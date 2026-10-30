@@ -1,0 +1,3 @@
+pptx-report/templates/*
+__pycache__/
+*.pyc
