@@ -45,7 +45,7 @@
   .panel-head .count { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
   .panel-body { padding: 18px 22px 22px; }
 
-  .gates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+  .gates { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
   .gate { border: 1px solid var(--line); border-top: 3px solid var(--line-strong); border-radius: 10px; padding: 12px 13px; background: #fff; }
   .gate:nth-child(1) { border-top-color: var(--sci); }
   .gate:nth-child(2) { border-top-color: var(--reports); }
@@ -174,7 +174,7 @@
     <div class="stats">
       <div class="stat"><b>3</b><span>навыка в репозитории</span></div>
       <div class="stat"><b>39</b><span>в очереди</span></div>
-      <div class="stat"><b>4</b><span>обязательных гейта</span></div>
+      <div class="stat"><b>5</b><span>обязательных гейтов</span></div>
       <div class="stat"><b>7 / 17 / 9</b><span>harness / dev / science</span></div>
       <div class="stat"><b>3 + 2</b><span>минимум GitHub + научных источников</span></div>
     </div>
@@ -191,7 +191,7 @@
 
   <section class="panel" id="gates">
     <div class="panel-head">
-      <h2>Четыре гейта</h2>
+      <h2>Пять гейтов</h2>
       <p>Ни один навык не переходит на следующий шаг без артефакта предыдущего</p>
       <span class="count">AGENTS.md §4</span>
     </div>
@@ -220,6 +220,12 @@
           <h3>Verification</h3>
           <p>Пример воспроизводится, скрипты работают, HTML открывается без сети, карта обновлена.</p>
           <div class="out">→ DoD + запись в README / карте</div>
+        </div>
+        <div class="gate">
+          <div class="gn">GATE 5</div>
+          <h3>PR</h3>
+          <p>Ветка запушена, PR открыт, описание содержит research, review и вывод валидатора.</p>
+          <div class="out">→ ссылка на PR · merge только после проверок</div>
         </div>
       </div>
     </div>
@@ -657,6 +663,7 @@
         <li>Нет проектных имён и данных в общих примерах.</li>
         <li>Обновлены <code>docs/skills-map.html</code>, <code>README.md</code> и счётчики.</li>
         <li>Навык не дублирует существующий по триггерам.</li>
+        <li>Ветка запушена, PR открыт и содержит research, review и вывод валидатора.</li>
       </ul>
     </div>
   </section>

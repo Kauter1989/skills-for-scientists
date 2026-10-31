@@ -112,10 +112,10 @@ skills/
 
 ## Как разрабатывается навык
 
-Каждый навык проходит четыре гейта, описанные в `AGENTS.md`:
+Каждый навык проходит пять гейтов, описанные в `AGENTS.md`:
 
 ```
-Research → Review → Implementation → Verification
+Research → Review → Implementation → Verification → PR
 ```
 
 1. **Research.** Не менее трёх GitHub-аналогов и двух научных или
@@ -127,6 +127,8 @@ Research → Review → Implementation → Verification
    `templates/`, `examples/`.
 4. **Verification.** Пример воспроизводится, скрипты работают, HTML
    открывается без сети, карта и README обновлены.
+5. **PR.** Ветка запушена, PR открыт, в описании — research ledger,
+   review HTML и вывод валидатора. Мерж без PR запрещён.
 
 Правила библиотеки:
 
