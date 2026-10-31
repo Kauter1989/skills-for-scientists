@@ -1,0 +1,18 @@
+version: 1
+rules:
+  - id: HARNESS-001
+    rule: "Навык с metadata.contract: harness-skill-template проходит validate_skill.py"
+    trigger: "SKILL.md невалиден, обязательный раздел отсутствует, ссылка битая, examples пуст или Python-скрипт не компилируется"
+    mechanism:
+      type: script
+      command: "python harness/harness-skill-template/scripts/validate_skill.py --all --root ."
+      config: ""
+      contract: ""
+    level: CI
+    owner: harness
+    cost: "менее 2 секунд локально; CI пока не подключён"
+    bypass: "legacy-навыки без metadata.contract пропускаются"
+    evidence: harness/harness-skill-template/tests/test_validate_skill.py
+    status: proposed
+    since: "2026-10-31"
+    notes: "CI не подключён; после подключения перевести в active."

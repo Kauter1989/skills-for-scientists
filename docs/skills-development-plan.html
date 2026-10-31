@@ -172,8 +172,8 @@
       Отчётные навыки остаются в поддержке; новые — после science.
     </p>
     <div class="stats">
-      <div class="stat"><b>3</b><span>навыка в репозитории</span></div>
-      <div class="stat"><b>39</b><span>в очереди</span></div>
+      <div class="stat"><b>4</b><span>навыка в репозитории</span></div>
+      <div class="stat"><b>38</b><span>в очереди</span></div>
       <div class="stat"><b>5</b><span>обязательных гейтов</span></div>
       <div class="stat"><b>7 / 17 / 9</b><span>harness / dev / science</span></div>
       <div class="stat"><b>3 + 2</b><span>минимум GitHub + научных источников</span></div>
@@ -284,7 +284,7 @@
     <div class="panel-head">
       <h2>Phase 1 · Harness</h2>
       <p>Первый приоритет: сначала то, что определяет форму и проверку остальных навыков</p>
-      <span class="count">7 навыков · 1 готов · 3 × P0</span>
+      <span class="count">7 навыков · 2 готово · 3 × P0</span>
     </div>
     <div class="panel-body">
       <div class="cards">
@@ -307,14 +307,14 @@
           <div class="card-head">
             <span class="ord">H2</span>
             <h3><code>harness-rule-to-mechanism</code></h3>
-            <span class="pri p0">P0</span><span class="eff">M</span>
+            <span class="pri p0">P0</span><span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span><span class="eff">M</span>
           </div>
-          <p>Превращает договорённость из текста в исполняемую проверку: хук, lint-правило, тест или шаг CI.</p>
+          <p>Реализован: матрица выбора механизма, registry `docs/rules/registry.yml`, шаблон правила и валидатор.</p>
           <dl>
             <dt>GitHub</dt><dd>policy-as-code, pre-commit, architecture tests, линтеры и хуки агентов.</dd>
             <dt>Наука</dt><dd>комплаенс и контроль, implementation intentions, автоматизация проверок, ложные срабатывания.</dd>
-            <dt>Выход</dt><dd>матрица «правило → механизм», пример хука и теста.</dd>
-            <dt>Приёмка</dt><dd>три правила репозитория переведены в проверки, каждая падает на нарушении.</dd>
+            <dt>Выход</dt><dd><code>mechanism-matrix.md</code>, <code>registry.yml</code>, <code>validate_rule.py</code>, примеры.</dd>
+            <dt>Приёмка</dt><dd>валидатор проходит на registry; good/bad примеры дают ожидаемый результат.</dd>
           </dl>
         </article>
 
@@ -703,16 +703,16 @@
   <section class="panel" id="next">
     <div class="panel-head">
       <h2>Текущий шаг</h2>
-      <p>H1 готов; следующий — H2</p>
+      <p>H2 готов; следующий — H3</p>
     </div>
     <div class="panel-body">
       <ol style="margin:0;padding-left:20px">
-        <li><code>harness-skill-template</code> реализован, review <code>approved</code>, PR #2 открыт.</li>
-        <li>Foundation и структура библиотеки: PR #1 открыт.</li>
-        <li>Собрать <code>docs/research/harness-rule-to-mechanism.md</code>.</li>
-        <li>Собрать <code>docs/reviews/harness-rule-to-mechanism.html</code> и получить <code>approved</code>.</li>
-        <li>Реализовать <code>harness/harness-rule-to-mechanism/</code>.</li>
-        <li>Повторить цикл для <code>harness-skill-audit</code>.</li>
+        <li><code>harness-skill-template</code> реализован, review <code>approved</code>, PR #2 merged.</li>
+        <li>Foundation и структура библиотеки: PR #1 merged.</li>
+        <li><code>harness-rule-to-mechanism</code> реализован, review <code>approved</code>, PR #3.</li>
+        <li>Собрать <code>docs/research/harness-skill-audit.md</code>.</li>
+        <li>Собрать <code>docs/reviews/harness-skill-audit.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>harness/harness-skill-audit/</code>.</li>
       </ol>
       <div class="decision">
         <div class="ok">approved</div>

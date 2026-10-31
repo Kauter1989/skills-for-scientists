@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Skill review — harness-rule-to-mechanism</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --green: #1f7a4d; --amber: #a96500; --red: #b42318; --violet: #6d5aa8;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .topbar { position: sticky; top: 0; z-index: 20; background: rgba(246,245,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; gap: 14px; min-height: 50px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  nav a { font-size: 11.5px; color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  header { padding: 40px 0 10px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 10px; }
+  h1 code { font-size: inherit; letter-spacing: -.02em; }
+  .sub { color: var(--muted); font-size: 17px; margin: 0 0 18px; max-width: 850px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 10px; font-size: 11.5px; color: var(--muted); }
+  .chip b { color: var(--ink); }
+  .status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 8px; border-radius: 6px; }
+  .status.draft { background: #eef0f3; color: var(--muted); }
+  .status.revise { background: #fbf0dc; color: var(--amber); }
+  .status.approved { background: #e7f4ec; color: var(--green); }
+  .status.rejected { background: #fbe9e7; color: var(--red); }
+
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; overflow: hidden; scroll-margin-top: 64px; }
+  .sec-head { padding: 16px 22px 13px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .sec-head h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: 12px; }
+  .body { padding: 18px 22px 22px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; background: #fcfdfd; margin-bottom: 16px; }
+  .callout b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 5px; }
+  .callout p { margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 14px; }
+  caption { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding-bottom: 6px; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 7px 8px; }
+  td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, code { font-family: var(--mono); font-size: 11.5px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; background: #fff; }
+  .box h3 { margin: 0 0 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .box ul { margin: 0; padding-left: 17px; }
+  .box li { font-size: 12.5px; }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 14px; }
+  .step { border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; font-size: 12px; background: #fff; }
+  .step.hot { border-color: #b8d0cd; background: #e6efee; }
+  .arrow { color: var(--line-strong); }
+  .metric { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .metric span { border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; font-size: 11.5px; color: var(--muted); }
+  .metric b { color: var(--ink); }
+
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .checklist li:last-child { border-bottom: 0; }
+  .checklist li::before { content: "☐"; margin-right: 8px; color: var(--muted); }
+
+  .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .decision div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+  .decision div.approved { border-color: #bfe0cb; background: #e7f4ec; color: var(--green); font-weight: 700; }
+
+  footer { padding: 8px 0 40px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 14px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10pt; }
+    .topbar { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">Skill review</span>
+    <nav aria-label="Разделы ревью">
+      <a href="#problem">Проблема</a>
+      <a href="#github">GitHub</a>
+      <a href="#science">Наука</a>
+      <a href="#design">Дизайн</a>
+      <a href="#metrics">Метрики</a>
+      <a href="#sources">Источники</a>
+      <a href="#decision">Решение</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header>
+    <div class="kicker">План навыка · на ревью</div>
+    <h1><code>harness-rule-to-mechanism</code></h1>
+    <p class="sub">Переводит правило из текста в исполняемую проверку с владельцем, стоимостью и доказательством.</p>
+    <div class="chips">
+      <span class="chip">Домен: <b>harness</b></span>
+      <span class="chip">Приоритет: <b>P0</b></span>
+      <span class="chip">Автор: <b>OpenCode agent</b></span>
+      <span class="chip">Дата: <b>2026-10-31</b></span>
+      <span class="chip">Источники: <b>12</b></span>
+      <span class="status approved">approved</span>
+    </div>
+
+    <div class="callout">
+      <b>Запрос решения</b>
+      <p>Утвердить формат registry правил, выбор механизма по типу правила, обязательный тест и критерии приёмки. После approved — реализация.</p>
+    </div>
+  </header>
+
+  <section id="problem">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>Проблема и границы</h2>
+    </div>
+    <div class="body">
+      <p>Правила живут в документации и проговариваются на ревью, но не имеют механизма: кто проверяет, где проверяется, что будет при нарушении и кто владелец. Проверки добавляются точечно, дублируются, шумят ложными срабатываниями или обходятся молча.</p>
+      <div class="grid2">
+        <div class="box">
+          <h3>Входит в задачу</h3>
+          <ul><li>классификация правила, выбор механизма, registry правила, тест, проверка срабатывания, владелец и разрешённый обход.</li></ul>
+        </div>
+        <div class="box">
+          <h3>Не входит</h3>
+          <ul><li>придумывание правил за команду, аудит библиотеки навыков и оценка пользы навыка.</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="github">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>GitHub-аналоги</h2>
+      <p>минимум три репозитория</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что уже существует и что из этого следует</caption>
+        <thead><tr><th>Репозиторий</th><th>Лицензия</th><th>Коммит</th><th>Подход</th><th>Берём</th><th>Отвергаем</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://github.com/pre-commit/pre-commit">pre-commit/pre-commit</a></td><td>MIT</td><td class="mono">2026-10-20</td><td>Фреймворк хуков перед коммитом для разных языков</td><td>ранний локальный гейт и единый конфиг</td><td>хук как единственный механизм</td></tr>
+<tr><td class="mono"><a href="https://github.com/seddonym/import-linter">seddonym/import-linter</a></td><td>BSD-2-Clause</td><td class="mono">2026-10-29</td><td>Ограничения импортов и архитектурные контракты Python</td><td>слои и направление зависимостей как правило</td><td>привязка к Python</td></tr>
+<tr><td class="mono"><a href="https://github.com/TNG/ArchUnit">TNG/ArchUnit</a></td><td>Apache-2.0</td><td class="mono">2026-10-27</td><td>Архитектурные тесты Java: пакеты, слои, циклы</td><td>тест как механизм для архитектуры</td><td>привязка к JVM</td></tr>
+<tr><td class="mono"><a href="https://github.com/open-policy-agent/conftest">open-policy-agent/conftest</a></td><td>NOASSERTION</td><td class="mono">2026-10-29</td><td>Policy-тесты конфигов на Rego</td><td>policy-as-code для инфраструктуры</td><td>DSL там, где хватает теста</td></tr>
+<tr><td class="mono"><a href="https://github.com/gitleaks/gitleaks">gitleaks/gitleaks</a></td><td>MIT</td><td class="mono">2026-10-28</td><td>Поиск секретов в истории и файлах</td><td>специализированный механизм для секретов</td><td>замена им всех проверок безопасности</td></tr>
+</tbody>
+      </table>
+      <p class="mono">Поисковые запросы: pre-commit hooks; architecture tests; import linter; policy as code; secret scanning CI</p>
+    </div>
+  </section>
+
+  <section id="science">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>Научные источники и стандарты</h2>
+      <p>минимум два источника или утверждённый waiver</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что подтверждено и какие есть ограничения</caption>
+        <thead><tr><th>Источник</th><th>Тип</th><th>Вклад</th><th>Ограничение</th><th>Вывод для навыка</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://doi.org/10.1037/0003-066X.54.7.493">Gollwitzer, 1999</a></td><td>рецензируемая</td><td>If-then планы повышают следование намерению</td><td>психология поведения, не ПО</td><td>правило задаёт триггер и действие, а не цель</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1145/3188720">Sadowski et al., 2018</a></td><td>рецензируемая</td><td>Успех статического анализа: низкий шум и быстрый фидбек</td><td>опыт Google</td><td>механизм выбирается по стоимости и шуму</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1109/ICSE.2013.6606613">Johnson et al., 2013</a></td><td>рецензируемая</td><td>Ложные срабатывания и workflow мешают adoption</td><td>качественное исследование</td><td>нужны владелец и понятное сообщение</td></tr>
+<tr><td class="mono"><a href="https://pre-commit.com/">pre-commit, import-linter, ArchUnit, Conftest</a></td><td>спецификации</td><td>Образцы хуков, архитектурных тестов и policy-проверок</td><td>не научный источник</td><td>нормативная база механизмов</td></tr>
+</tbody>
+      </table>
+      <div class="box">
+        <h3>Waiver научной части</h3>
+        <p>Не требуется: научные источники и официальные спецификации найдены.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="design">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>Синтез и предлагаемый дизайн</h2>
+    </div>
+    <div class="body">
+      <p>Аналоги показывают четыре класса механизмов: локальный хук, lint/архитектурный тест, policy-тест для конфигов и специализированный сканер. Выбор зависит от типа правила и момента, когда ошибку дешевле поймать. Исследования добавляют ограничение: инструмент не приживается при высоком шуме, медленном фидбеке и отсутствии владельца. Поэтому навык требует registry, тест и явный обход.</p>
+      <div class="flow">
+        <span class="step hot">Классифицировать правило</span><span class="arrow">→</span>
+        <span class="step">Выбрать механизм</span><span class="arrow">→</span>
+        <span class="step">Написать тест</span><span class="arrow">→</span>
+        <span class="step">Зарегистрировать и проверить</span>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h3>Вход</h3>
+          <p>Текст правила, триггер нарушения, пример нарушения и ограничения репозитория.</p>
+        </div>
+        <div class="box">
+          <h3>Выход</h3>
+          <p>Карточка правила, механизм, тест, лог проверки и строка в <code>docs/rules/registry.yml</code>.</p>
+        </div>
+      </div>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
+      <ul>
+        <li><code>SKILL.md</code> — триггеры, процедура, границы</li>
+        <li><code>references/</code> — матрица «тип правила → механизм», формат карточки</li>
+        <li><code>scripts/</code> — проверка карточки правила и наличия evidence</li>
+        <li><code>examples/</code> — правило + падающий пример + проходящий baseline</li>
+        <li><code>docs/rules/registry.yml</code> — единый источник правды по правилам</li>
+      </ul>
+
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Registry</h3>
+      <p>Одна запись — одно правило. Механизм и evidence — ссылки, а не копии конфигов. Файл версионируется вместе с кодом.</p>
+      <pre style="background:#12161c;color:#d9e1e8;padding:12px 14px;border-radius:8px;font:11.5px/1.55 var(--mono);overflow:auto;margin:0 0 10px">version: 1
+rules:
+  - id: ARCH-001
+    rule: "domain не импортирует infrastructure"
+    trigger: "import из infrastructure в domain/"
+    mechanism:
+      type: import-linter
+      config: .importlinter
+      contract: domain-independent
+    level: CI
+    owner: architecture
+    cost: "8 секунд в CI"
+    bypass: "только через ADR"
+    evidence: tests/architecture/test_layers.py
+    status: active</pre>
+      <p class="mono" style="font-size:11.5px;color:var(--muted)">python scripts/validate_rule.py --registry docs/rules/registry.yml</p>
+    </div>
+  </section>
+
+  <section id="alternatives">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>Альтернативы и цена</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead>
+        <tbody>
+          <tr><td>Всегда писать тест</td><td>Понятная проверка поведения</td><td>Дорого для стиля, конфигов и архитектуры</td><td>Тест не всегда самый ранний и дешёвый слой</td></tr>
+          <tr><td>Только CI</td><td>Нельзя обойти локально</td><td>Поздний фидбек, дорогая итерация</td><td>Мелкие правила дешевле ловить до коммита</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>Метрики и план проверки</h2>
+    </div>
+    <div class="body">
+      <div class="metric">
+        <span><b>Доля правил с механизмом и владельцем</b> — 100 % для новых правил</span>
+        <span><b>Ложные срабатывания на baseline</b> — 0 критичных</span>
+        <span><b>Время до фидбека</b> — ≤ 2 минут локально</span>
+      </div>
+      <ol>
+        <li>Тест падает на нарушении и проходит на baseline.</li>
+        <li>Запись registry содержит владельца, стоимость и разрешённый обход.</li>
+        <li>Повторный запуск механизма даёт тот же результат без сети.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="risks">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>Риски и открытые вопросы</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead>
+        <tbody>
+          <tr><td>Механизмы размножаются и дублируют друг друга</td><td>средняя</td><td>среднее</td><td>registry и правило «один механизм на правило»</td></tr>
+          <tr><td>Высокий шум убивает adoption</td><td>высокая</td><td>высокое</td><td>baseline, порог ложных срабатываний, владелец</td></tr>
+        </tbody>
+      </table>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Решения ревью</h3>
+      <ol>
+        <li>Registry: достаточно <code>docs/rules/registry.yml</code>; отдельная карточка правила не нужна.</li>
+        <li>Минимальное доказательство: тест, который падает на нарушении. Лог хука и CI-run сами по себе не считаются.</li>
+        <li>Стоимость и обход фиксируются в registry; глобальное отключение запрещено.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>Источники</h2>
+      <p>дата обращения обязательна</p>
+    </div>
+    <div class="body">
+      <ol>
+<li><a href="https://github.com/pre-commit/pre-commit">pre-commit/pre-commit</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/seddonym/import-linter">seddonym/import-linter</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/TNG/ArchUnit">TNG/ArchUnit</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/open-policy-agent/conftest">open-policy-agent/conftest</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/gitleaks/gitleaks">gitleaks/gitleaks</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1037/0003-066X.54.7.493">Gollwitzer, 1999</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1145/3188720">Sadowski et al., 2018</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1109/ICSE.2013.6606613">Johnson et al., 2013</a> — доступно 2026-10-31.</li>
+<li><a href="https://pre-commit.com/">pre-commit docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://import-linter.readthedocs.io/">import-linter docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://www.archunit.org/">ArchUnit docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://www.conftest.dev/">Conftest docs</a> — доступно 2026-10-31.</li>
+</ol>
+    </div>
+  </section>
+
+  <section id="decision">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>Чек-лист и решение</h2>
+      <p>без approved реализация не начинается</p>
+    </div>
+    <div class="body">
+      <ul class="checklist">
+        <li>Изучены минимум 3 GitHub-аналога, лицензии проверены.</li>
+        <li>Изучены минимум 2 научных/официальных источника или утверждён waiver.</li>
+        <li>Каждое утверждение в дизайне имеет источник или явно помечено как решение автора.</li>
+        <li>Границы и не-цели сформулированы.</li>
+        <li>Метрики проверяемы, а не оценочны.</li>
+        <li>План не дублирует существующий навык по триггерам.</li>
+        <li>Артефакты и команды воспроизводимы.</li>
+      </ul>
+      <div class="decision">
+        <div class="approved">approved</div>
+        <div class="revise">revise</div>
+        <div class="rejected">rejected</div>
+        <div class="draft">draft</div>
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:12px">
+        Решение: approved. Комментарий ревьюера: утверждено 2026-10-31.
+        После правок обновите статус в шапке и дату.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>opencode-skills · review template</span>
+      <span>harness-rule-to-mechanism · 2026-10-31</span>
+    </div>
+  </footer>
+</main>
+</body>
+</html>

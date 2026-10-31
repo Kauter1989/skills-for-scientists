@@ -263,8 +263,8 @@
       означает, что без скилла процесс теряет проверяемое звено.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">3</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">39</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-existing">4</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">38</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -432,7 +432,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-10-31 · 3 реализовано · 39 предложено</span>
+      <span>снимок 2026-10-31 · 4 реализовано · 38 предложено</span>
     </div>
   </footer>
 </main>
@@ -748,12 +748,12 @@
       links: ""
     },
     {
-      id: "harness-rule-to-mechanism", name: "/harness-rule-to-mechanism", domain: "harness", status: "proposed", priority: "P0",
-      blocks: ["meta"],
-      sum: "Правило из prose → хук, lint-правило, тест или CI-шаг. Правило без машины не существует.",
-      io: "правило → проверка",
+      id: "harness-rule-to-mechanism", name: "/harness-rule-to-mechanism", domain: "harness", status: "existing", priority: "core",
+      blocks: ["meta", "audit"],
+      sum: "Переводит правило в механизм: хук, lint, тест, policy или CI, с registry, владельцем и тестом-доказательством.",
+      io: "правило → проверка + запись registry",
       from: "принцип «правило = механизм»",
-      links: ""
+      links: "../harness/harness-rule-to-mechanism/SKILL.md"
     },
     {
       id: "harness-analyze-codebase", name: "/harness-analyze-codebase", domain: "harness", status: "proposed", priority: "P1",
@@ -869,7 +869,7 @@
       label: "Харнесс",
       steps: [
         { t: "/harness-init", c: "new" }, { t: "/harness-skill-template", c: "implemented" },
-        { t: "/harness-rule-to-mechanism", c: "new" }, { t: "/harness-skill-eval", c: "new" },
+        { t: "/harness-rule-to-mechanism", c: "implemented" }, { t: "/harness-skill-eval", c: "new" },
         { t: "/harness-skill-audit", c: "new" }
       ]
     }
