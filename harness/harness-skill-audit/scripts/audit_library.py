@@ -305,7 +305,10 @@ def render(template: str, data: dict) -> str:
         "COVERAGE_ROWS": "\n".join(coverage_rows),
     }
     for key, value in values.items():
-        template = template.replace("{{" + key + "}}", esc(value))
+        if key in ("FINDINGS_ROWS", "COVERAGE_ROWS"):
+            template = template.replace("{{" + key + "}}", str(value))
+        else:
+            template = template.replace("{{" + key + "}}", esc(value))
     return template
 
 

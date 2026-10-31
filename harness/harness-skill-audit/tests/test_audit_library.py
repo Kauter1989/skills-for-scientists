@@ -106,6 +106,9 @@ class AuditLibraryTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertTrue(html_out.is_file())
             self.assertTrue(json_out.is_file())
+            html_text = html_out.read_text(encoding="utf-8")
+            self.assertIn("<tr>", html_text)
+            self.assertNotIn("&lt;tr&gt;", html_text)
             data = json.loads(json_out.read_text(encoding="utf-8"))
 
             rules = {f["rule"] for f in data["findings"]}
