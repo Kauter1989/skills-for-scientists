@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Skill review — harness-skill-audit</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --green: #1f7a4d; --amber: #a96500; --red: #b42318; --violet: #6d5aa8;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .topbar { position: sticky; top: 0; z-index: 20; background: rgba(246,245,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; gap: 14px; min-height: 50px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  nav a { font-size: 11.5px; color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  header { padding: 40px 0 10px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 10px; }
+  h1 code { font-size: inherit; letter-spacing: -.02em; }
+  .sub { color: var(--muted); font-size: 17px; margin: 0 0 18px; max-width: 850px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 10px; font-size: 11.5px; color: var(--muted); }
+  .chip b { color: var(--ink); }
+  .status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 8px; border-radius: 6px; }
+  .status.draft { background: #eef0f3; color: var(--muted); }
+  .status.revise { background: #fbf0dc; color: var(--amber); }
+  .status.approved { background: #e7f4ec; color: var(--green); }
+  .status.rejected { background: #fbe9e7; color: var(--red); }
+
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; overflow: hidden; scroll-margin-top: 64px; }
+  .sec-head { padding: 16px 22px 13px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .sec-head h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: 12px; }
+  .body { padding: 18px 22px 22px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; background: #fcfdfd; margin-bottom: 16px; }
+  .callout b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 5px; }
+  .callout p { margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 14px; }
+  caption { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding-bottom: 6px; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 7px 8px; }
+  td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, code { font-family: var(--mono); font-size: 11.5px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; background: #fff; }
+  .box h3 { margin: 0 0 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .box ul { margin: 0; padding-left: 17px; }
+  .box li { font-size: 12.5px; }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 14px; }
+  .step { border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; font-size: 12px; background: #fff; }
+  .step.hot { border-color: #b8d0cd; background: #e6efee; }
+  .arrow { color: var(--line-strong); }
+  .metric { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .metric span { border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; font-size: 11.5px; color: var(--muted); }
+  .metric b { color: var(--ink); }
+
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .checklist li:last-child { border-bottom: 0; }
+  .checklist li::before { content: "☐"; margin-right: 8px; color: var(--muted); }
+
+  .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .decision div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+  .decision div.approved { border-color: #bfe0cb; background: #e7f4ec; color: var(--green); font-weight: 700; }
+
+  footer { padding: 8px 0 40px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 14px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10pt; }
+    .topbar { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">Skill review</span>
+    <nav aria-label="Разделы ревью">
+      <a href="#problem">Проблема</a>
+      <a href="#github">GitHub</a>
+      <a href="#science">Наука</a>
+      <a href="#design">Дизайн</a>
+      <a href="#metrics">Метрики</a>
+      <a href="#sources">Источники</a>
+      <a href="#decision">Решение</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header>
+    <div class="kicker">План навыка · на ревью</div>
+    <h1><code>harness-skill-audit</code></h1>
+    <p class="sub">Регулярный аудит библиотеки: структура, дубли триггеров, артефакты, ссылки и покрытие доменов.</p>
+    <div class="chips">
+      <span class="chip">Домен: <b>harness</b></span>
+      <span class="chip">Приоритет: <b>P0</b></span>
+      <span class="chip">Автор: <b>OpenCode agent</b></span>
+      <span class="chip">Дата: <b>2026-10-31</b></span>
+      <span class="chip">Источники: <b>12</b></span>
+      <span class="status draft">draft</span>
+    </div>
+
+    <div class="callout">
+      <b>Запрос решения</b>
+      <p>Утвердить чек-лист аудита, severity-шкалу, риск-ориентированную выборку и формат отчёта. После approved — реализация.</p>
+    </div>
+  </header>
+
+  <section id="problem">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>Проблема и границы</h2>
+    </div>
+    <div class="body">
+      <p>Библиотека растёт: появляются похожие триггеры, навыки без примеров, устаревшие команды и пробелы в доменах. Проверка «глазами» зависит от внимания автора, не повторяется и не даёт тренда. Нужен регулярный аудит с машинными проверками и выборочным смысловым разбором.</p>
+      <div class="grid2">
+        <div class="box">
+          <h3>Входит в задачу</h3>
+          <ul><li>инвентаризация, структурные проверки, дубли триггеров, наличие артефактов, ссылки, покрытие доменов, severity и отчёт.</li></ul>
+        </div>
+        <div class="box">
+          <h3>Не входит</h3>
+          <ul><li>исправление найденного, оценка пользы навыка и создание новых правил.</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="github">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>GitHub-аналоги</h2>
+      <p>минимум три репозитория</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что уже существует и что из этого следует</caption>
+        <thead><tr><th>Репозиторий</th><th>Лицензия</th><th>Коммит</th><th>Подход</th><th>Берём</th><th>Отвергаем</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://github.com/promptfoo/promptfoo">promptfoo/promptfoo</a></td><td>MIT</td><td class="mono">2026-10-31</td><td>Проверка промптов и агентов декларативными assertion-ами</td><td>проверяемые утверждения и CI</td><td>оценка модели вместо аудита артефактов</td></tr>
+<tr><td class="mono"><a href="https://github.com/UKGovernmentBEIS/inspect_ai">UKGovernmentBEIS/inspect_ai</a></td><td>MIT</td><td class="mono">2026-10-31</td><td>Фреймворк оценки LLM: задачи, датасеты, метрики</td><td>структура task → metric → report</td><td>тяжёлая инфраструктура там, где нужен lint</td></tr>
+<tr><td class="mono"><a href="https://github.com/lycheeverse/lychee">lycheeverse/lychee</a></td><td>Apache-2.0</td><td class="mono">2026-10-26</td><td>Поиск битых ссылок в Markdown, HTML и RST</td><td>проверка ссылок</td><td>сеть как обязательная зависимость</td></tr>
+<tr><td class="mono"><a href="https://github.com/DavidAnson/markdownlint">DavidAnson/markdownlint</a></td><td>MIT</td><td class="mono">2026-10-30</td><td>Стилевой линтер Markdown</td><td>детерминированные правила структуры</td><td>стиль ради стиля</td></tr>
+<tr><td class="mono"><a href="https://github.com/kucherenko/jscpd">kucherenko/jscpd</a></td><td>MIT</td><td class="mono">2026-10-30</td><td>Детектор копипасты в коде и текстах</td><td>поиск дублей</td><td>сравнение кода вместо смысловых дублей</td></tr>
+</tbody>
+      </table>
+      <p class="mono">Поисковые запросы: skill library lint; prompt evaluation; markdown lint; link checker; duplicate detection</p>
+    </div>
+  </section>
+
+  <section id="science">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>Научные источники и стандарты</h2>
+      <p>минимум два источника или утверждённый waiver</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что подтверждено и какие есть ограничения</caption>
+        <thead><tr><th>Источник</th><th>Тип</th><th>Вклад</th><th>Ограничение</th><th>Вывод для навыка</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://doi.org/10.1147/sj.153.0182">Fagan, 1976</a></td><td>рецензируемая</td><td>Формальная инспекция с ролями и чек-листом снижает дефекты</td><td>код и документы, не библиотека</td><td>аудит должен быть структурированным</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1177/001316446002000104">Cohen, 1960</a></td><td>рецензируемая</td><td>Каппа измеряет согласие сверх случайного</td><td>нужны независимые оценщики</td><td>спорные находки калибруются вторым проходом</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1109/ICSE.1994.296790">Parnas, 1994</a></td><td>рецензируемая</td><td>Системы деградируют без постоянного обновления</td><td>концептуальная работа</td><td>аудит должен быть регулярным</td></tr>
+<tr><td class="mono"><a href="https://agentskills.io/specification">Agent Skills, markdownlint, lychee, promptfoo</a></td><td>спецификации</td><td>Нормативные требования к структуре и проверкам</td><td>не научный источник</td><td>детерминированная база аудита</td></tr>
+</tbody>
+      </table>
+      <div class="box">
+        <h3>Waiver научной части</h3>
+        <p>Не требуется: научные источники и официальные спецификации найдены.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="design">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>Синтез и предлагаемый дизайн</h2>
+    </div>
+    <div class="body">
+      <p>Аналоги делятся на детерминированные проверки (markdownlint, lychee, jscpd) и оценку (promptfoo, inspect_ai). Для библиотеки нужен гибрид: сначала машинные проверки всех навыков, затем риск-ориентированная выборка для смысловых дублей и качества триггеров. Исследования добавляют формальную инспекцию, измерение согласия оценщиков и необходимость регулярности.</p>
+      <div class="flow">
+        <span class="step hot">Инвентаризация</span><span class="arrow">→</span>
+        <span class="step">Машинные проверки</span><span class="arrow">→</span>
+        <span class="step">Дубли и покрытие</span><span class="arrow">→</span>
+        <span class="step">Выборка и отчёт</span>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h3>Вход</h3>
+          <p>Корень библиотеки, домен или навык, прошлый снимок и политика severity.</p>
+        </div>
+        <div class="box">
+          <h3>Выход</h3>
+          <p>docs/audits/&lt;date&gt;.html, audit.json, находки с evidence и владельцем.</p>
+        </div>
+      </div>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
+      <ul>
+        <li><code>SKILL.md</code> — триггеры, процедура, границы</li>
+        <li><code>references/</code> — чек-лист, severity, порог дублей</li>
+        <li><code>scripts/</code> — инвентаризация, проверки, JSON-снимок</li>
+        <li><code>examples/</code> — отчёт с blocker/major/minor и трендом</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="alternatives">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>Альтернативы и цена</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead>
+        <tbody>
+          <tr><td>Только ручное чтение</td><td>Глубокое понимание смысла</td><td>Дорого, не повторяется, зависит от внимания</td><td>Нет тренда и покрытия</td></tr>
+          <tr><td>Только линтеры</td><td>Дёшево и детерминированно</td><td>Не видит смысловых дублей и покрытия</td><td>Зелёный линтер не означает качественную библиотеку</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>Метрики и план проверки</h2>
+    </div>
+    <div class="body">
+      <div class="metric">
+        <span><b>Покрытие навыков аудитом</b> — 100 % структурных проверок</span>
+        <span><b>Дубли триггеров</b> — 0 блокирующих пар</span>
+        <span><b>Ложные срабатывания</b> — ≤ 10 % находок</span>
+      </div>
+      <ol>
+        <li>Аудит находит заранее внесённые дефекты: дубль, пустой пример, битую ссылку.</li>
+        <li>Повторный запуск на том же снимке даёт тот же результат.</li>
+        <li>Спорная находка подтверждается вторым проходом или правилом severity.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="risks">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>Риски и открытые вопросы</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead>
+        <tbody>
+          <tr><td>Аудит превращается в формальность</td><td>средняя</td><td>высокое</td><td>обязательные проверки, тренд, владелец</td></tr>
+          <tr><td>Слишком много ложных находок</td><td>средняя</td><td>среднее</td><td>порог дублей, второй проход, калибровка severity</td></tr>
+        </tbody>
+      </table>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <ol>
+        <li>Где хранить отчёты: docs/audits/&lt;date&gt;.html или рядом с навыком?</li>
+        <li>Какой порог дублей считать блокирующим?</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>Источники</h2>
+      <p>дата обращения обязательна</p>
+    </div>
+    <div class="body">
+      <ol>
+<li><a href="https://github.com/promptfoo/promptfoo">promptfoo/promptfoo</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/UKGovernmentBEIS/inspect_ai">UKGovernmentBEIS/inspect_ai</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/lycheeverse/lychee">lycheeverse/lychee</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/DavidAnson/markdownlint">DavidAnson/markdownlint</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/kucherenko/jscpd">kucherenko/jscpd</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1147/sj.153.0182">Fagan, 1976</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1177/001316446002000104">Cohen, 1960</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1109/ICSE.1994.296790">Parnas, 1994</a> — доступно 2026-10-31.</li>
+<li><a href="https://agentskills.io/specification">Agent Skills specification</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md">markdownlint rules</a> — доступно 2026-10-31.</li>
+<li><a href="https://lychee.cli.rs/">lychee docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://www.promptfoo.dev/docs/">promptfoo docs</a> — доступно 2026-10-31.</li>
+</ol>
+    </div>
+  </section>
+
+  <section id="decision">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>Чек-лист и решение</h2>
+      <p>без approved реализация не начинается</p>
+    </div>
+    <div class="body">
+      <ul class="checklist">
+        <li>Изучены минимум 3 GitHub-аналога, лицензии проверены.</li>
+        <li>Изучены минимум 2 научных/официальных источника или утверждён waiver.</li>
+        <li>Каждое утверждение в дизайне имеет источник или явно помечено как решение автора.</li>
+        <li>Границы и не-цели сформулированы.</li>
+        <li>Метрики проверяемы, а не оценочны.</li>
+        <li>План не дублирует существующий навык по триггерам.</li>
+        <li>Артефакты и команды воспроизводимы.</li>
+      </ul>
+      <div class="decision">
+        <div class="approved">approved</div>
+        <div class="revise">revise</div>
+        <div class="rejected">rejected</div>
+        <div class="draft">draft</div>
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:12px">
+        Решение: draft. Комментарий ревьюера: ожидает ревью разработчика.
+        После правок обновите статус в шапке и дату.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>opencode-skills · review template</span>
+      <span>harness-skill-audit · 2026-10-31</span>
+    </div>
+  </footer>
+</main>
+</body>
+</html>
