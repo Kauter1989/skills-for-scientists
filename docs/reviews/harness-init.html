@@ -118,19 +118,19 @@
   <header>
     <div class="kicker">План навыка · на ревью</div>
     <h1><code>harness-init</code></h1>
-    <p class="sub">Разворачивает процесс в новом репозитории: профиль, AGENTS.md, docs, хуки, CI и проверка bootstrap.</p>
+    <p class="sub">Разворачивает процесс в новом репозитории: опрос пользователя, подбор навыков, профиль, AGENTS.md, docs, хуки, CI и HTML-утверждение workflow.</p>
     <div class="chips">
       <span class="chip">Домен: <b>harness</b></span>
       <span class="chip">Приоритет: <b>P1</b></span>
       <span class="chip">Автор: <b>OpenCode agent</b></span>
       <span class="chip">Дата: <b>2026-10-31</b></span>
-      <span class="chip">Источники: <b>12</b></span>
+      <span class="chip">Источники: <b>14</b></span>
       <span class="status draft">draft</span>
     </div>
 
     <div class="callout">
       <b>Запрос решения</b>
-      <p>Утвердить минимальный состав bootstrap, формат profile.yml, политику перезаписи и проверку результата. После approved — реализация.</p>
+      <p>Утвердить минимальный состав bootstrap, обязательный опрос пользователя, формат profile.yml, политику перезаписи и HTML-утверждение workflow. После approved — реализация.</p>
     </div>
   </header>
 
@@ -140,11 +140,11 @@
       <h2>Проблема и границы</h2>
     </div>
     <div class="body">
-      <p>Новый репозиторий собирается вручную: половина правил и проверок теряется, команды расходятся с документацией, а новичок не знает первого шага. Копирование старого репозитория переносит и его долги.</p>
+      <p>Новый репозиторий собирается вручную: половина правил и проверок теряется, команды расходятся с документацией, а новичок не знает первого шага. Копирование старого репозитория переносит и его долги. Готовый набор навыков выбирается без вопросов пользователю, поэтому старт может не совпасть с реальными задачами.</p>
       <div class="grid2">
         <div class="box">
           <h3>Входит в задачу</h3>
-          <ul><li>профиль, AGENTS.md, структура docs, хуки, CI, шаблоны research/review, проверка bootstrap.</li></ul>
+          <ul><li>опрос пользователя, подбор стартовых навыков, профиль, AGENTS.md, структура docs, хуки, CI, шаблоны research/review, HTML-утверждение и проверка bootstrap.</li></ul>
         </div>
         <div class="box">
           <h3>Не входит</h3>
@@ -190,6 +190,8 @@
 <tr><td class="mono"><a href="https://doi.org/10.1145/2675133.2675215">Steinmacher et al., 2015</a></td><td>рецензируемая</td><td>Барьеры новичков: документация, точки входа, коммуникация</td><td>open source</td><td>старт должен давать первый шаг</td></tr>
 <tr><td class="mono"><a href="https://doi.org/10.1109/MS.2014.107">Fagerholm et al., 2014</a></td><td>рецензируемая</td><td>Практики онбординга и наставничества</td><td>open source</td><td>шаблоны и чек-листы снижают стоимость входа</td></tr>
 <tr><td class="mono"><a href="https://doi.org/10.1207/s15516709cog1202_4">Sweller, 1988</a></td><td>рецензируемая</td><td>Ограниченность рабочей памяти</td><td>теория обучения</td><td>минимальный стартовый набор</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1136/bmj.328.7451.1312">Boynton &amp; Greenhalgh, 2004</a></td><td>рецензируемая</td><td>Как формулировать вопросы и избегать наводящих</td><td>медицинская среда</td><td>опрос короткий и однозначный</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1111/j.1365-2929.2006.02418.x">DiCicco-Bloom &amp; Crabtree, 2006</a></td><td>рецензируемая</td><td>Полуструктурированное интервью и уточнения</td><td>качественная методология</td><td>ответы важнее предположений</td></tr>
 <tr><td class="mono"><a href="https://agentskills.io/specification">Agent Skills, pre-commit, Copier, Actions</a></td><td>спецификации</td><td>Форматы профиля, хуков, шаблонов и CI</td><td>не научный источник</td><td>нормативная база scaffold</td></tr>
 </tbody>
       </table>
@@ -206,28 +208,31 @@
       <h2>Синтез и предлагаемый дизайн</h2>
     </div>
     <div class="body">
-      <p>Аналоги дают параметризованные шаблоны и декларативные окружения, но не связывают профиль, правила, research/review и проверки. Исследования добавляют: новичку нужны явные точки входа и минимальная инструкция; избыточный старт повышает когнитивную нагрузку. Поэтому bootstrap должен быть небольшим, проверяемым и не перезаписывать существующее.</p>
+      <p>Аналоги дают параметризованные шаблоны и декларативные окружения, но не связывают профиль, правила, research/review и проверки. Исследования добавляют: новичку нужны явные точки входа и минимальная инструкция; избыточный старт повышает когнитивную нагрузку; качество опроса зависит от формулировок. Поэтому bootstrap начинается с опроса, а итоговый workflow утверждается в HTML до scaffold.</p>
       <div class="flow">
-        <span class="step hot">Инвентаризация</span><span class="arrow">→</span>
-        <span class="step">Профиль и AGENTS</span><span class="arrow">→</span>
-        <span class="step">Docs, хуки, CI</span><span class="arrow">→</span>
-        <span class="step">Проверка bootstrap</span>
+        <span class="step hot">Опрос</span><span class="arrow">→</span>
+        <span class="step">Подбор навыков</span><span class="arrow">→</span>
+        <span class="step">HTML-план</span><span class="arrow">→</span>
+        <span class="step">Утверждение</span><span class="arrow">→</span>
+        <span class="step">Scaffold</span><span class="arrow">→</span>
+        <span class="step">Проверка</span>
       </div>
       <div class="grid2">
         <div class="box">
           <h3>Вход</h3>
-          <p>Пустой или существующий репозиторий, стек, команды проверки, владелец и default branch.</p>
+          <p>Пустой или существующий репозиторий, ответы пользователя, стек, команды проверки, владелец и default branch.</p>
         </div>
         <div class="box">
           <h3>Выход</h3>
-          <p>profile.yml, AGENTS.md, docs/, hooks, CI, bootstrap-report.html.</p>
+          <p><code>bootstrap-plan.html</code> со статусом <code>approved</code>, profile.yml, AGENTS.md, docs/, hooks, CI, bootstrap-report.html.</p>
         </div>
       </div>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
       <ul>
         <li><code>SKILL.md</code> — триггеры, процедура, границы</li>
-        <li><code>references/</code> — минимальный состав и схема профиля</li>
+        <li><code>references/</code> — минимальный состав, схема профиля и вопросы опроса</li>
         <li><code>scripts/</code> — init_repo.py и check_bootstrap.py</li>
+        <li><code>templates/</code> — профиль, AGENTS, hooks, CI и bootstrap-plan.html</li>
         <li><code>examples/</code> — пустой репозиторий до и после</li>
       </ul>
     </div>
@@ -244,6 +249,7 @@
         <tbody>
           <tr><td>Копировать существующий репозиторий</td><td>Быстро и знакомо</td><td>Переносит чужие долги и секреты</td><td>Нет минимального контракта</td></tr>
           <tr><td>Полный фреймворк</td><td>Много готовых практик</td><td>Высокий порог и лишние файлы</td><td>Несоразмерно новому репозиторию</td></tr>
+          <tr><td>Сразу scaffold без опроса</td><td>Быстрый старт</td><td>Набор навыков не совпадает с задачами</td><td>Нет утверждения workflow</td></tr>
         </tbody>
       </table>
     </div>
@@ -259,9 +265,11 @@
         <span><b>Время до рабочего bootstrap</b> — ≤ 10 минут</span>
         <span><b>Обязательные файлы на месте</b> — 100 %</span>
         <span><b>Перезаписи без подтверждения</b> — 0</span>
+        <span><b>Утверждение workflow до scaffold</b> — 100 %</span>
       </div>
       <ol>
         <li>Bootstrap на пустом репозитории создаёт профиль, AGENTS, docs, hooks и CI.</li>
+        <li><code>bootstrap-plan.html</code> содержит набор навыков и workflow; scaffold начинается только после <code>approved</code>.</li>
         <li>Повторный запуск не перезаписывает существующие файлы без --force.</li>
         <li>check_bootstrap.py проходит на созданном репозитории.</li>
       </ol>
@@ -279,12 +287,15 @@
         <tbody>
           <tr><td>Перезапись существующих файлов</td><td>средняя</td><td>высокое</td><td>dry-run по умолчанию, запрет overwrite</td></tr>
           <tr><td>Избыточная конфигурация</td><td>высокая</td><td>среднее</td><td>минимальный набор и optional-блоки</td></tr>
+          <tr><td>Опрос утомляет или даёт неверную рекомендацию</td><td>средняя</td><td>среднее</td><td>короткие вопросы, план на утверждение, правки до scaffold</td></tr>
         </tbody>
       </table>
-      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Обязательные требования</h3>
       <ol>
-        <li>Где хранить профиль: profile.yml в корне или .opencode/profile.yml?</li>
-        <li>Делать ли GitHub Actions CI по умолчанию?</li>
+        <li>Опрос пользователя проводится до scaffold; ответы фиксируются в профиле.</li>
+        <li>Итоговый workflow и набор навыков показываются в <code>bootstrap-plan.html</code>; scaffold только после <code>approved</code>.</li>
+        <li>Рекомендуются только реализованные навыки; proposed попадают в план, но не устанавливаются.</li>
+        <li>Профиль — <code>profile.yml</code> в корне; GitHub Actions CI — опциональный блок; <code>--force</code> только явно.</li>
       </ol>
     </div>
   </section>
@@ -309,6 +320,8 @@
 <li><a href="https://pre-commit.com/">pre-commit docs</a> — доступно 2026-10-31.</li>
 <li><a href="https://copier.readthedocs.io/">Copier docs</a> — доступно 2026-10-31.</li>
 <li><a href="https://docs.github.com/actions">GitHub Actions docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1136/bmj.328.7451.1312">Boynton &amp; Greenhalgh, 2004</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1111/j.1365-2929.2006.02418.x">DiCicco-Bloom &amp; Crabtree, 2006</a> — доступно 2026-10-31.</li>
 </ol>
     </div>
   </section>
