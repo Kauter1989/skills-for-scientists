@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Карта библиотеки скиллов — opencode-skills</title>
+<style>
+  :root {
+    --paper: #f6f5f2;
+    --card: #ffffff;
+    --ink: #14181f;
+    --muted: #5f6875;
+    --line: #dfe2e7;
+    --line-strong: #c4cad2;
+    --accent: #1f5f5b;
+    --dev: #2f6f6a;
+    --science: #5b4b9a;
+    --report: #a8622a;
+    --harness: #59636e;
+    --green: #1f7a4d;
+    --amber: #a96500;
+    --red: #b42318;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(20,24,31,.04), 0 10px 28px rgba(20,24,31,.05);
+    --mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(246,245,242,.94); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .wrap { display: flex; align-items: center; gap: 16px; min-height: 52px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  .topbar nav { margin-left: auto; display: flex; gap: 14px; flex-wrap: wrap; }
+  .topbar nav a { font-size: 12px; color: var(--muted); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
+  .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--ink); border-color: var(--accent); }
+
+  header.hero { padding: 46px 0 10px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(32px, 4.4vw, 50px); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 12px; }
+  .lead { font-size: 18px; color: var(--muted); max-width: 900px; margin: 0 0 24px; }
+  .hero-stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-bottom: 26px; }
+  .hstat { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px 14px; box-shadow: var(--shadow); }
+  .hstat b { display: block; font-size: 26px; letter-spacing: -.02em; line-height: 1.1; }
+  .hstat span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .lg-swatch { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line-strong); background: #fff; }
+  .lg-swatch.solid { background: var(--accent); border-color: var(--accent); }
+  .lg-swatch.dashed { border-style: dashed; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--accent); }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px; box-shadow: var(--shadow); margin-bottom: 18px;
+  }
+  .search { flex: 1 1 240px; min-width: 200px; position: relative; }
+  .search input {
+    width: 100%; border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 11px 8px 32px; font: 13px var(--sans); background: #fff; color: var(--ink);
+  }
+  .search::before { content: "⌕"; position: absolute; left: 10px; top: 6px; color: var(--muted); font-size: 16px; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip-btn {
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+    border-radius: 999px; padding: 5px 10px; font: 11.5px var(--sans); cursor: pointer;
+  }
+  .chip-btn:hover { border-color: var(--line-strong); color: var(--ink); }
+  .chip-btn[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chip-btn .c-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+  .reset { border: 0; background: none; color: var(--muted); font-size: 11.5px; cursor: pointer; text-decoration: underline; }
+
+  section.panel {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden;
+  }
+  .panel-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .panel-head h2 { margin: 0; font-size: 21px; letter-spacing: -.01em; }
+  .panel-head p { margin: 0; color: var(--muted); font-size: 12.5px; }
+  .panel-head .count { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .panel-body { padding: 18px 22px 22px; }
+
+  .lifecycle { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; }
+  .block-card {
+    text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 10px;
+    padding: 10px 10px 9px; cursor: pointer; min-width: 120px; position: relative;
+  }
+  .block-card:hover { border-color: var(--accent); }
+  .block-card[aria-pressed="true"] { border-color: var(--accent); background: #eef4f3; box-shadow: inset 0 0 0 1px var(--accent); }
+  .block-card .bn { font-family: var(--mono); font-size: 9.5px; color: var(--muted); }
+  .block-card .bt { font-size: 12px; font-weight: 700; line-height: 1.25; margin: 3px 0 4px; }
+  .block-card .bc { font-size: 10px; color: var(--muted); }
+  .block-card .bar { height: 3px; border-radius: 2px; background: var(--line); margin-top: 7px; overflow: hidden; }
+  .block-card .bar i { display: block; height: 100%; background: var(--accent); }
+
+  .flows { display: grid; gap: 12px; }
+  .flow { display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .flow:last-child { border-bottom: 0; }
+  .flow-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding-top: 5px; }
+  .flow-line { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .fitem { display: inline-flex; align-items: center; gap: 5px; }
+  .fstep {
+    font-size: 11.5px; border: 1px solid var(--line); border-radius: 6px;
+    padding: 3px 7px; background: #fff; white-space: nowrap;
+  }
+  .fstep.implemented { background: #e6efee; border-color: #b8d0cd; color: #174a47; font-weight: 600; }
+  .fstep.new { background: #fbf0dc; border-color: #ead3a8; color: #8a5300; font-weight: 600; }
+  .farrow { color: var(--line-strong); font-size: 12px; }
+
+  .matrix-wrap { overflow-x: auto; }
+  table.matrix { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 880px; }
+  table.matrix th, table.matrix td { border-bottom: 1px solid var(--line); }
+  table.matrix thead th {
+    position: sticky; top: 0; background: #fbfbfa; z-index: 2;
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--muted); padding: 8px 5px; text-align: center; font-weight: 700;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  table.matrix thead th:first-child { text-align: left; padding-left: 12px; width: 250px; position: sticky; left: 0; z-index: 3; }
+  table.matrix tbody th {
+    text-align: left; font-weight: 500; font-size: 12px; padding: 6px 10px;
+    position: sticky; left: 0; background: var(--card); z-index: 1;
+  }
+  table.matrix tbody tr:hover th, table.matrix tbody tr:hover td { background: #f7f9f8; }
+  table.matrix tbody tr.existing th { background: #f2f7f6; }
+  table.matrix tbody tr.group th {
+    background: #f1f2f4; font-size: 10px; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--muted); font-weight: 700; padding: 5px 10px;
+  }
+  table.matrix td { text-align: center; padding: 6px 3px; }
+  table.matrix td .m-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--accent); }
+  table.matrix td .m-dot.proposed { background: transparent; border: 1.5px solid #8fa8a5; }
+  table.matrix td .m-dot.existing { background: var(--accent); box-shadow: 0 0 0 2px #d9e8e5; }
+  .s-name { display: flex; align-items: center; gap: 7px; cursor: pointer; }
+  .s-name code { font-family: var(--mono); font-size: 11.5px; color: var(--ink); }
+  .s-name .badge-mini { font-size: 8.5px; text-transform: uppercase; letter-spacing: .04em; border-radius: 3px; padding: 1px 4px; font-weight: 700; }
+  .badge-mini.dev { background: #e6efee; color: var(--dev); }
+  .badge-mini.science { background: #efebf9; color: var(--science); }
+  .badge-mini.report { background: #fbf0dc; color: var(--report); }
+  .badge-mini.harness { background: #eef0f3; color: var(--harness); }
+
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+  .card {
+    border: 1px solid var(--line); border-left: 3px solid var(--line-strong);
+    border-radius: 10px; background: #fff; padding: 12px 13px;
+    display: flex; flex-direction: column; gap: 6px; min-height: 150px;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .card:hover { box-shadow: 0 6px 18px rgba(20,24,31,.07); }
+  .card.flash { box-shadow: 0 0 0 3px #b8d0cd; }
+  .card[data-status="existing"] { border-left-style: solid; border-left-color: var(--accent); background: #fdfefd; }
+  .card[data-status="proposed"] { border-left-style: dashed; }
+  .card[data-domain="dev"] { border-left-color: var(--dev); }
+  .card[data-domain="science"] { border-left-color: var(--science); }
+  .card[data-domain="report"] { border-left-color: var(--report); }
+  .card[data-domain="harness"] { border-left-color: var(--harness); }
+  .card-top { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .tag { font-size: 8.5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; padding: 2px 5px; border-radius: 3px; }
+  .tag.existing { background: #e6efee; color: var(--accent); }
+  .tag.proposed { background: #eef0f3; color: var(--muted); }
+  .tag.p0 { background: #fbe9e7; color: var(--red); }
+  .tag.p1 { background: #fbf0dc; color: var(--amber); }
+  .tag.p2 { background: #eef0f3; color: var(--muted); }
+  .card h3 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
+  .card h3 code { font-family: var(--mono); font-size: 13px; }
+  .card .sum { margin: 0; font-size: 12px; color: #3c434d; flex: 1; }
+  .card .io { font-size: 10.5px; color: var(--muted); font-family: var(--mono); line-height: 1.4; }
+  .card .from { font-size: 10px; color: #7b8490; font-style: italic; }
+  .card .blocks { display: flex; flex-wrap: wrap; gap: 4px; }
+  .card .blocks span { font-size: 9px; color: var(--muted); background: #f3f4f5; border-radius: 3px; padding: 1px 4px; }
+  .card .links { font-size: 10.5px; color: var(--muted); }
+
+  .repo-grid { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(280px,.65fr); gap: 18px; }
+  pre.tree {
+    margin: 0; background: #12161c; color: #d9e1e8; border-radius: 10px;
+    padding: 16px 18px; font: 11.5px/1.65 var(--mono); overflow-x: auto;
+  }
+  pre.tree .c { color: #7f8b98; }
+  pre.tree .new { color: #f0c98a; }
+  pre.tree .dir { color: #9fd3cd; }
+  .repo-notes { display: grid; gap: 10px; align-content: start; }
+  .note-card { border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; background: #fcfcfb; }
+  .note-card h4 { margin: 0 0 5px; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .note-card p, .note-card li { margin: 0; font-size: 12px; color: #3c434d; }
+  .note-card ul { margin: 0; padding-left: 16px; }
+  .note-card li { margin-bottom: 3px; }
+  .anatomy { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 6px; margin-top: 10px; }
+  .anatomy div { border: 1px solid var(--line); border-radius: 7px; padding: 7px; background: #fff; }
+  .anatomy b { display: block; font-family: var(--mono); font-size: 10.5px; margin-bottom: 2px; }
+  .anatomy span { font-size: 9.5px; color: var(--muted); }
+
+  .count-line { font-size: 11.5px; color: var(--muted); margin: 0 0 10px; }
+  .empty { padding: 28px; text-align: center; color: var(--muted); font-size: 13px; display: none; }
+  .empty.show { display: block; }
+
+  footer { padding: 10px 0 44px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 1050px) {
+    .cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .repo-grid { grid-template-columns: 1fr; }
+    .anatomy { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  }
+  @media (max-width: 700px) {
+    .wrap { padding: 0 14px; }
+    .hero-stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .cards { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: 1fr; gap: 4px; }
+    .anatomy { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .panel-head .count { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body { background: #fff; font-size: 9pt; }
+    .topbar, .controls { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section.panel, .card, .hstat { box-shadow: none; break-inside: avoid; }
+    .cards { grid-template-columns: repeat(3, 1fr); }
+    pre.tree { background: #fff; color: #111; border: 1px solid #ccc; }
+    pre.tree .c { color: #555; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">Skill library · opencode-skills</span>
+    <nav aria-label="Разделы карты">
+      <a href="skills-development-plan.html">План</a>
+      <a href="#lifecycle">Процесс</a>
+      <a href="#flows">Потоки</a>
+      <a href="#matrix">Матрица</a>
+      <a href="#catalog">Каталог</a>
+      <a href="#repo">Репозиторий</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header class="hero">
+    <div class="kicker">Библиотека навыков · карта применения</div>
+    <h1>От задачи до отчёта:<br>что делает каждый скилл</h1>
+    <p class="lead">
+      Скиллы сгруппированы по блокам разработки, науки и отчётности.
+      Префикс имени показывает домен: <code>dev-</code>, <code>sci-</code>,
+      <code>harness-</code>; отчётные навыки лежат в <code>reports/</code>.
+      Сплошная рамка — уже в репозитории, пунктир — предложено. Приоритет P0
+      означает, что без скилла процесс теряет проверяемое звено.
+    </p>
+    <div class="hero-stats">
+      <div class="hstat"><b id="stat-existing">3</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">39</b><span>предложено</span></div>
+      <div class="hstat"><b>9</b><span>блоков процесса</span></div>
+      <div class="hstat"><b>4</b><span>домена</span></div>
+    </div>
+    <div class="legend">
+      <span><i class="lg-swatch solid"></i> реализовано</span>
+      <span><i class="lg-swatch dashed"></i> предложено</span>
+      <span><i class="dot"></i> применяется в блоке</span>
+      <span>P0 — фундамент, P1 — следующий шаг, P2 — по мере надобности</span>
+    </div>
+  </header>
+
+  <div class="controls" role="search">
+    <label class="search">
+      <span class="sr-only" style="position:absolute;left:-9999px">Поиск по скиллам</span>
+      <input id="q" type="search" placeholder="Найти скилл: release, отчёт, права, эксперимент…" autocomplete="off">
+    </label>
+    <div class="chips" id="domain-chips" aria-label="Фильтр по домену">
+      <button class="chip-btn" data-domain="all" aria-pressed="true">Все домены</button>
+      <button class="chip-btn" data-domain="dev" aria-pressed="false"><i class="c-dot" style="background:#2f6f6a"></i>Разработка</button>
+      <button class="chip-btn" data-domain="science" aria-pressed="false"><i class="c-dot" style="background:#5b4b9a"></i>Наука</button>
+      <button class="chip-btn" data-domain="report" aria-pressed="false"><i class="c-dot" style="background:#a8622a"></i>Отчёты</button>
+      <button class="chip-btn" data-domain="harness" aria-pressed="false"><i class="c-dot" style="background:#59636e"></i>Харнесс</button>
+    </div>
+    <div class="chips" id="status-chips" aria-label="Фильтр по статусу">
+      <button class="chip-btn" data-status="all" aria-pressed="true">Все</button>
+      <button class="chip-btn" data-status="existing" aria-pressed="false">В репозитории</button>
+      <button class="chip-btn" data-status="proposed" aria-pressed="false">Предложено</button>
+    </div>
+    <button class="reset" id="reset" type="button">Сбросить</button>
+  </div>
+
+  <section class="panel" id="lifecycle">
+    <div class="panel-head">
+      <h2>Блоки процесса</h2>
+      <p>Нажмите блок, чтобы отфильтровать каталог и матрицу</p>
+      <span class="count" id="block-count">9 блоков</span>
+    </div>
+    <div class="panel-body">
+      <div class="lifecycle" id="lifecycle-grid"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="flows">
+    <div class="panel-head">
+      <h2>Потоки</h2>
+      <p>Типовые последовательности; зелёным — уже есть, охра — предложено</p>
+    </div>
+    <div class="panel-body">
+      <div class="flows" id="flows-body"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="matrix">
+    <div class="panel-head">
+      <h2>Матрица «скилл × блок»</h2>
+      <p>Пустая клетка — скилл не применяется в этом блоке</p>
+      <span class="count" id="matrix-count"></span>
+    </div>
+    <div class="panel-body">
+      <div class="matrix-wrap">
+        <table class="matrix" id="matrix-table">
+          <caption style="position:absolute;left:-9999px">Соответствие скиллов блокам процесса</caption>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="empty" id="matrix-empty">Ничего не найдено. Сбросьте фильтры.</div>
+    </div>
+  </section>
+
+  <section class="panel" id="catalog">
+    <div class="panel-head">
+      <h2>Каталог навыков</h2>
+      <p>Вход, выход и блоки применения</p>
+      <span class="count" id="catalog-count"></span>
+    </div>
+    <div class="panel-body">
+      <div class="cards" id="cards"></div>
+      <div class="empty" id="cards-empty">Ничего не найдено. Измените запрос или сбросьте фильтры.</div>
+    </div>
+  </section>
+
+  <section class="panel" id="repo">
+    <div class="panel-head">
+      <h2>Репозиторий</h2>
+      <p>Домены и префиксы: dev-, sci-, harness-; отчёты — в отдельной папке</p>
+    </div>
+    <div class="panel-body">
+      <div class="repo-grid">
+        <div>
+          <pre class="tree" aria-label="Дерево репозитория">skills/                         <span class="c">← корень git-репозитория (origin: Kauter1989/opencode-skills)</span>
+├── LICENSE
+├── README.md                   <span class="c">← установка, домены, каталог</span>
+├── AGENTS.md                   <span class="c">← регламент: research → review → код</span>
+├── .gitignore
+├── docs/
+│   ├── skills-map.html         <span class="new">← эта карта</span>
+│   ├── skills-development-plan.html <span class="new">← план и очередь</span>
+│   ├── research/               <span class="c">← research ledger по навыкам</span>
+│   ├── reviews/                <span class="c">← HTML-ревью по навыкам</span>
+│   └── templates/
+│       ├── skill-research.md   <span class="c">← research ledger</span>
+│       └── skill-review.html   <span class="c">← HTML-ревью</span>
+├── dev/                        <span class="c">← разработка, префикс dev-</span>
+│   └── dev-pr-report-html/     <span class="new">← добавлено: HTML-отчёт об изменениях</span>
+│       ├── SKILL.md
+│       ├── references/
+│       │   ├── metrics.md      <span class="c">← формулы шести метрик</span>
+│       │   └── html-contract.md <span class="c">← схема данных и дизайн</span>
+│       ├── scripts/
+│       │   ├── collect_metrics.py  <span class="c">← Git/AST → metrics.json</span>
+│       │   └── build_report.py     <span class="c">← metrics.json → HTML</span>
+│       ├── templates/
+│       │   └── report.html     <span class="c">← автономная страница</span>
+│       └── examples/
+│           ├── metrics-example.json
+│           ├── telemetry-example.json
+│           └── example-report.html <span class="new">← демо</span>
+├── reports/                    <span class="c">← отчётность, без доменного префикса</span>
+│   └── pptx-report/            <span class="c">← есть: презентации и отчёты PPTX</span>
+│       ├── SKILL.md
+│       ├── examples/
+│       ├── references/
+│       ├── scripts/
+│       └── templates/
+├── sci/                        <span class="c">← наука, префикс sci-; пока пусто</span>
+└── harness/                    <span class="c">← общее для харнесса, префикс harness-; пока пусто</span></pre>
+          <p class="count-line" style="margin-top:10px">
+            Внутри доменных папок каталоги плоские: один каталог — один навык.
+            При установке копируется <code>dev/dev-pr-report-html</code> в
+            <code>~/.config/opencode/skill/dev-pr-report-html</code>; папка-домен
+            в имя навыка не входит.
+          </p>
+        </div>
+        <div class="repo-notes">
+          <div class="note-card">
+            <h4>Установка</h4>
+            <ul>
+              <li>домен: скопировать навык из <code>dev/</code>, <code>sci/</code> или <code>harness/</code></li>
+              <li>отчёты: скопировать из <code>reports/</code></li>
+              <li>личная: <code>~/.config/opencode/skill/&lt;name&gt;/</code></li>
+              <li>проектная: <code>.opencode/skill/&lt;name&gt;/</code></li>
+            </ul>
+          </div>
+          <div class="note-card">
+            <h4>Анатомия скилла</h4>
+            <div class="anatomy">
+              <div><b>SKILL.md</b><span>триггеры и процедура</span></div>
+              <div><b>references/</b><span>нормативы и формулы</span></div>
+              <div><b>scripts/</b><span>детерминированный сбор</span></div>
+              <div><b>templates/</b><span>форма результата</span></div>
+              <div><b>examples/</b><span>эталон и проверка</span></div>
+            </div>
+          </div>
+          <div class="note-card">
+            <h4>Правило библиотеки</h4>
+            <p>Скилл без артефакта-доказательства — это промпт. Каждый новый навык
+            добавляет вход, выход и способ проверить, что выход настоящий.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>opencode-skills · карта библиотеки</span>
+      <span>снимок 2026-10-31 · 3 реализовано · 39 предложено</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var BLOCKS = [
+    { id: "intake",  n: "01", title: "Рамка и план",        desc: "задача, ветка, цель" },
+    { id: "spec",    n: "02", title: "Спецификация",         desc: "сценарии, архитектура" },
+    { id: "build",   n: "03", title: "Реализация",           desc: "код, миграции, данные" },
+    { id: "verify",  n: "04", title: "Проверки",             desc: "тесты, живые сценарии" },
+    { id: "audit",   n: "05", title: "Ревью и аудит",        desc: "независимые проверки" },
+    { id: "release", n: "06", title: "Релиз и эксплуатация", desc: "тег, миграции, откат" },
+    { id: "report",  n: "07", title: "Отчётность",           desc: "цифры, текст, презентация" },
+    { id: "science", n: "08", title: "Исследование",         desc: "гипотеза, данные, вывод" },
+    { id: "meta",    n: "09", title: "Библиотека",           desc: "правила и сами скиллы" }
+  ];
+
+  var SKILLS = [
+    // --- реализовано ---
+    {
+      id: "pptx-report", name: "/pptx-report", domain: "report", status: "existing", priority: "core",
+      blocks: ["report"],
+      sum: "Строгие презентации и аналитические отчёты PPTX: научные доклады, отчёты о НИР, аналитика для руководства.",
+      io: "факты + spec.json → deck.pptx + PNG",
+      links: "../reports/pptx-report/SKILL.md"
+    },
+    {
+      id: "dev-pr-report-html", name: "/dev-pr-report-html", domain: "dev", status: "existing", priority: "core",
+      blocks: ["verify", "audit", "report"],
+      sum: "HTML-отчёт об изменениях фичи или майлстоуна: шесть метрик агентской разработки, доказательства, интерпретация и решения.",
+      io: "git range + telemetry → автономный HTML",
+      links: "../dev/dev-pr-report-html/SKILL.md",
+      metrics: ["Token Budget", "Architecture Drift", "Cognitive Load", "Iteration Rate", "Hallucination Risk", "Context Utilization"]
+    },
+
+    // --- разработка ---
+    {
+      id: "dev-feature-start", name: "/dev-feature-start", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["intake", "spec"],
+      sum: "Открыть фичу: ветка от свежего main, привязка к пункту плана, передача в цепочку спецификации.",
+      io: "slug → ветка + запись в план",
+      from: "практика открытия фичи",
+      links: ""
+    },
+    {
+      id: "dev-spec-chain", name: "/dev-spec-chain", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["spec"],
+      sum: "Адаптер spec-kit: specify → clarify → plan → tasks → analyze → implement; плюс checklist, constitution, converge и taskstoissues — 10 команд с шаблонами и конституцией под проект.",
+      io: "идея → spec.md, plan.md, tasks.md",
+      from: "пакет spec-kit",
+      links: ""
+    },
+    {
+      id: "dev-scope-check", name: "/dev-scope-check", domain: "dev", status: "proposed", priority: "P1",
+      blocks: ["intake"],
+      sum: "Alignment Gate: фича ↔ цель или пункт плана; работа вне плана требует явного обоснования.",
+      io: "запрос → вердикт + запись",
+      links: ""
+    },
+    {
+      id: "dev-adr", name: "/dev-adr", domain: "dev", status: "proposed", priority: "P1",
+      blocks: ["spec", "meta"],
+      sum: "Архитектурное решение с альтернативами, ценой и последствиями — чтобы не пересматривать его через полгода.",
+      io: "дилемма → docs/adr/NNN-*.md",
+      links: ""
+    },
+    {
+      id: "dev-repro-first", name: "/dev-repro-first", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["build", "verify"],
+      sum: "Воспроизвести дефект до починки: изолировать окружение, минимальный кейс, падающий тест.",
+      io: "симптом → failing test + диагноз",
+      from: "ядро практики bugfix",
+      links: ""
+    },
+    {
+      id: "dev-regression-guard", name: "/dev-regression-guard", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["verify", "meta"],
+      sum: "Из закрытого дефекта сделать защиту всего класса: тест, lint-правило, хук или CI-шаг.",
+      io: "RCA → механизм, падающий на нарушении",
+      from: "принцип «лечи класс»",
+      links: ""
+    },
+    {
+      id: "dev-refactor-under-suite", name: "/dev-refactor-under-suite", domain: "dev", status: "proposed", priority: "P2",
+      blocks: ["build", "verify"],
+      sum: "Рефакторинг под зелёной сюитой малыми шагами, без изменения наблюдаемого поведения.",
+      io: "код → диф + доказательство паритета",
+      links: ""
+    },
+    {
+      id: "dev-contract-migration", name: "/dev-contract-migration", domain: "dev", status: "proposed", priority: "P1",
+      blocks: ["spec", "release"],
+      sum: "Изменение схемы или API: миграция, обратная совместимость, окно деплоя, план отката.",
+      io: "изменение → миграция + rollback",
+      links: ""
+    },
+    {
+      id: "dev-dependency-bump", name: "/dev-dependency-bump", domain: "dev", status: "proposed", priority: "P2",
+      blocks: ["build", "release"],
+      sum: "Обновление тулчейна и лока без рассинхрона версий — класс ошибок «версия поднята, lock забыт».",
+      io: "версия → зелёный CI + memory",
+      links: ""
+    },
+    {
+      id: "dev-verification-live", name: "/dev-verification-live", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["verify", "audit"],
+      sum: "Живая проверка изменения: браузер, CLI, HTTP API, desktop; песочница без пароля и рабочей базы; ширины и уборка.",
+      io: "изменение → доказательство + абзац для PR",
+      from: "практика живой проверки",
+      links: ""
+    },
+    {
+      id: "dev-milestone-audit", name: "/dev-milestone-audit", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["verify", "audit"],
+      sum: "Аудит майлстоуна: покрытие, затем пять независимых read-only проверок и запись расхождений в план.",
+      io: "фаза → отчёт: подтверждено / не сделано / дефекты",
+      from: "практика аудита фазы",
+      links: ""
+    },
+    {
+      id: "dev-perf-baseline", name: "/dev-perf-baseline", domain: "dev", status: "proposed", priority: "P2",
+      blocks: ["verify", "audit"],
+      sum: "Паритет с аналогом: замеры в покое и под нагрузкой, объём ответа, поведение на сотнях записей.",
+      io: "изменение → таблица чисел с методом",
+      links: ""
+    },
+    {
+      id: "dev-threat-model", name: "/dev-threat-model", domain: "dev", status: "proposed", priority: "P1",
+      blocks: ["spec", "audit", "release"],
+      sum: "Модель угроз и проверка перед релизом: права, токены, загрузка файлов, supply chain.",
+      io: "система → риски + меры",
+      links: ""
+    },
+    {
+      id: "dev-ship", name: "/dev-ship", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["verify", "audit", "release"],
+      sum: "Сдача ветки: полный прогон, покрытие, self-review, PR, зелёный CI, merge --no-ff, план и memory.",
+      io: "ветка → main + PR",
+      from: "практика сдачи ветки",
+      links: ""
+    },
+    {
+      id: "dev-release", name: "/dev-release", domain: "dev", status: "proposed", priority: "P1",
+      blocks: ["release"],
+      sum: "Выпуск версии: номер по содержимому, миграции и ручные действия, тег только на merge-коммит, откат.",
+      io: "main → тег vX.Y.Z",
+      from: "практика выпуска версии",
+      links: ""
+    },
+    {
+      id: "dev-postmortem", name: "/dev-postmortem", domain: "dev", status: "proposed", priority: "P1",
+      blocks: ["audit", "report"],
+      sum: "Инцидент: таймлайн, причина, влияние, что сработало, какие механизмы добавить.",
+      io: "инцидент → разбор + действия",
+      links: ""
+    },
+
+    // --- отчётность ---
+    {
+      id: "evidence-ledger", name: "/evidence-ledger", domain: "report", status: "proposed", priority: "P0",
+      blocks: ["verify", "audit", "report", "science"],
+      sum: "Таблица «утверждение → источник → команда/файл → дата». Один артефакт для отчёта, аудита, статьи и презентации.",
+      io: "утверждения → реестр доказательств",
+      from: "реестр чисел и источников",
+      links: ""
+    },
+    {
+      id: "metrics-snapshot", name: "/metrics-snapshot", domain: "report", status: "proposed", priority: "P1",
+      blocks: ["report"],
+      sum: "Собрать KPI цифрами: команда, метод, дата снимка, дельта к прошлому — без «около» и «примерно».",
+      io: "вопрос → таблица чисел",
+      links: ""
+    },
+    {
+      id: "technical-writing", name: "/technical-writing", domain: "report", status: "proposed", priority: "P1",
+      blocks: ["report"],
+      sum: "Регистр технического текста: стоп-лист метафор и оценок, длина фразы, заголовок-факт; проверка линтером.",
+      io: "черновик → текст без оценок",
+      from: "правила технического регистра",
+      links: ""
+    },
+    {
+      id: "report", name: "/report", domain: "report", status: "proposed", priority: "P1",
+      blocks: ["report"],
+      sum: "Универсальный отчёт: аудитория → структура → факты → выводы → ограничения. Основа для deck и HTML-отчёта.",
+      io: "данные → документ",
+      links: ""
+    },
+    {
+      id: "status-report", name: "/status-report", domain: "report", status: "proposed", priority: "P2",
+      blocks: ["report"],
+      sum: "Периодический статус: сделано / не сделано / риски / следующий шаг, с датой и источником.",
+      io: "период → статус",
+      links: ""
+    },
+    {
+      id: "exec-summary", name: "/exec-summary", domain: "report", status: "proposed", priority: "P2",
+      blocks: ["report"],
+      sum: "Одна страница для руководителя: решение, цена, риск, срок.",
+      io: "отчёт → 1 страница",
+      links: ""
+    },
+    {
+      id: "release-notes", name: "/release-notes", domain: "report", status: "proposed", priority: "P2",
+      blocks: ["release", "report"],
+      sum: "Из мержей и тегов — пользовательское описание изменений и ручных действий после обновления.",
+      io: "диапазон → release notes",
+      links: ""
+    },
+    {
+      id: "grant-proposal", name: "/grant-proposal", domain: "report", status: "proposed", priority: "P2",
+      blocks: ["report", "science"],
+      sum: "Заявка: проблема → состояние искусства → метод → план работ → риски → бюджет → метрики успеха.",
+      io: "идея → заявка",
+      links: ""
+    },
+
+    // --- наука ---
+    {
+      id: "sci-literature-review", name: "/sci-literature-review", domain: "science", status: "proposed", priority: "P1",
+      blocks: ["intake", "science"],
+      sum: "Протокол поиска, критерии включения и исключения, таблица доказательств, пробелы.",
+      io: "вопрос → обзор + таблица",
+      links: ""
+    },
+    {
+      id: "sci-experiment-plan", name: "/sci-experiment-plan", domain: "science", status: "proposed", priority: "P1",
+      blocks: ["intake", "spec", "science"],
+      sum: "Гипотеза, переменные, контроли, критерий успеха и размер выборки — до запуска, а не после.",
+      io: "гипотеза → протокол",
+      links: ""
+    },
+    {
+      id: "sci-repro-run", name: "/sci-repro-run", domain: "science", status: "proposed", priority: "P1",
+      blocks: ["build", "science"],
+      sum: "Детерминированный прогон: seeds, версии, окружение, хэши входных данных, провенанс-манифест.",
+      io: "эксперимент → манифест + результат",
+      links: ""
+    },
+    {
+      id: "sci-dataset-card", name: "/sci-dataset-card", domain: "science", status: "proposed", priority: "P2",
+      blocks: ["spec", "science"],
+      sum: "Происхождение данных, лицензия, ограничения, известные смещения, PII.",
+      io: "данные → карточка",
+      links: ""
+    },
+    {
+      id: "sci-stats-plan", name: "/sci-stats-plan", domain: "science", status: "proposed", priority: "P1",
+      blocks: ["verify", "science"],
+      sum: "Проверка предпосылок, выбор теста, размер эффекта, поправка на множественные сравнения.",
+      io: "данные → план анализа",
+      links: ""
+    },
+    {
+      id: "sci-stats-report", name: "/sci-stats-report", domain: "science", status: "proposed", priority: "P1",
+      blocks: ["verify", "report", "science"],
+      sum: "Отчёт о результате: n, эффект, интервалы, ограничения, что бы опровергло вывод.",
+      io: "анализ → результат",
+      links: ""
+    },
+    {
+      id: "sci-figure", name: "/sci-figure", domain: "science", status: "proposed", priority: "P2",
+      blocks: ["report", "science"],
+      sum: "Воспроизводимый график из данных: скрипт-источник, подписи, единицы, палитра, доступность.",
+      io: "данные → figure + скрипт",
+      links: ""
+    },
+    {
+      id: "sci-red-team-results", name: "/sci-red-team-results", domain: "science", status: "proposed", priority: "P2",
+      blocks: ["audit", "science"],
+      sum: "Состязательная проверка своих выводов: альтернативные объяснения и что бы опровергло результат.",
+      io: "результат → контраргументы",
+      links: ""
+    },
+    {
+      id: "sci-replication-check", name: "/sci-replication-check", domain: "science", status: "proposed", priority: "P2",
+      blocks: ["verify", "science"],
+      sum: "Воспроизвести результат по описанию, не подглядывая в авторский код.",
+      io: "описание → вердикт",
+      links: ""
+    },
+
+    // --- харнесс ---
+    {
+      id: "harness-init", name: "/harness-init", domain: "harness", status: "proposed", priority: "P0",
+      blocks: ["intake", "meta"],
+      sum: "Развернуть воркфлоу в новом репозитории: профиль проекта, конституция, хуки, CI, шаблоны документов.",
+      io: "репозиторий → рабочий harness",
+      links: ""
+    },
+    {
+      id: "harness-skill-template", name: "/harness-skill-template", domain: "harness", status: "existing", priority: "core",
+      blocks: ["meta"],
+      sum: "Контракт и каркас навыка: frontmatter, обязательные разделы, шаблон, генератор и валидатор.",
+      io: "процедура → SKILL.md + проверка",
+      links: "../harness/harness-skill-template/SKILL.md"
+    },
+    {
+      id: "harness-skill-audit", name: "/harness-skill-audit", domain: "harness", status: "proposed", priority: "P1",
+      blocks: ["meta"],
+      sum: "Ревизия библиотеки: дубли триггеров, скиллы без артефакта, устаревшие команды, покрытие домена.",
+      io: "библиотека → отчёт",
+      links: ""
+    },
+    {
+      id: "harness-skill-eval", name: "/harness-skill-eval", domain: "harness", status: "proposed", priority: "P2",
+      blocks: ["meta"],
+      sum: "Проверка скилла на реальных задачах: срабатывает ли, воспроизводим ли результат дважды.",
+      io: "скилл → метрики качества",
+      links: ""
+    },
+    {
+      id: "harness-rule-to-mechanism", name: "/harness-rule-to-mechanism", domain: "harness", status: "proposed", priority: "P0",
+      blocks: ["meta"],
+      sum: "Правило из prose → хук, lint-правило, тест или CI-шаг. Правило без машины не существует.",
+      io: "правило → проверка",
+      from: "принцип «правило = механизм»",
+      links: ""
+    },
+    {
+      id: "harness-analyze-codebase", name: "/harness-analyze-codebase", domain: "harness", status: "proposed", priority: "P1",
+      blocks: ["intake", "meta"],
+      sum: "Карта кодовой базы: слои, точки входа, граф импортов, тесты, конвенции, blast radius и список файлов для чтения.",
+      io: "репозиторий → карта",
+      links: ""
+    },
+    {
+      id: "harness-session-retrospective", name: "/harness-session-retrospective", domain: "harness", status: "proposed", priority: "P2",
+      blocks: ["intake", "meta"],
+      sum: "Ретроспектива сессии: что сделано, открыто, следующий шаг, где остановились и какие файлы трогать нельзя.",
+      io: "сессия → записка",
+      links: ""
+    }
+  ];
+
+  var DOMAIN_LABEL = { dev: "разработка", science: "наука", report: "отчёты", harness: "харнесс" };
+  var BLOCK_LABEL = {};
+  BLOCKS.forEach(function (b) { BLOCK_LABEL[b.id] = b.title; });
+
+  var state = { domain: "all", status: "all", block: null, q: "" };
+
+  function $(sel) { return document.querySelector(sel); }
+  function el(tag, attrs) {
+    var node = document.createElement(tag);
+    var a = attrs || {};
+    Object.keys(a).forEach(function (k) {
+      if (k === "text") node.textContent = a[k];
+      else if (k === "className") node.className = a[k];
+      else if (k === "html") node.innerHTML = a[k];
+      else if (a[k] !== null && a[k] !== undefined && a[k] !== false) node.setAttribute(k, a[k]);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var c = arguments[i];
+      if (c === null || c === undefined || c === false) continue;
+      if (Array.isArray(c)) c.forEach(function (x) { if (x) node.appendChild(x); });
+      else if (typeof c === "string" || typeof c === "number") node.appendChild(document.createTextNode(String(c)));
+      else node.appendChild(c);
+    }
+    return node;
+  }
+
+  function matches(s) {
+    if (state.domain !== "all" && s.domain !== state.domain) return false;
+    if (state.status !== "all" && s.status !== state.status) return false;
+    if (state.block && s.blocks.indexOf(state.block) === -1) return false;
+    if (state.q) {
+      var hay = (s.name + " " + s.id + " " + s.sum + " " + s.blocks.map(function (b) { return BLOCK_LABEL[b]; }).join(" ")).toLowerCase();
+      if (hay.indexOf(state.q.toLowerCase()) === -1) return false;
+    }
+    return true;
+  }
+
+  function visible() { return SKILLS.filter(matches); }
+
+  function renderLifecycle() {
+    var grid = $("#lifecycle-grid");
+    grid.replaceChildren();
+    var list = visible();
+    BLOCKS.forEach(function (b) {
+      var count = list.filter(function (s) { return s.blocks.indexOf(b.id) >= 0; }).length;
+      var total = SKILLS.filter(function (s) { return s.blocks.indexOf(b.id) >= 0; }).length;
+      var pct = total ? Math.round(count / total * 100) : 0;
+      var btn = el("button", {
+        className: "block-card", type: "button",
+        "aria-pressed": state.block === b.id ? "true" : "false",
+        "aria-label": b.title + ": " + count + " скиллов"
+      },
+        el("div", { className: "bn", text: "BLOCK " + b.n }),
+        el("div", { className: "bt", text: b.title }),
+        el("div", { className: "bc", text: b.desc }),
+        el("div", { className: "bc", text: count + " / " + total + " скиллов" }),
+        el("div", { className: "bar" }, el("i", { style: "width:" + pct + "%" }))
+      );
+      btn.addEventListener("click", function () {
+        state.block = (state.block === b.id) ? null : b.id;
+        renderAll();
+        document.getElementById("matrix").scrollIntoView({ block: "start" });
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  var FLOWS = [
+    {
+      label: "Разработка",
+      steps: [
+        { t: "/dev-feature-start", c: "new" }, { t: "/dev-spec-chain", c: "new" }, { t: "/dev-adr", c: "new" },
+        { t: "/dev-repro-first", c: "new" }, { t: "/dev-verification-live", c: "new" },
+        { t: "/dev-milestone-audit", c: "new" }, { t: "/dev-ship", c: "new" }, { t: "/dev-release", c: "new" },
+        { t: "/dev-pr-report-html", c: "implemented" }, { t: "/dev-postmortem", c: "new" }
+      ]
+    },
+    {
+      label: "Наука",
+      steps: [
+        { t: "/sci-literature-review", c: "new" }, { t: "/sci-experiment-plan", c: "new" },
+        { t: "/sci-dataset-card", c: "new" }, { t: "/sci-repro-run", c: "new" },
+        { t: "/sci-stats-plan", c: "new" }, { t: "/sci-stats-report", c: "new" },
+        { t: "/sci-figure", c: "new" }, { t: "/sci-red-team-results", c: "new" }
+      ]
+    },
+    {
+      label: "Отчёты",
+      steps: [
+        { t: "/evidence-ledger", c: "new" }, { t: "/metrics-snapshot", c: "new" },
+        { t: "/technical-writing", c: "new" }, { t: "/report", c: "new" },
+        { t: "/pptx-report", c: "implemented" }, { t: "/dev-pr-report-html", c: "implemented" }
+      ]
+    },
+    {
+      label: "Харнесс",
+      steps: [
+        { t: "/harness-init", c: "new" }, { t: "/harness-skill-template", c: "implemented" },
+        { t: "/harness-rule-to-mechanism", c: "new" }, { t: "/harness-skill-eval", c: "new" },
+        { t: "/harness-skill-audit", c: "new" }
+      ]
+    }
+  ];
+
+  function renderFlows() {
+    var body = $("#flows-body");
+    FLOWS.forEach(function (flow) {
+      var line = el("div", { className: "flow-line" });
+      flow.steps.forEach(function (step, i) {
+        line.appendChild(el("span", { className: "fitem" },
+          i ? el("span", { className: "farrow", text: "→" }) : null,
+          el("span", { className: "fstep " + step.c, text: step.t })
+        ));
+      });
+      body.appendChild(el("div", { className: "flow" },
+        el("div", { className: "flow-label", text: flow.label }),
+        line
+      ));
+    });
+  }
+
+  var SHORT_BLOCK = { intake: "Рамка", spec: "Спека", build: "Код", verify: "Проверки", audit: "Аудит", release: "Релиз", report: "Отчёт", science: "Наука", meta: "Мета" };
+
+  function renderMatrix() {
+    var list = visible();
+    var table = $("#matrix-table");
+    var thead = table.querySelector("thead");
+    var tbody = table.querySelector("tbody");
+    thead.replaceChildren();
+    tbody.replaceChildren();
+    var headRow = el("tr");
+    headRow.appendChild(el("th", { text: "Скилл" }));
+    BLOCKS.forEach(function (b) {
+      headRow.appendChild(el("th", { text: b.n + " " + SHORT_BLOCK[b.id], title: b.title + " — " + b.desc }));
+    });
+    thead.appendChild(headRow);
+
+    var domains = ["dev", "science", "report", "harness"];
+    domains.forEach(function (d) {
+      var groupSkills = list.filter(function (s) { return s.domain === d; });
+      if (!groupSkills.length) return;
+      var groupRow = el("tr", { className: "group" });
+      groupRow.appendChild(el("th", { text: DOMAIN_LABEL[d] + " · " + groupSkills.length }));
+      BLOCKS.forEach(function () { groupRow.appendChild(el("td")); });
+      tbody.appendChild(groupRow);
+
+      groupSkills.forEach(function (s) {
+        var row = el("tr", { className: s.status === "existing" ? "existing" : "" });
+        var nameCell = el("th", {});
+        nameCell.appendChild(el("div", { className: "s-name", title: "Показать карточку" },
+          el("span", { className: "m-dot " + s.status, style: "width:6px;height:6px;background:" + (s.status === "existing" ? "var(--accent)" : "transparent"), border: s.status === "proposed" ? "1px solid var(--line-strong)" : "0" }),
+          el("code", { text: s.name }),
+          el("span", { className: "badge-mini " + s.domain, text: DOMAIN_LABEL[s.domain] })
+        ));
+        nameCell.querySelector(".s-name").addEventListener("click", function () {
+          var card = document.querySelector('.card[data-id="' + s.id + '"]');
+          if (card) {
+            card.scrollIntoView({ block: "center" });
+            card.classList.add("flash");
+            setTimeout(function () { card.classList.remove("flash"); }, 1400);
+          }
+        });
+        row.appendChild(nameCell);
+        BLOCKS.forEach(function (b) {
+          var td = el("td");
+          if (s.blocks.indexOf(b.id) >= 0) {
+            td.appendChild(el("span", { className: "m-dot " + s.status, title: BLOCK_LABEL[b.id] }));
+          }
+          row.appendChild(td);
+        });
+        tbody.appendChild(row);
+      });
+    });
+
+    $("#matrix-count").textContent = list.length + " из " + SKILLS.length + " скиллов";
+    $("#matrix-empty").classList.toggle("show", list.length === 0);
+    table.style.display = list.length ? "" : "none";
+  }
+
+  function renderCards() {
+    var wrap = $("#cards");
+    var list = visible();
+    wrap.replaceChildren();
+    list.forEach(function (s) {
+      var top = el("div", { className: "card-top" },
+        el("span", { className: "tag " + s.status, text: s.status === "existing" ? "в репозитории" : "предложено" }),
+        s.priority !== "core" ? el("span", { className: "tag " + s.priority.toLowerCase(), text: s.priority }) : null,
+        el("span", { className: "tag " + s.domain, style: "background:#f3f4f5;color:var(--muted)", text: DOMAIN_LABEL[s.domain] })
+      );
+      var card = el("article", { className: "card", "data-id": s.id, "data-status": s.status, "data-domain": s.domain },
+        top,
+        el("h3", {}, el("code", { text: s.name })),
+        el("p", { className: "sum", text: s.sum }),
+        el("div", { className: "io", text: "→ " + s.io }),
+        s.from ? el("div", { className: "from", text: "основа: " + s.from }) : null,
+        el("div", { className: "blocks" }, s.blocks.map(function (b) {
+          return el("span", { text: BLOCK_LABEL[b] });
+        }))
+      );
+      if (s.metrics) {
+        card.appendChild(el("div", { className: "blocks" }, s.metrics.map(function (m) {
+          return el("span", { text: m });
+        })));
+      }
+      if (s.links) {
+        card.appendChild(el("div", { className: "links" }, el("a", { href: s.links, text: "SKILL.md →" })));
+      }
+      wrap.appendChild(card);
+    });
+    $("#catalog-count").textContent = list.length + " из " + SKILLS.length;
+    $("#cards-empty").classList.toggle("show", list.length === 0);
+  }
+
+  function renderStats() {
+    var existing = SKILLS.filter(function (s) { return s.status === "existing"; }).length;
+    var proposed = SKILLS.length - existing;
+    $("#stat-existing").textContent = existing;
+    $("#stat-proposed").textContent = proposed;
+  }
+
+  function renderAll() {
+    renderLifecycle();
+    renderMatrix();
+    renderCards();
+    document.querySelectorAll("#domain-chips .chip-btn").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.domain === state.domain ? "true" : "false");
+    });
+    document.querySelectorAll("#status-chips .chip-btn").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.status === state.status ? "true" : "false");
+    });
+  }
+
+  document.querySelectorAll("#domain-chips .chip-btn").forEach(function (b) {
+    b.addEventListener("click", function () { state.domain = b.dataset.domain; state.block = null; renderAll(); });
+  });
+  document.querySelectorAll("#status-chips .chip-btn").forEach(function (b) {
+    b.addEventListener("click", function () { state.status = b.dataset.status; renderAll(); });
+  });
+  $("#q").addEventListener("input", function (e) { state.q = e.target.value.trim(); renderAll(); });
+  $("#reset").addEventListener("click", function () {
+    state = { domain: "all", status: "all", block: null, q: "" };
+    $("#q").value = "";
+    renderAll();
+  });
+
+  renderStats();
+  renderFlows();
+  renderAll();
+})();
+</script>
+</body>
+</html>

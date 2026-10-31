@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Skill review — harness-skill-template</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --green: #1f7a4d; --amber: #a96500; --red: #b42318; --violet: #6d5aa8;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .topbar { position: sticky; top: 0; z-index: 20; background: rgba(246,245,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; gap: 14px; min-height: 50px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  nav a { font-size: 11.5px; color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  header { padding: 40px 0 10px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 10px; }
+  h1 code { font-size: inherit; letter-spacing: -.02em; }
+  .sub { color: var(--muted); font-size: 17px; margin: 0 0 18px; max-width: 850px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 10px; font-size: 11.5px; color: var(--muted); }
+  .chip b { color: var(--ink); }
+  .status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 8px; border-radius: 6px; }
+  .status.draft { background: #eef0f3; color: var(--muted); }
+  .status.revise { background: #fbf0dc; color: var(--amber); }
+  .status.approved { background: #e7f4ec; color: var(--green); }
+  .status.rejected { background: #fbe9e7; color: var(--red); }
+
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; overflow: hidden; scroll-margin-top: 64px; }
+  .sec-head { padding: 16px 22px 13px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .sec-head h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: 12px; }
+  .body { padding: 18px 22px 22px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; background: #fcfdfd; margin-bottom: 16px; }
+  .callout b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 5px; }
+  .callout p { margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 14px; }
+  caption { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding-bottom: 6px; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 7px 8px; }
+  td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, code { font-family: var(--mono); font-size: 11.5px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; background: #fff; }
+  .box h3 { margin: 0 0 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .box ul { margin: 0; padding-left: 17px; }
+  .box li { font-size: 12.5px; }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 14px; }
+  .step { border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; font-size: 12px; background: #fff; }
+  .step.hot { border-color: #b8d0cd; background: #e6efee; }
+  .arrow { color: var(--line-strong); }
+  .metric { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .metric span { border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; font-size: 11.5px; color: var(--muted); }
+  .metric b { color: var(--ink); }
+
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .checklist li:last-child { border-bottom: 0; }
+  .checklist li::before { content: "☐"; margin-right: 8px; color: var(--muted); }
+
+  .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .decision div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+  .decision div.approved { border-color: #bfe0cb; background: #e7f4ec; color: var(--green); font-weight: 700; }
+
+  footer { padding: 8px 0 40px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 14px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10pt; }
+    .topbar { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">Skill review</span>
+    <nav aria-label="Разделы ревью">
+      <a href="#problem">Проблема</a>
+      <a href="#github">GitHub</a>
+      <a href="#science">Наука</a>
+      <a href="#design">Дизайн</a>
+      <a href="#metrics">Метрики</a>
+      <a href="#sources">Источники</a>
+      <a href="#decision">Решение</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header>
+    <div class="kicker">План навыка · на ревью</div>
+    <h1><code>harness-skill-template</code></h1>
+    <p class="sub">Единый контракт навыка: структура каталога, frontmatter, обязательные разделы и проверка.</p>
+    <div class="chips">
+      <span class="chip">Домен: <b>harness</b></span>
+      <span class="chip">Приоритет: <b>P0</b></span>
+      <span class="chip">Автор: <b>OpenCode agent</b></span>
+      <span class="chip">Дата: <b>2026-10-31</b></span>
+      <span class="chip">Источники: <b>10</b></span>
+      <span class="status approved">approved</span>
+    </div>
+
+    <div class="callout">
+      <b>Запрос решения</b>
+      <p>Утвердить контракт шаблона, состав артефактов и минимальный валидатор. После approved создаётся harness/harness-skill-template/.</p>
+    </div>
+  </header>
+
+  <section id="problem">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>Проблема и границы</h2>
+    </div>
+    <div class="body">
+      <p>Навыки библиотеки пишутся в разной структуре: где-то нет входов и выходов, где-то нет границ и проверки, описание не помогает найти навык по формулировке задачи. Из-за этого новый навык трудно ревьюить, а старый — сравнивать с остальными.</p>
+      <div class="grid2">
+        <div class="box">
+          <h3>Входит в задачу</h3>
+          <ul><li>frontmatter по Agent Skills spec, обязательные разделы SKILL.md, структура каталога, шаблон, генератор и валидатор.</li></ul>
+        </div>
+        <div class="box">
+          <h3>Не входит</h3>
+          <ul><li>содержание конкретного навыка, оценка эффективности, аудит существующих навыков и их триггеров.</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="github">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>GitHub-аналоги</h2>
+      <p>минимум три репозитория</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что уже существует и что из этого следует</caption>
+        <thead><tr><th>Репозиторий</th><th>Лицензия</th><th>Коммит</th><th>Подход</th><th>Берём</th><th>Отвергаем</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://github.com/anthropics/skills">anthropics/skills</a></td><td>mixed: Apache-2.0 / source-available</td><td class="mono">2026-10-28</td><td>Официальные примеры Agent Skills: SKILL.md, scripts, references</td><td>структура, progressive disclosure, description-триггеры</td><td>проприетарные doc-навыки</td></tr>
+<tr><td class="mono"><a href="https://github.com/obra/superpowers">obra/superpowers</a></td><td>MIT</td><td class="mono">2026-10-29</td><td>Методология из композируемых навыков и явных гейтов</td><td>декомпозиция, цепочки, контрольные точки</td><td>тяжёлая методология целиком</td></tr>
+<tr><td class="mono"><a href="https://github.com/wshobson/agents">wshobson/agents</a></td><td>MIT</td><td class="mono">2026-10-30</td><td>202 агента, 185 навыков, мульти-харнесс каталог</td><td>дисциплина каталога, единый Markdown-источник</td><td>генерация артефактов под каждый харнесс</td></tr>
+<tr><td class="mono"><a href="https://github.com/davila7/claude-code-templates">davila7/claude-code-templates</a></td><td>MIT</td><td class="mono">2026-10-31</td><td>CLI и каталог шаблонов для Claude Code</td><td>UX установки и валидации</td><td>инструмент вместо контракта навыка</td></tr>
+</tbody>
+      </table>
+      <p class="mono">Поисковые запросы: agent skills SKILL.md; claude skills repository; agent skills template; multi-harness skills</p>
+    </div>
+  </section>
+
+  <section id="science">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>Научные источники и стандарты</h2>
+      <p>минимум два источника или утверждённый waiver</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что подтверждено и какие есть ограничения</caption>
+        <thead><tr><th>Источник</th><th>Тип</th><th>Вклад</th><th>Ограничение</th><th>Вывод для навыка</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://arxiv.org/abs/2305.16291">Voyager, arXiv:2305.16291</a></td><td>препринт</td><td>Растущая библиотека исполняемого кода и композиция навыков</td><td>Minecraft; нет оценки сопровождения</td><td>навык — исполняемый и переиспользуемый артефакт</td></tr>
+<tr><td class="mono"><a href="https://arxiv.org/abs/2303.11366">Reflexion, arXiv:2303.11366</a></td><td>препринт</td><td>Вербальная рефлексия и эпизодическая память улучшают следующие попытки</td><td>бенчмарки; возможна переоценка саморефлексии</td><td>раздел ошибок и история пересмотра обязательны</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1056/NEJMoa061115">Pronovost et al., NEJM 2006</a></td><td>рецензируемая</td><td>Чек-лист + культура + измерение снизили инфекции</td><td>клиническая среда; высокая цена ошибки</td><td>QA-чек-лист работает с владельцем и измерением</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1207/s15516709cog1202_4">Sweller, Cognitive Science 1988</a></td><td>рецензируемая</td><td>Ограниченность рабочей памяти и когнитивная нагрузка</td><td>теория обучения, не LLM</td><td>короткий SKILL.md, детали в references</td></tr>
+<tr><td class="mono"><a href="https://agentskills.io/specification">Agent Skills specification</a></td><td>стандарт</td><td>Требования к каталогу, frontmatter, name, description</td><td>не научный источник; версия стандарта</td><td>нормативная основа шаблона</td></tr>
+</tbody>
+      </table>
+      <div class="box">
+        <h3>Waiver научной части</h3>
+        <p>Не требуется: научные источники и официальная спецификация найдены.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="design">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>Синтез и предлагаемый дизайн</h2>
+    </div>
+    <div class="body">
+      <p>Аналоги сходятся в трёх вещах: навык — это каталог, SKILL.md — точка входа, а глубина вынесена в references и scripts. Описание работает как маршрутизатор. Расходятся они в весе: от минимального формата Anthropic до полной методологии Superpowers. Ни один из аналогов не проверяет локальные требования к границам, доказательствам и QA — этот пробел закрывает валидатор.</p>
+      <div class="flow">
+        <span class="step hot">Выбрать домен и имя</span><span class="arrow">→</span>
+        <span class="step">Создать каталог и SKILL.md</span><span class="arrow">→</span>
+        <span class="step">Заполнить разделы и пример</span><span class="arrow">→</span>
+        <span class="step">Запустить валидатор и ревью</span>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h3>Вход</h3>
+          <p>Повторяемая процедура, домен, один пример входа и ожидаемого выхода.</p>
+        </div>
+        <div class="box">
+          <h3>Выход</h3>
+          <p>Каталог навыка с SKILL.md, references, scripts, templates и examples; валидатор проходит.</p>
+        </div>
+      </div>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
+      <ul>
+        <li><code>SKILL.md</code> — триггеры, процедура, границы</li>
+        <li><code>references/</code> — контракт разделов, правила триггеров и границы</li>
+        <li><code>scripts/</code> — new_skill.py и validate_skill.py</li>
+        <li><code>examples/</code> — эталонный навык и негативный пример</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="alternatives">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>Альтернативы и цена</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead>
+        <tbody>
+          <tr><td>Свободный Markdown без шаблона</td><td>Быстро, нет порога входа</td><td>Дрейф структуры, пропуски границ и QA</td><td>Невозможно проверить полноту автоматически</td></tr>
+          <tr><td>Только официальная спецификация Agent Skills</td><td>Совместимость и минимализм</td><td>Нет локальных требований к evidence, QA и границам</td><td>Спецификация не покрывает процесс разработки библиотеки</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>Метрики и план проверки</h2>
+    </div>
+    <div class="body">
+      <div class="metric">
+        <span><b>Доля навыков, проходящих валидатор</b> — ≥ 95 %</span>
+        <span><b>Время до первого валидного навыка</b> — ≤ 30 минут</span>
+        <span><b>Точность триггеров на наборе задач</b> — ≥ 80 %</span>
+      </div>
+      <ol>
+        <li>Создать два навыка по шаблону; оба проходят валидатор без исключений.</li>
+        <li>Проверить, что шаблон не требует проектных имён и секретов.</li>
+        <li>Проверить, что пример воспроизводится без сети по команде из SKILL.md.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="risks">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>Риски и открытые вопросы</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead>
+        <tbody>
+          <tr><td>Шаблон окажется слишком тяжёлым</td><td>средняя</td><td>высокое</td><td>минимальный обязательный набор; детали в references</td></tr>
+          <tr><td>Валидатор создаст ложную уверенность</td><td>средняя</td><td>высокое</td><td>валидировать структуру, смысл оставить ревью</td></tr>
+        </tbody>
+      </table>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <ol>
+        <li>Делать ли поле license обязательным, хотя стандарт его не требует?</li>
+        <li>Должен ли валидатор требовать все разделы или только минимальный набор?</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>Источники</h2>
+      <p>дата обращения обязательна</p>
+    </div>
+    <div class="body">
+      <ol>
+<li><a href="https://github.com/anthropics/skills">anthropics/skills</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/obra/superpowers">obra/superpowers</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/wshobson/agents">wshobson/agents</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/davila7/claude-code-templates">davila7/claude-code-templates</a> — доступно 2026-10-31.</li>
+<li><a href="https://agentskills.io/specification">Agent Skills specification</a> — доступно 2026-10-31.</li>
+<li><a href="https://arxiv.org/abs/2305.16291">Wang et al., Voyager</a> — доступно 2026-10-31.</li>
+<li><a href="https://arxiv.org/abs/2303.11366">Shinn et al., Reflexion</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1056/NEJMoa061115">Pronovost et al., NEJM 2006</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1207/s15516709cog1202_4">Sweller, Cognitive Science 1988</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1037/0033-295X.89.4.369">Anderson, Psychological Review 1982</a> — доступно 2026-10-31.</li>
+</ol>
+    </div>
+  </section>
+
+  <section id="decision">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>Чек-лист и решение</h2>
+      <p>без approved реализация не начинается</p>
+    </div>
+    <div class="body">
+      <ul class="checklist">
+        <li>Изучены минимум 3 GitHub-аналога, лицензии проверены.</li>
+        <li>Изучены минимум 2 научных/официальных источника или утверждён waiver.</li>
+        <li>Каждое утверждение в дизайне имеет источник или явно помечено как решение автора.</li>
+        <li>Границы и не-цели сформулированы.</li>
+        <li>Метрики проверяемы, а не оценочны.</li>
+        <li>План не дублирует существующий навык по триггерам.</li>
+        <li>Артефакты и команды воспроизводимы.</li>
+      </ul>
+      <div class="decision">
+        <div class="approved">approved</div>
+        <div class="revise">revise</div>
+        <div class="rejected">rejected</div>
+        <div>draft</div>
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:12px">
+        Решение: approved. Комментарий ревьюера: утверждено 2026-10-31.
+        После правок обновите статус в шапке и дату.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>opencode-skills · review template</span>
+      <span>harness-skill-template · 2026-10-31</span>
+    </div>
+  </footer>
+</main>
+</body>
+</html>

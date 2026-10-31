@@ -1,0 +1,64 @@
+{
+  "agent": {
+    "name": "opencode",
+    "model": "deepseek-v4.1-flash",
+    "sessions": ["ses_example_1", "ses_example_2"]
+  },
+  "tokens": {
+    "input": 1240000,
+    "output": 182000,
+    "cache_read": 380000,
+    "cache_write": 40000,
+    "currency": "USD",
+    "cost": 3.4
+  },
+  "iterations": {
+    "cycles": 7,
+    "verification_attempts": 34,
+    "verification_failed": 9,
+    "max_repeat_failure": 2,
+    "manual_interventions": 1,
+    "history": [
+      { "cycle": 1, "attempts": 4, "failed": 3, "note": "e2e fixture" },
+      { "cycle": 2, "attempts": 5, "failed": 2, "note": "e2e fixture" },
+      { "cycle": 3, "attempts": 3, "failed": 0, "note": "" },
+      { "cycle": 4, "attempts": 6, "failed": 1, "note": "retry without hypothesis" },
+      { "cycle": 5, "attempts": 4, "failed": 1, "note": "" },
+      { "cycle": 6, "attempts": 7, "failed": 1, "note": "" },
+      { "cycle": 7, "attempts": 5, "failed": 1, "note": "" }
+    ]
+  },
+  "context": {
+    "relevant_files": 34,
+    "read_before_first_edit": 25,
+    "peak_window_tokens": 82000,
+    "window_tokens": 200000,
+    "read_list": [
+      "docs/adr/0003-layers.md",
+      "CONVENTIONS.md",
+      "src/app/domain/share.py",
+      "src/app/services/share.py"
+    ],
+    "missed_list": [
+      "src/app/services/budget.py",
+      "src/app/services/audit.py"
+    ]
+  },
+  "hallucinations": {
+    "confirmed": [
+      {
+        "type": "missing_import",
+        "symbol": "app.services.share_tokens",
+        "location": "src/app/services/share.py:9",
+        "evidence": "модуль переименован"
+      }
+    ],
+    "unconfirmed": [
+      {
+        "type": "missing_import",
+        "symbol": "dash_extensions",
+        "note": "не установлен в среде проверки"
+      }
+    ]
+  }
+}
