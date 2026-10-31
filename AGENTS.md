@@ -268,12 +268,16 @@ gh pr checks --watch
 6. Запустить валидатор, открыть PR и приложить research, review и вывод
    проверки.
 
-Текущая очередь harness (H1–H3 реализованы):
+Текущая очередь harness (H1–H3 реализованы, H4 отложен):
 
-1. `harness-skill-eval`
-2. `harness-init`
-3. `harness-analyze-codebase`
-4. `harness-session-retrospective`
+1. `harness-init`
+2. `harness-analyze-codebase`
+3. `harness-session-retrospective`
+
+Backlog (possible):
+
+- `harness-skill-eval` — `deferred`: research и review сохранены, реализация
+  не планируется в текущем цикле.
 
 История переименований harness:
 

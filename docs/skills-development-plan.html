@@ -284,7 +284,7 @@
     <div class="panel-head">
       <h2>Phase 1 · Harness</h2>
       <p>Первый приоритет: сначала то, что определяет форму и проверку остальных навыков</p>
-      <span class="count">7 навыков · 3 готово · 3 × P0</span>
+      <span class="count">7 навыков · 3 готово · 1 отложен · 3 × P0</span>
     </div>
     <div class="panel-body">
       <div class="cards">
@@ -337,14 +337,14 @@
           <div class="card-head">
             <span class="ord">H4</span>
             <h3><code>harness-skill-eval</code></h3>
-            <span class="pri p1">P1</span><span class="eff">L</span>
+            <span class="pri p2">P2</span><span class="tag" style="background:#fbf0dc;color:#a96500">отложен</span><span class="eff">L</span>
           </div>
-          <p>Проверка навыка на реальных задачах: срабатывает ли триггер, воспроизводим ли результат, не деградирует ли качество.</p>
+          <p>Возможный навык: оценка навыка на реальных задачах. Отложен — для текущих практических сценариев большого значения не имеет.</p>
           <dl>
-            <dt>GitHub</dt><dd>promptfoo, Inspect AI, lm-evaluation-harness, agent benchmarks.</dd>
-            <dt>Наука</dt><dd>методология оценки, валидность, загрязнение бенчмарков, воспроизводимость.</dd>
-            <dt>Выход</dt><dd>протокол оценки, набор задач, отчёт с метриками.</dd>
-            <dt>Приёмка</dt><dd>два прогона на одних задачах дают сопоставимый результат; известен порог.</dd>
+            <dt>GitHub</dt><dd>promptfoo, Inspect AI, lm-evaluation-harness, HELM, openai/evals.</dd>
+            <dt>Наука</dt><dd>HELM, prompt sensitivity, reproducible evaluation.</dd>
+            <dt>Выход</dt><dd>research/review сохранены как основа будущей оценки.</dd>
+            <dt>Приёмка</dt><dd>не реализуется в текущем цикле; статус <code>deferred</code>.</dd>
           </dl>
         </article>
 
@@ -703,17 +703,18 @@
   <section class="panel" id="next">
     <div class="panel-head">
       <h2>Текущий шаг</h2>
-      <p>H3 готов; следующий — H4</p>
+      <p>H4 отложен; следующий — H5</p>
     </div>
     <div class="panel-body">
       <ol style="margin:0;padding-left:20px">
         <li><code>harness-skill-template</code> реализован, review <code>approved</code>, PR #2 merged.</li>
         <li>Foundation и структура библиотеки: PR #1 merged.</li>
         <li><code>harness-rule-to-mechanism</code> реализован, review <code>approved</code>, PR #3 merged.</li>
-        <li><code>harness-skill-audit</code> реализован, review <code>approved</code>, PR #4.</li>
-        <li>Собрать <code>docs/research/harness-skill-eval.md</code>.</li>
-        <li>Собрать <code>docs/reviews/harness-skill-eval.html</code> и получить <code>approved</code>.</li>
-        <li>Реализовать <code>harness/harness-skill-eval/</code>.</li>
+        <li><code>harness-skill-audit</code> реализован, review <code>approved</code>, PR #4 merged.</li>
+        <li><code>harness-skill-eval</code> отложен: research/review сохранены, статус <code>deferred</code>, не реализуется.</li>
+        <li>Собрать <code>docs/research/harness-init.md</code>.</li>
+        <li>Собрать <code>docs/reviews/harness-init.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>harness/harness-init/</code>.</li>
       </ol>
       <div class="decision">
         <div class="ok">approved</div>
