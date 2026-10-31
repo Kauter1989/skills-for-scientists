@@ -1,0 +1,14 @@
+name: checks
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: tests
+        run: {{TEST_COMMAND}}
+      - name: lint
+        run: {{LINT_COMMAND}}

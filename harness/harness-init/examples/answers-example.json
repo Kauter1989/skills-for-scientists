@@ -1,0 +1,17 @@
+{
+  "project": "example-service",
+  "domain": "dev",
+  "stack": "python",
+  "default_branch": "main",
+  "workflow": "minimal",
+  "ci": "github",
+  "commands": {
+    "test": "pytest -q",
+    "lint": "ruff check .",
+    "build": ""
+  },
+  "roles": ["developer", "reviewer"],
+  "tasks": ["feature", "bugfix", "report"],
+  "constraints": ["private"],
+  "skills": []
+}

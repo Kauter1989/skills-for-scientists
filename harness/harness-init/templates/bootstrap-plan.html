@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Bootstrap plan — {{PROJECT}}</title>
+<style>
+  :root { --paper:#f6f5f2; --card:#fff; --ink:#14181f; --muted:#5f6875; --line:#dfe2e7; --accent:#1f5f5b; --green:#1f7a4d; --amber:#a96500; --red:#b42318; --mono:ui-monospace,"Cascadia Code",Consolas,monospace; --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.55 var(--sans); }
+  .wrap { max-width:1080px; margin:0 auto; padding:36px 24px 44px; }
+  .kicker { font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); }
+  h1 { font-size:clamp(28px,4vw,42px); line-height:1.1; letter-spacing:-.02em; margin:8px 0 10px; }
+  .meta { color:var(--muted); font-size:12.5px; margin-bottom:18px; }
+  .meta code { font-family:var(--mono); font-size:11.5px; }
+  .status { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:4px 8px; border-radius:6px; background:#eef0f3; color:var(--muted); }
+  .status.approved { background:#e7f4ec; color:var(--green); }
+  .status.draft { background:#fbf0dc; color:var(--amber); }
+  section { background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:14px; overflow:hidden; }
+  .head { padding:14px 18px 11px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .head h2 { margin:0; font-size:18px; }
+  .head p { margin:0; color:var(--muted); font-size:11.5px; }
+  .body { padding:14px 18px 18px; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { text-align:left; font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); border-bottom:1px solid var(--line); padding:6px 7px; }
+  td { border-bottom:1px solid var(--line); padding:7px; vertical-align:top; }
+  tr:last-child td { border-bottom:0; }
+  td.mono, code { font-family:var(--mono); font-size:11.5px; }
+  .callout { border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:9px; padding:12px 14px; background:#fcfdfd; margin-bottom:14px; }
+  .callout b { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:5px; }
+  .callout p { margin:0; }
+  .approval { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  .approval div { border:1px solid var(--line); border-radius:7px; padding:9px; text-align:center; font-size:12px; color:var(--muted); }
+  .approval div.ok { border-color:#bfe0cb; background:#e7f4ec; color:var(--green); font-weight:700; }
+  footer { color:var(--muted); font-size:11px; margin-top:16px; }
+  @media (max-width:700px) { .wrap { padding:20px 14px; } .approval { grid-template-columns:1fr; } }
+  @media print { @page { size:A4; margin:12mm; } body { background:#fff; font-size:9.5pt; } .wrap { max-width:none; padding:0; } section { break-inside:avoid; } }
+</style>
+</head>
+<body data-status="{{STATUS}}">
+<main class="wrap">
+  <div class="kicker">Bootstrap plan · на утверждение</div>
+  <h1>{{PROJECT}}</h1>
+  <div class="meta">
+    Домен: <b>{{DOMAIN}}</b> · Стек: <b>{{STACK}}</b> · Workflow: <b>{{WORKFLOW}}</b> · Дата: <b>{{DATE}}</b>
+    · <span id="approval" class="status {{STATUS}}">{{STATUS}}</span>
+  </div>
+
+  <div class="callout">
+    <b>Что утверждается</b>
+    <p>Набор стартовых навыков, этапы workflow, команды проверки и список создаваемых файлов. До <code>approved</code> scaffold не выполняется.</p>
+  </div>
+
+  <section>
+    <div class="head"><h2>Стартовые навыки</h2><p>только реализованные в библиотеке</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Навык</th><th>Зачем на старте</th><th>Статус</th></tr></thead>
+        <tbody>
+{{SKILL_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Workflow</h2><p>этапы и навыки в каждом</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Этап</th><th>Что происходит</th><th>Навыки</th></tr></thead>
+        <tbody>
+{{STAGE_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Команды</h2><p>из ответов пользователя</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Проверка</th><th>Команда</th></tr></thead>
+        <tbody>
+{{COMMAND_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Что будет создано</h2><p>без перезаписи существующего</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Путь</th><th>Назначение</th></tr></thead>
+        <tbody>
+{{FILE_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Решение</h2><p>после review пользователя</p></div>
+    <div class="body">
+      <p>Утвердить план можно командой <code>init_repo.py approve --plan bootstrap-plan.html --json bootstrap-plan.json</code>. После этого <code>apply</code> создаст файлы.</p>
+      <div class="approval">
+        <div class="ok">approved</div>
+        <div>revise</div>
+        <div>rejected</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Сгенерировано <code>harness-init</code> · read-only до approved</footer>
+</main>
+</body>
+</html>
