@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Skill review — harness-skill-eval</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --green: #1f7a4d; --amber: #a96500; --red: #b42318; --violet: #6d5aa8;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .topbar { position: sticky; top: 0; z-index: 20; background: rgba(246,245,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; gap: 14px; min-height: 50px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  nav a { font-size: 11.5px; color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  header { padding: 40px 0 10px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 10px; }
+  h1 code { font-size: inherit; letter-spacing: -.02em; }
+  .sub { color: var(--muted); font-size: 17px; margin: 0 0 18px; max-width: 850px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 10px; font-size: 11.5px; color: var(--muted); }
+  .chip b { color: var(--ink); }
+  .status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 8px; border-radius: 6px; }
+  .status.draft { background: #eef0f3; color: var(--muted); }
+  .status.revise { background: #fbf0dc; color: var(--amber); }
+  .status.approved { background: #e7f4ec; color: var(--green); }
+  .status.rejected { background: #fbe9e7; color: var(--red); }
+
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; overflow: hidden; scroll-margin-top: 64px; }
+  .sec-head { padding: 16px 22px 13px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .sec-head h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: 12px; }
+  .body { padding: 18px 22px 22px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; background: #fcfdfd; margin-bottom: 16px; }
+  .callout b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 5px; }
+  .callout p { margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 14px; }
+  caption { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding-bottom: 6px; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 7px 8px; }
+  td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, code { font-family: var(--mono); font-size: 11.5px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; background: #fff; }
+  .box h3 { margin: 0 0 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .box ul { margin: 0; padding-left: 17px; }
+  .box li { font-size: 12.5px; }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 14px; }
+  .step { border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; font-size: 12px; background: #fff; }
+  .step.hot { border-color: #b8d0cd; background: #e6efee; }
+  .arrow { color: var(--line-strong); }
+  .metric { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .metric span { border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; font-size: 11.5px; color: var(--muted); }
+  .metric b { color: var(--ink); }
+
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .checklist li:last-child { border-bottom: 0; }
+  .checklist li::before { content: "☐"; margin-right: 8px; color: var(--muted); }
+
+  .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .decision div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+  .decision div.approved { border-color: #bfe0cb; background: #e7f4ec; color: var(--green); font-weight: 700; }
+
+  footer { padding: 8px 0 40px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 14px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10pt; }
+    .topbar { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">Skill review</span>
+    <nav aria-label="Разделы ревью">
+      <a href="#problem">Проблема</a>
+      <a href="#github">GitHub</a>
+      <a href="#science">Наука</a>
+      <a href="#design">Дизайн</a>
+      <a href="#metrics">Метрики</a>
+      <a href="#sources">Источники</a>
+      <a href="#decision">Решение</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header>
+    <div class="kicker">План навыка · на ревью</div>
+    <h1><code>harness-skill-eval</code></h1>
+    <p class="sub">Оценка навыка на реальных задачах: срабатывание триггера, качество результата, воспроизводимость и стоимость.</p>
+    <div class="chips">
+      <span class="chip">Домен: <b>harness</b></span>
+      <span class="chip">Приоритет: <b>P1</b></span>
+      <span class="chip">Автор: <b>OpenCode agent</b></span>
+      <span class="chip">Дата: <b>2026-10-31</b></span>
+      <span class="chip">Источники: <b>12</b></span>
+      <span class="status draft">draft</span>
+    </div>
+
+    <div class="callout">
+      <b>Запрос решения</b>
+      <p>Утвердить протокол оценки: набор задач, baseline, число повторов, метрики, путь отчёта и порядок решения keep/revise/retire. После approved — реализация.</p>
+    </div>
+  </header>
+
+  <section id="problem">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>Проблема и границы</h2>
+    </div>
+    <div class="body">
+      <p>«Работает» обычно означает один удачный запуск. Без baseline не видно прироста, без повторов — дисперсии, без фиксации модели и промпта — воспроизводимости, без стоимости — цены навыка. Оценка превращается во впечатление.</p>
+      <div class="grid2">
+        <div class="box">
+          <h3>Входит в задачу</h3>
+          <ul><li>набор задач, baseline, повторы, метрики триггера и качества, стоимость, отчёт и решение по навыку.</li></ul>
+        </div>
+        <div class="box">
+          <h3>Не входит</h3>
+          <ul><li>аудит структуры библиотеки, разработка навыка и создание механизмов.</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="github">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>GitHub-аналоги</h2>
+      <p>минимум три репозитория</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что уже существует и что из этого следует</caption>
+        <thead><tr><th>Репозиторий</th><th>Лицензия</th><th>Коммит</th><th>Подход</th><th>Берём</th><th>Отвергаем</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://github.com/promptfoo/promptfoo">promptfoo/promptfoo</a></td><td>MIT</td><td class="mono">2026-10-31</td><td>Декларативные проверки промптов, агентов и RAG</td><td>assertions, сравнение вариантов, CI</td><td>оценка модели вместо навыка</td></tr>
+<tr><td class="mono"><a href="https://github.com/UKGovernmentBEIS/inspect_ai">UKGovernmentBEIS/inspect_ai</a></td><td>MIT</td><td class="mono">2026-10-31</td><td>Фреймворк LLM-оценки: задачи, датасеты, метрики</td><td>task → solver → scorer → log</td><td>тяжёлая инфраструктура для одного навыка</td></tr>
+<tr><td class="mono"><a href="https://github.com/EleutherAI/lm-evaluation-harness">EleutherAI/lm-evaluation-harness</a></td><td>MIT</td><td class="mono">2026-09-14</td><td>Few-shot оценка языковых моделей</td><td>воспроизводимый запуск и логи</td><td>публичные бенчмарки вместо задач навыка</td></tr>
+<tr><td class="mono"><a href="https://github.com/stanford-crfm/helm">stanford-crfm/helm</a></td><td>Apache-2.0</td><td class="mono">2026-09-01</td><td>Holistic evaluation: сценарии, метрики, прозрачность</td><td>матрица сценариев и метрик</td><td>масштаб и стоимость полной HELM</td></tr>
+<tr><td class="mono"><a href="https://github.com/openai/evals">openai/evals</a></td><td>NOASSERTION</td><td class="mono">2026-04-14</td><td>Фреймворк и реестр бенчмарков</td><td>формат реестра и отчёта</td><td>зависимость от чужого реестра</td></tr>
+</tbody>
+      </table>
+      <p class="mono">Поисковые запросы: prompt evaluation; LLM evaluation harness; eval framework; reproducible evaluation</p>
+    </div>
+  </section>
+
+  <section id="science">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>Научные источники и стандарты</h2>
+      <p>минимум два источника или утверждённый waiver</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что подтверждено и какие есть ограничения</caption>
+        <thead><tr><th>Источник</th><th>Тип</th><th>Вклад</th><th>Ограничение</th><th>Вывод для навыка</th></tr></thead>
+        <tbody>
+<tr><td class="mono"><a href="https://arxiv.org/abs/2211.09110">Liang et al., HELM</a></td><td>препринт</td><td>Таксономия сценариев и метрик, прозрачная оценка</td><td>широко и дорого</td><td>сценарии и метрики задаются заранее</td></tr>
+<tr><td class="mono"><a href="https://arxiv.org/abs/2310.11324">Sclar et al., prompt sensitivity</a></td><td>препринт</td><td>Форматирование промпта сильно меняет результат</td><td>промпты, не навыки</td><td>нужны повторы и варианты промпта</td></tr>
+<tr><td class="mono"><a href="https://arxiv.org/abs/2405.14782">Biderman et al., reproducible eval</a></td><td>препринт</td><td>Воспроизводимость: окружение, версии, логи</td><td>общая методология</td><td>фиксировать модель, версию и артефакты</td></tr>
+<tr><td class="mono"><a href="https://www.promptfoo.dev/docs/">promptfoo, Inspect, lm-eval, HELM</a></td><td>спецификации</td><td>Форматы задач, метрик и отчётов</td><td>не научный источник</td><td>практическая база протокола</td></tr>
+</tbody>
+      </table>
+      <div class="box">
+        <h3>Waiver научной части</h3>
+        <p>Не требуется: научные источники и официальные спецификации найдены.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="design">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>Синтез и предлагаемый дизайн</h2>
+    </div>
+    <div class="body">
+      <p>Аналоги сходятся на схеме task → run → score → report, но оценивают модели и промпты, а не навык. Исследования добавляют: формат промпта влияет на результат, один запуск нестабилен, воспроизводимость требует фиксации окружения и логов. Предлагается task-specific протокол с baseline, повторами и явными метриками.</p>
+      <div class="flow">
+        <span class="step hot">Набор задач</span><span class="arrow">→</span>
+        <span class="step">Baseline и skill</span><span class="arrow">→</span>
+        <span class="step">Повторы и метрики</span><span class="arrow">→</span>
+        <span class="step">Отчёт и решение</span>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h3>Вход</h3>
+          <p>Навык, 5 positive / 5 negative / 3 edge задач, модель и температура, бюджет.</p>
+        </div>
+        <div class="box">
+          <h3>Выход</h3>
+          <p>docs/evals/&lt;skill&gt;/&lt;date&gt;.html, JSON результатов, решение keep/revise/retire.</p>
+        </div>
+      </div>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
+      <ul>
+        <li><code>SKILL.md</code> — триггеры, процедура, границы</li>
+        <li><code>references/</code> — протокол, схема результатов, метрики</li>
+        <li><code>scripts/</code> — сводка результатов и проверка воспроизводимости</li>
+        <li><code>examples/</code> — набор задач и отчёт с baseline</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="alternatives">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>Альтернативы и цена</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead>
+        <tbody>
+          <tr><td>Один запуск</td><td>Быстро и дёшево</td><td>Нет дисперсии и доверия</td><td>Совпадение может быть случайным</td></tr>
+          <tr><td>Только публичный бенчмарк</td><td>Сравнимость с другими</td><td>Не проверяет навык и его триггер</td><td>Бенчмарк не равен рабочей задаче</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>Метрики и план проверки</h2>
+    </div>
+    <div class="body">
+      <div class="metric">
+        <span><b>Trigger precision / recall</b> — ≥ 0,8 на наборе</span>
+        <span><b>Pass rate против baseline</b> — прирост ≥ 10 п.п.</span>
+        <span><b>Разброс между повторами</b> — ≤ 10 п.п.</span>
+      </div>
+      <ol>
+        <li>Baseline и skill запускаются на одном наборе задач и одной конфигурации.</li>
+        <li>Два повтора дают сопоставимый результат; отклонение записано.</li>
+        <li>Отчёт воспроизводится из JSON без ручных правок.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="risks">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>Риски и открытые вопросы</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead>
+        <tbody>
+          <tr><td>Малая выборка создаёт ложную уверенность</td><td>высокая</td><td>высокое</td><td>минимум задач, повторы, явные ограничения</td></tr>
+          <tr><td>Результат зависит от формата промпта</td><td>высокая</td><td>среднее</td><td>фиксировать промпт и проверять варианты</td></tr>
+        </tbody>
+      </table>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <ol>
+        <li>Сколько повторов считать достаточным: 2 или 3?</li>
+        <li>Кто утверждает keep/revise/retire?</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>Источники</h2>
+      <p>дата обращения обязательна</p>
+    </div>
+    <div class="body">
+      <ol>
+<li><a href="https://github.com/promptfoo/promptfoo">promptfoo/promptfoo</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/UKGovernmentBEIS/inspect_ai">UKGovernmentBEIS/inspect_ai</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/EleutherAI/lm-evaluation-harness">EleutherAI/lm-evaluation-harness</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/stanford-crfm/helm">stanford-crfm/helm</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/openai/evals">openai/evals</a> — доступно 2026-10-31.</li>
+<li><a href="https://arxiv.org/abs/2211.09110">Liang et al., HELM</a> — доступно 2026-10-31.</li>
+<li><a href="https://arxiv.org/abs/2310.11324">Sclar et al., prompt sensitivity</a> — доступно 2026-10-31.</li>
+<li><a href="https://arxiv.org/abs/2405.14782">Biderman et al., reproducible eval</a> — доступно 2026-10-31.</li>
+<li><a href="https://www.promptfoo.dev/docs/">promptfoo docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://inspect.aisi.org.uk/">Inspect AI docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://github.com/EleutherAI/lm-evaluation-harness">lm-evaluation-harness docs</a> — доступно 2026-10-31.</li>
+<li><a href="https://crfm.stanford.edu/helm/">HELM docs</a> — доступно 2026-10-31.</li>
+</ol>
+    </div>
+  </section>
+
+  <section id="decision">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>Чек-лист и решение</h2>
+      <p>без approved реализация не начинается</p>
+    </div>
+    <div class="body">
+      <ul class="checklist">
+        <li>Изучены минимум 3 GitHub-аналога, лицензии проверены.</li>
+        <li>Изучены минимум 2 научных/официальных источника или утверждён waiver.</li>
+        <li>Каждое утверждение в дизайне имеет источник или явно помечено как решение автора.</li>
+        <li>Границы и не-цели сформулированы.</li>
+        <li>Метрики проверяемы, а не оценочны.</li>
+        <li>План не дублирует существующий навык по триггерам.</li>
+        <li>Артефакты и команды воспроизводимы.</li>
+      </ul>
+      <div class="decision">
+        <div class="approved">approved</div>
+        <div class="revise">revise</div>
+        <div class="rejected">rejected</div>
+        <div class="draft">draft</div>
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:12px">
+        Решение: draft. Комментарий ревьюера: ожидает ревью разработчика.
+        После правок обновите статус в шапке и дату.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>opencode-skills · review template</span>
+      <span>harness-skill-eval · 2026-10-31</span>
+    </div>
+  </footer>
+</main>
+</body>
+</html>
