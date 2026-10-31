@@ -55,7 +55,7 @@ rules:
 | `owner` | да | string | команда или роль |
 | `cost` | да | string | latency/шум/обслуживание |
 | `bypass` | да | string | правило обхода или `нет` |
-| `evidence` | да | string | путь к negative fixture или тесту |
+| `evidence` | да | string | путь к тесту |
 | `status` | да | string | `proposed`, `active`, `deprecated` |
 | `since` | нет | date | ISO `YYYY-MM-DD` |
 | `notes` | нет | string | ограничение или ссылка |
@@ -67,7 +67,7 @@ rules:
 | Статус | Значит |
 |---|---|
 | `proposed` | правило сформулировано, механизм ещё не проверен |
-| `active` | negative fixture падает на нарушении, baseline чист, evidence существует |
+| `active` | тест падает на нарушении, baseline чист, evidence существует |
 | `deprecated` | правило больше не действует; запись сохраняется для истории |
 
 `active` без существующего `evidence` запрещён.
@@ -75,7 +75,7 @@ rules:
 ## 5. Жизненный цикл
 
 1. **Proposed.** Добавить запись, указать предполагаемый механизм.
-2. **Implement.** Написать negative fixture и механизм.
+2. **Implement.** Написать тест и механизм.
 3. **Verify.** Показать падение на нарушении и чистый baseline.
 4. **Active.** Обновить статус и evidence.
 5. **Deprecated.** Пометить и указать замену в `notes`.

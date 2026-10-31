@@ -17,7 +17,7 @@
 | Навык | Папка | Назначение | Артефакт |
 |---|---|---|---|
 | [`harness-skill-template`](harness/harness-skill-template/SKILL.md) | `harness/` | Контракт и каркас навыка: frontmatter, обязательные разделы, шаблон, генератор и валидатор | `SKILL.md`, отчёт валидатора |
-| [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Переводит правило в исполняемую проверку: хук, lint, тест, policy или CI, с registry и negative fixture | проверка, `docs/rules/registry.yml` |
+| [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Переводит правило в исполняемую проверку: хук, lint, тест, policy или CI, с registry и тестом-доказательством | проверка, `docs/rules/registry.yml` |
 | [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML-отчёт об изменениях фичи или майлстоуна: шесть метрик агентской разработки, доказательства и решения | автономный `report.html` |
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Строгие презентации и аналитические отчёты PPTX: научные доклады, отчёты о НИР, аналитика для руководства | `deck.pptx`, PNG для проверки |
 

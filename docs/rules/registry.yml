@@ -12,7 +12,7 @@ rules:
     owner: harness
     cost: "менее 2 секунд локально; CI пока не подключён"
     bypass: "legacy-навыки без metadata.contract пропускаются"
-    evidence: harness/harness-skill-template/scripts/validate_skill.py
+    evidence: harness/harness-skill-template/tests/test_validate_skill.py
     status: proposed
     since: "2026-10-31"
     notes: "CI не подключён; после подключения перевести в active."

@@ -12,7 +12,7 @@ rules:
     owner: architecture
     cost: "8 секунд в CI, 0 ложных срабатываний"
     bypass: "только через ADR"
-    evidence: harness/harness-rule-to-mechanism/examples/negative-fixture.txt
+    evidence: harness/harness-skill-template/tests/test_validate_skill.py
     status: proposed
     since: "2026-10-31"
-    notes: "Пример схемы registry; механизм и negative fixture подключаются отдельно."
+    notes: "Пример схемы registry; механизм и тест подключаются отдельно."

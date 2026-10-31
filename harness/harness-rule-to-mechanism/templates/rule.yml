@@ -10,7 +10,7 @@
   owner: team-or-role
   cost: "latency / шум / обслуживание"
   bypass: "нет"
-  evidence: path/to/negative-fixture-or-test
+  evidence: path/to/test_file.py
   status: proposed
   since: "YYYY-MM-DD"
   notes: ""

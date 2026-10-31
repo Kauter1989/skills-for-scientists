@@ -196,7 +196,7 @@ def validate(data: dict, repo: Path) -> tuple[list[str], list[str]]:
             elif not candidate.is_file():
                 errors.append(f"{prefix}: evidence не найден: {evidence}")
             elif status == "active":
-                warnings.append(f"{prefix}: evidence существует, но negative fixture не проверен валидатором")
+                warnings.append(f"{prefix}: evidence существует, но тест не запускался валидатором")
 
         since = rule.get("since")
         if since is not None and (not isinstance(since, str) or not DATE_RE.match(since)):
