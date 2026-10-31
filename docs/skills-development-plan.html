@@ -172,8 +172,8 @@
       Отчётные навыки остаются в поддержке; новые — после science.
     </p>
     <div class="stats">
-      <div class="stat"><b>2</b><span>навыка в репозитории</span></div>
-      <div class="stat"><b>40</b><span>в очереди</span></div>
+      <div class="stat"><b>3</b><span>навыка в репозитории</span></div>
+      <div class="stat"><b>39</b><span>в очереди</span></div>
       <div class="stat"><b>4</b><span>обязательных гейта</span></div>
       <div class="stat"><b>7 / 17 / 9</b><span>harness / dev / science</span></div>
       <div class="stat"><b>3 + 2</b><span>минимум GitHub + научных источников</span></div>
@@ -278,7 +278,7 @@
     <div class="panel-head">
       <h2>Phase 1 · Harness</h2>
       <p>Первый приоритет: сначала то, что определяет форму и проверку остальных навыков</p>
-      <span class="count">7 навыков · 3 × P0</span>
+      <span class="count">7 навыков · 1 готов · 3 × P0</span>
     </div>
     <div class="panel-body">
       <div class="cards">
@@ -286,14 +286,14 @@
           <div class="card-head">
             <span class="ord">H1</span>
             <h3><code>harness-skill-template</code></h3>
-            <span class="pri p0">P0</span><span class="eff">M</span>
+            <span class="pri p0">P0</span><span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span><span class="eff">M</span>
           </div>
-          <p>Шаблон и правила написания навыка: триггеры, вход, процедура, выход, доказательство, границы, отличие от соседей.</p>
+          <p>Реализован: контракт, шаблон, генератор и валидатор. Два эталонных заполнения показывают хороший и плохой вариант.</p>
           <dl>
             <dt>GitHub</dt><dd>каталоги SKILL.md, agent skills, prompt libraries, convention-over-configuration.</dd>
             <dt>Наука</dt><dd>инструкции и процедурные знания, чек-листы, когнитивная нагрузка, воспроизводимость процедур.</dd>
-            <dt>Выход</dt><dd>шаблон SKILL.md, чек-лист автора, 2 эталонных навыка.</dd>
-            <dt>Приёмка</dt><dd>два новых навыка собраны по шаблону и проходят audit без исключений.</dd>
+            <dt>Выход</dt><dd><code>templates/SKILL.md</code>, <code>new_skill.py</code>, <code>validate_skill.py</code>, примеры.</dd>
+            <dt>Приёмка</dt><dd>валидатор проходит на самом навыке; scaffold и негативный пример дают ожидаемые ошибки.</dd>
           </dl>
         </article>
 
@@ -695,16 +695,16 @@
 
   <section class="panel" id="next">
     <div class="panel-head">
-      <h2>Первый спринт</h2>
-      <p>Что делать сразу после утверждения плана</p>
+      <h2>Текущий шаг</h2>
+      <p>H1 готов; следующий — H2</p>
     </div>
     <div class="panel-body">
       <ol style="margin:0;padding-left:20px">
-        <li>Утвердить этот план и <code>AGENTS.md</code>.</li>
-        <li>Собрать <code>docs/research/harness-skill-template.md</code> по шаблону.</li>
-        <li>Собрать <code>docs/reviews/harness-skill-template.html</code> и получить <code>approved</code>.</li>
-        <li>Реализовать <code>harness/harness-skill-template/</code> с шаблоном и двумя эталонными навыками.</li>
-        <li>Повторить цикл для <code>harness-rule-to-mechanism</code> и <code>harness-skill-audit</code>.</li>
+        <li><code>harness-skill-template</code> реализован, review <code>approved</code>.</li>
+        <li>Собрать <code>docs/research/harness-rule-to-mechanism.md</code>.</li>
+        <li>Собрать <code>docs/reviews/harness-rule-to-mechanism.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>harness/harness-rule-to-mechanism/</code>.</li>
+        <li>Повторить цикл для <code>harness-skill-audit</code>.</li>
       </ol>
       <div class="decision">
         <div class="ok">approved</div>
@@ -713,8 +713,8 @@
         <div>draft</div>
       </div>
       <p class="small" style="margin-top:10px">
-        Решение по плану: <b>draft</b>. Комментарий:
-        <b>ожидает ревью разработчика</b>. После правок обновите дату и версию.
+        Решение по плану: <b>approved</b>. Комментарий:
+        <b>утверждено 2026-10-31; H1 реализован</b>. После правок обновите дату и версию.
       </p>
     </div>
   </section>

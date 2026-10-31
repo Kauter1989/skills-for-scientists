@@ -263,8 +263,8 @@
       означает, что без скилла процесс теряет проверяемое звено.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">2</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">40</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-existing">3</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">39</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -432,7 +432,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-10-31 · 2 реализовано · 40 предложено</span>
+      <span>снимок 2026-10-31 · 3 реализовано · 39 предложено</span>
     </div>
   </footer>
 </main>
@@ -727,11 +727,11 @@
       links: ""
     },
     {
-      id: "harness-skill-template", name: "/harness-skill-template", domain: "harness", status: "proposed", priority: "P0",
+      id: "harness-skill-template", name: "/harness-skill-template", domain: "harness", status: "existing", priority: "core",
       blocks: ["meta"],
-      sum: "Шаблон скилла и чек-лист: триггеры, вход, выход, доказательство, границы, отличие от соседей.",
-      io: "процедура → SKILL.md",
-      links: ""
+      sum: "Контракт и каркас навыка: frontmatter, обязательные разделы, шаблон, генератор и валидатор.",
+      io: "процедура → SKILL.md + проверка",
+      links: "../harness/harness-skill-template/SKILL.md"
     },
     {
       id: "harness-skill-audit", name: "/harness-skill-audit", domain: "harness", status: "proposed", priority: "P1",
@@ -868,7 +868,7 @@
     {
       label: "Харнесс",
       steps: [
-        { t: "/harness-init", c: "new" }, { t: "/harness-skill-template", c: "new" },
+        { t: "/harness-init", c: "new" }, { t: "/harness-skill-template", c: "implemented" },
         { t: "/harness-rule-to-mechanism", c: "new" }, { t: "/harness-skill-eval", c: "new" },
         { t: "/harness-skill-audit", c: "new" }
       ]

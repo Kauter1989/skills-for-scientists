@@ -16,6 +16,7 @@
 
 | Навык | Папка | Назначение | Артефакт |
 |---|---|---|---|
+| [`harness-skill-template`](harness/harness-skill-template/SKILL.md) | `harness/` | Контракт и каркас навыка: frontmatter, обязательные разделы, шаблон, генератор и валидатор | `SKILL.md`, отчёт валидатора |
 | [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML-отчёт об изменениях фичи или майлстоуна: шесть метрик агентской разработки, доказательства и решения | автономный `report.html` |
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Строгие презентации и аналитические отчёты PPTX: научные доклады, отчёты о НИР, аналитика для руководства | `deck.pptx`, PNG для проверки |
 
@@ -51,6 +52,9 @@ OpenCode видит навыки в двух местах:
 `templates/`, `examples/`:
 
 ```powershell
+# Windows: навык харнесса
+Copy-Item -Recurse .\harness\harness-skill-template "$env:USERPROFILE\.config\opencode\skill\harness-skill-template"
+
 # Windows: навык разработки
 Copy-Item -Recurse .\dev\dev-pr-report-html "$env:USERPROFILE\.config\opencode\skill\dev-pr-report-html"
 
@@ -60,6 +64,7 @@ Copy-Item -Recurse .\reports\pptx-report "$env:USERPROFILE\.config\opencode\skil
 
 ```bash
 # Linux/macOS
+cp -r harness/harness-skill-template ~/.config/opencode/skill/
 cp -r dev/dev-pr-report-html ~/.config/opencode/skill/
 cp -r reports/pptx-report ~/.config/opencode/skill/
 ```
@@ -88,7 +93,13 @@ skills/
 │       ├── templates/
 │       └── examples/
 ├── sci/                       наука, префикс sci- (пока пусто)
-├── harness/                   общее для харнесса, префикс harness- (пока пусто)
+├── harness/                   харнесс, префикс harness-
+│   └── harness-skill-template/
+│       ├── SKILL.md
+│       ├── references/
+│       ├── scripts/
+│       ├── templates/
+│       └── examples/
 ├── reports/                   отчётность, без префикса
 │   └── pptx-report/
 │       ├── SKILL.md

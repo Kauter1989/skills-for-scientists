@@ -243,15 +243,14 @@ docs/reviews/<skill-name>.html
 4. Собрать `docs/reviews/<skill>.html` и получить `approved`.
 5. Только после этого писать `SKILL.md` и код.
 
-Текущая очередь harness:
+Текущая очередь harness (H1 `harness-skill-template` реализован):
 
-1. `harness-skill-template`
-2. `harness-rule-to-mechanism`
-3. `harness-skill-audit`
-4. `harness-skill-eval`
-5. `harness-init`
-6. `harness-analyze-codebase`
-7. `harness-session-retrospective`
+1. `harness-rule-to-mechanism`
+2. `harness-skill-audit`
+3. `harness-skill-eval`
+4. `harness-init`
+5. `harness-analyze-codebase`
+6. `harness-session-retrospective`
 
 История переименований harness:
 
