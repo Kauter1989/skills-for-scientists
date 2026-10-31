@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Аудит библиотеки навыков — {{DATE}}</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --red: #b42318; --amber: #a96500; --green: #1f7a4d;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 36px 24px 44px; }
+  .kicker { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.1; letter-spacing: -.02em; margin: 8px 0 10px; }
+  .meta { color: var(--muted); font-size: 12.5px; margin-bottom: 20px; }
+  .meta code { font-family: var(--mono); font-size: 11.5px; }
+  .summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; margin-bottom: 18px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; }
+  .stat b { display: block; font-size: 25px; line-height: 1.1; }
+  .stat span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .stat.red b { color: var(--red); } .stat.amber b { color: var(--amber); }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 14px; overflow: hidden; }
+  .head { padding: 14px 18px 11px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .head h2 { margin: 0; font-size: 18px; }
+  .head p { margin: 0; color: var(--muted); font-size: 11.5px; }
+  .body { padding: 14px 18px 18px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 6px 7px; }
+  td { border-bottom: 1px solid var(--line); padding: 7px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono { font-family: var(--mono); font-size: 11px; }
+  .sev { font-size: 9px; font-weight: 700; letter-spacing: .04em; padding: 2px 5px; border-radius: 3px; white-space: nowrap; }
+  .sev.blocker { background: #fbe9e7; color: var(--red); }
+  .sev.major { background: #fbf0dc; color: var(--amber); }
+  .sev.minor { background: #eef0f3; color: var(--muted); }
+  .empty { color: var(--muted); text-align: center; padding: 18px; }
+  .dups { font-family: var(--mono); font-size: 11.5px; color: #3c434d; background: #f7f8f9; border: 1px solid var(--line); border-radius: 7px; padding: 9px 11px; }
+  footer { color: var(--muted); font-size: 11px; margin-top: 18px; }
+  @media (max-width: 760px) { .summary { grid-template-columns: repeat(2, 1fr); } .wrap { padding: 22px 14px; } }
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body { background: #fff; font-size: 9pt; }
+    .wrap { max-width: none; padding: 0; }
+    section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="kicker">Skill library audit</div>
+  <h1>Аудит библиотеки навыков</h1>
+  <div class="meta">
+    Дата: <b>{{DATE}}</b> · Область: <b>{{SCOPE}}</b> · Корень: <code>{{ROOT}}</code>
+  </div>
+
+  <div class="summary">
+    <div class="stat"><b>{{SKILL_COUNT}}</b><span>навыков</span></div>
+    <div class="stat red"><b>{{BLOCKERS}}</b><span>blocker</span></div>
+    <div class="stat amber"><b>{{MAJORS}}</b><span>major</span></div>
+    <div class="stat"><b>{{MINORS}}</b><span>minor</span></div>
+    <div class="stat"><b>{{DUPLICATES}}</b><span>дубли</span></div>
+  </div>
+
+  <section>
+    <div class="head"><h2>Находки</h2><p>отсортированы по severity</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Severity</th><th>Навык</th><th>Правило</th><th>Evidence</th><th>Рекомендация</th></tr></thead>
+        <tbody>
+{{FINDINGS_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Дубли триггеров</h2><p>по умолчанию дублей быть не должно; исключения утверждает пользователь</p></div>
+    <div class="body">
+      <div class="dups">{{DUPLICATES}}</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Покрытие доменов</h2><p>сколько навыков в каждом домене</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Домен</th><th>Навыков</th><th>Состояние</th></tr></thead>
+        <tbody>
+{{COVERAGE_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Сгенерировано <code>harness-skill-audit</code> · read-only · исправления не вносятся
+  </footer>
+</main>
+</body>
+</html>

@@ -263,8 +263,8 @@
       означает, что без скилла процесс теряет проверяемое звено.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">4</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">38</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-existing">5</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">37</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -393,7 +393,10 @@
 │       ├── scripts/
 │       └── templates/
 ├── sci/                        <span class="c">← наука, префикс sci-; пока пусто</span>
-└── harness/                    <span class="c">← общее для харнесса, префикс harness-; пока пусто</span></pre>
+└── harness/                    <span class="c">← харнесс, префикс harness-</span>
+    ├── harness-skill-template/
+    ├── harness-rule-to-mechanism/
+    └── harness-skill-audit/</pre>
           <p class="count-line" style="margin-top:10px">
             Внутри доменных папок каталоги плоские: один каталог — один навык.
             При установке копируется <code>dev/dev-pr-report-html</code> в
@@ -434,7 +437,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-10-31 · 4 реализовано · 38 предложено</span>
+      <span>снимок 2026-10-31 · 5 реализовано · 37 предложено</span>
     </div>
   </footer>
 </main>
@@ -736,11 +739,11 @@
       links: "../harness/harness-skill-template/SKILL.md"
     },
     {
-      id: "harness-skill-audit", name: "/harness-skill-audit", domain: "harness", status: "proposed", priority: "P1",
-      blocks: ["meta"],
-      sum: "Ревизия библиотеки: дубли триггеров, скиллы без артефакта, устаревшие команды, покрытие домена.",
-      io: "библиотека → отчёт",
-      links: ""
+      id: "harness-skill-audit", name: "/harness-skill-audit", domain: "harness", status: "existing", priority: "core",
+      blocks: ["audit", "meta"],
+      sum: "Аудит библиотеки: структура, дубли триггеров, артефакты, ссылки, покрытие доменов; HTML и JSON-снимок.",
+      io: "библиотека → docs/audits/<date>.html",
+      links: "../harness/harness-skill-audit/SKILL.md"
     },
     {
       id: "harness-skill-eval", name: "/harness-skill-eval", domain: "harness", status: "proposed", priority: "P2",
@@ -872,7 +875,7 @@
       steps: [
         { t: "/harness-init", c: "new" }, { t: "/harness-skill-template", c: "implemented" },
         { t: "/harness-rule-to-mechanism", c: "implemented" }, { t: "/harness-skill-eval", c: "new" },
-        { t: "/harness-skill-audit", c: "new" }
+        { t: "/harness-skill-audit", c: "implemented" }
       ]
     }
   ];

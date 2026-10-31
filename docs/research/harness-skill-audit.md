@@ -8,7 +8,7 @@
 | Автор | OpenCode agent |
 | Дата начала | `2026-10-31` |
 | Дата снимка источников | `2026-10-31` |
-| Статус | `ready-for-review` |
+| Статус | `approved` |
 
 ## 1. Задача
 
@@ -94,11 +94,11 @@
 ## 8. Что дальше
 
 - [x] Research Gate: 5 GitHub-аналогов, 3 научных источника, 4 спецификации
-- [ ] Собран `docs/reviews/harness-skill-audit.html`
-- [ ] Ревью проведено, статус `approved`
-- [ ] Создан каталог `harness/harness-skill-audit/`
-- [ ] Аудит находит заранее внесённые дефекты
-- [ ] Обновлены `docs/skills-map.html` и `README.md`
+- [x] Собран `docs/reviews/harness-skill-audit.html`
+- [x] Ревью проведено, статус `approved`
+- [x] Создан каталог `harness/harness-skill-audit/`
+- [x] Аудит находит заранее внесённые дефекты
+- [x] Обновлены `docs/skills-map.html` и `README.md`
 
 ## 9. Источники
 

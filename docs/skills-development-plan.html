@@ -172,8 +172,8 @@
       Отчётные навыки остаются в поддержке; новые — после science.
     </p>
     <div class="stats">
-      <div class="stat"><b>4</b><span>навыка в репозитории</span></div>
-      <div class="stat"><b>38</b><span>в очереди</span></div>
+      <div class="stat"><b>5</b><span>навыка в репозитории</span></div>
+      <div class="stat"><b>37</b><span>в очереди</span></div>
       <div class="stat"><b>5</b><span>обязательных гейтов</span></div>
       <div class="stat"><b>7 / 17 / 9</b><span>harness / dev / science</span></div>
       <div class="stat"><b>3 + 2</b><span>минимум GitHub + научных источников</span></div>
@@ -284,7 +284,7 @@
     <div class="panel-head">
       <h2>Phase 1 · Harness</h2>
       <p>Первый приоритет: сначала то, что определяет форму и проверку остальных навыков</p>
-      <span class="count">7 навыков · 2 готово · 3 × P0</span>
+      <span class="count">7 навыков · 3 готово · 3 × P0</span>
     </div>
     <div class="panel-body">
       <div class="cards">
@@ -322,14 +322,14 @@
           <div class="card-head">
             <span class="ord">H3</span>
             <h3><code>harness-skill-audit</code></h3>
-            <span class="pri p0">P0</span><span class="eff">M</span>
+            <span class="pri p0">P0</span><span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span><span class="eff">M</span>
           </div>
-          <p>Ревизия библиотеки: дубли триггеров, навыки без артефакта, устаревшие команды, покрытие домена.</p>
+          <p>Реализован: чек-лист, severity-шкала, HTML/JSON-отчёт и `audit_library.py` с поиском дублей.</p>
           <dl>
-            <dt>GitHub</dt><dd>skill linters, docs lint, prompt evaluation, awesome-list curation.</dd>
-            <dt>Наука</dt><dd>чек-листы качества, межэкспертная надёжность, валидность измерений.</dd>
-            <dt>Выход</dt><dd>чек-лист аудита, скрипт проверки структуры и триггеров, отчёт.</dd>
-            <dt>Приёмка</dt><dd>аудит находит заранее внесённые дефекты и не даёт ложных срабатываний на эталонах.</dd>
+            <dt>GitHub</dt><dd>promptfoo, inspect_ai, lychee, markdownlint, jscpd.</dd>
+            <dt>Наука</dt><dd>Fagan 1976, Cohen 1960, Parnas 1994.</dd>
+            <dt>Выход</dt><dd>чек-лист, severity, шаблон отчёта, <code>audit_library.py</code>.</dd>
+            <dt>Приёмка</dt><dd>находит seeded-дефекты: дубль, пустой пример, битую ссылку.</dd>
           </dl>
         </article>
 
@@ -703,16 +703,17 @@
   <section class="panel" id="next">
     <div class="panel-head">
       <h2>Текущий шаг</h2>
-      <p>H2 готов; следующий — H3</p>
+      <p>H3 готов; следующий — H4</p>
     </div>
     <div class="panel-body">
       <ol style="margin:0;padding-left:20px">
         <li><code>harness-skill-template</code> реализован, review <code>approved</code>, PR #2 merged.</li>
         <li>Foundation и структура библиотеки: PR #1 merged.</li>
-        <li><code>harness-rule-to-mechanism</code> реализован, review <code>approved</code>, PR #3.</li>
-        <li>Собрать <code>docs/research/harness-skill-audit.md</code>.</li>
-        <li>Собрать <code>docs/reviews/harness-skill-audit.html</code> и получить <code>approved</code>.</li>
-        <li>Реализовать <code>harness/harness-skill-audit/</code>.</li>
+        <li><code>harness-rule-to-mechanism</code> реализован, review <code>approved</code>, PR #3 merged.</li>
+        <li><code>harness-skill-audit</code> реализован, review <code>approved</code>, PR #4.</li>
+        <li>Собрать <code>docs/research/harness-skill-eval.md</code>.</li>
+        <li>Собрать <code>docs/reviews/harness-skill-eval.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>harness/harness-skill-eval/</code>.</li>
       </ol>
       <div class="decision">
         <div class="ok">approved</div>
@@ -722,7 +723,7 @@
       </div>
       <p class="small" style="margin-top:10px">
         Решение по плану: <b>approved</b>. Комментарий:
-        <b>утверждено 2026-10-31; H1 реализован</b>. После правок обновите дату и версию.
+        <b>утверждено 2026-10-31; H1–H3 реализованы</b>. После правок обновите дату и версию.
       </p>
     </div>
   </section>
