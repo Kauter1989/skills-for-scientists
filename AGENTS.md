@@ -253,6 +253,14 @@ docs/reviews/<skill-name>.html
 6. `harness-analyze-codebase`
 7. `harness-session-retrospective`
 
+История переименований harness:
+
+| Было | Стало |
+|---|---|
+| `harness-skill-author` | `harness-skill-template` |
+| `harness-context-map` | `harness-analyze-codebase` |
+| `harness-handoff` | `harness-session-retrospective` |
+
 ## 11. Проверка репозитория
 
 ```powershell
