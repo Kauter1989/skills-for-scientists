@@ -46,10 +46,10 @@ reports/   → без префикса отчётность
 
 ## 4. Обязательные гейты
 
-Ни один навык не разрабатывается без прохождения четырёх гейтов.
+Ни один навык не разрабатывается без прохождения пяти гейтов.
 
 ```
-Research Gate → Review Gate → Implementation Gate → Verification Gate
+Research Gate → Review Gate → Implementation Gate → Verification Gate → PR Gate
 ```
 
 ### 4.1 Research Gate — до плана навыка
@@ -175,6 +175,25 @@ docs/reviews/<skill-name>.html
 - research ledger и review HTML лежат в репозитории;
 - проверено, что навык не дублирует существующий: триггеры различаются.
 
+### 4.6 PR Gate — обязателен
+
+Новый навык не мержится без pull request.
+
+- Ветка называется по навыку: `feature/<skill-name>` или
+  `research/<skill-name>`; база — актуальная `main` или ветка серии.
+- PR открывается до мержа, даже если работа сделана одним коммитом.
+- В описании PR обязательны: ссылка на research ledger, ссылка на review
+  HTML со статусом `approved`, вывод валидатора, изменения в карте и
+  README, названные ограничения.
+- Красные проверки и незакрытые замечания ревью не мержатся.
+- PR остаётся в истории как ссылка на решение и источники.
+
+```bash
+git push -u origin feature/<skill-name>
+gh pr create --base main --title "feat(<skill>): ..." --body-file pr.md
+gh pr checks --watch
+```
+
 ## 5. Definition of Done
 
 Навык считается готовым, когда одновременно выполнено:
@@ -189,7 +208,8 @@ docs/reviews/<skill-name>.html
       объяснена;
 - [ ] обновлены карта и README;
 - [ ] нет проектных имён и данных в общих примерах;
-- [ ] коммит описывает, какой гейт пройден.
+- [ ] коммит описывает, какой гейт пройден;
+- [ ] ветка запушена и PR открыт по §4.6.
 
 ## 6. Качество и честность
 
@@ -219,6 +239,8 @@ docs/reviews/<skill-name>.html
 ## 8. Git и изменения
 
 - Работа идёт в ветке; прямые коммиты в `main` не приветствуются.
+- Каждый новый навык сдаётся через PR: ветка → push → PR → проверки →
+  мерж. Мерж без PR запрещён.
 - Перед коммитом: `git status`, проверка ссылок, прогон примеров.
 - В коммит попадают код, документация, research ledger и review HTML
   вместе; отделять ревью от реализации нельзя.
@@ -234,6 +256,7 @@ docs/reviews/<skill-name>.html
 - Оставлять примеры с внутренними именами проектов.
 - Публиковать секреты, токены и персональные данные.
 - Объявлять навык готовым без воспроизводимого примера.
+- Мержить новый навык без pull request.
 
 ## 10. Первые шаги
 
@@ -242,16 +265,17 @@ docs/reviews/<skill-name>.html
 3. Собрать `docs/research/<skill>.md`.
 4. Собрать `docs/reviews/<skill>.html` и получить `approved`.
 5. Только после этого писать `SKILL.md` и код.
+6. Запустить валидатор, открыть PR и приложить research, review и вывод
+   проверки.
 
-Текущая очередь harness:
+Текущая очередь harness (H1 `harness-skill-template` реализован):
 
-1. `harness-skill-template`
-2. `harness-rule-to-mechanism`
-3. `harness-skill-audit`
-4. `harness-skill-eval`
-5. `harness-init`
-6. `harness-analyze-codebase`
-7. `harness-session-retrospective`
+1. `harness-rule-to-mechanism`
+2. `harness-skill-audit`
+3. `harness-skill-eval`
+4. `harness-init`
+5. `harness-analyze-codebase`
+6. `harness-session-retrospective`
 
 История переименований harness:
 
