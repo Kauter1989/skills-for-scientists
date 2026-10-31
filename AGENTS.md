@@ -268,14 +268,14 @@ gh pr checks --watch
 6. Запустить валидатор, открыть PR и приложить research, review и вывод
    проверки.
 
-Текущая очередь harness (H1 `harness-skill-template` реализован):
+Текущая очередь harness (H1 `harness-skill-template` и H2
+`harness-rule-to-mechanism` реализованы):
 
-1. `harness-rule-to-mechanism`
-2. `harness-skill-audit`
-3. `harness-skill-eval`
-4. `harness-init`
-5. `harness-analyze-codebase`
-6. `harness-session-retrospective`
+1. `harness-skill-audit`
+2. `harness-skill-eval`
+3. `harness-init`
+4. `harness-analyze-codebase`
+5. `harness-session-retrospective`
 
 История переименований harness:
 

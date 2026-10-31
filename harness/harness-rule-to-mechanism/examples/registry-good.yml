@@ -1,0 +1,18 @@
+version: 1
+rules:
+  - id: ARCH-001
+    rule: "domain не импортирует infrastructure"
+    trigger: "import из infrastructure в domain/"
+    mechanism:
+      type: test
+      command: "pytest tests/architecture/test_layers.py"
+      config: ""
+      contract: "domain-independent"
+    level: CI
+    owner: architecture
+    cost: "8 секунд в CI, 0 ложных срабатываний"
+    bypass: "только через ADR"
+    evidence: harness/harness-rule-to-mechanism/examples/negative-fixture.txt
+    status: proposed
+    since: "2026-10-31"
+    notes: "Пример схемы registry; механизм и negative fixture подключаются отдельно."

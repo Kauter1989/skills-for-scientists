@@ -1,0 +1,16 @@
+- id: PREFIX-001
+  rule: "Одно предложение: что запрещено или требуется."
+  trigger: "Как выглядит нарушение: файл, импорт, команда, событие."
+  mechanism:
+    type: test
+    command: "pytest path/to/test_rule.py"
+    config: ""
+    contract: ""
+  level: CI
+  owner: team-or-role
+  cost: "latency / шум / обслуживание"
+  bypass: "нет"
+  evidence: path/to/negative-fixture-or-test
+  status: proposed
+  since: "YYYY-MM-DD"
+  notes: ""

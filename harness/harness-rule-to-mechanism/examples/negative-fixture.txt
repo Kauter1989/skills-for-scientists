@@ -1,0 +1,6 @@
+# Нарушение: domain импортирует infrastructure
+from app.infrastructure.db import session
+
+
+def get_share_token(record_id: str) -> str:
+    return session.query(record_id)

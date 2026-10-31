@@ -8,7 +8,7 @@
 | Автор | OpenCode agent |
 | Дата начала | `2026-10-31` |
 | Дата снимка источников | `2026-10-31` |
-| Статус | `ready-for-review` |
+| Статус | `approved` |
 
 ## 1. Задача
 
@@ -90,11 +90,11 @@
 ## 8. Что дальше
 
 - [x] Research Gate: 5 GitHub-аналогов, 3 научных источника, 4 спецификации
-- [ ] Собран `docs/reviews/harness-rule-to-mechanism.html`
-- [ ] Ревью проведено, статус `approved`
-- [ ] Создан каталог `harness/harness-rule-to-mechanism/`
-- [ ] Negative fixture падает, baseline проходит
-- [ ] Обновлены `docs/skills-map.html` и `README.md`
+- [x] Собран `docs/reviews/harness-rule-to-mechanism.html`
+- [x] Ревью проведено, статус `approved`
+- [x] Создан каталог `harness/harness-rule-to-mechanism/`
+- [x] Валидатор проходит на good/bad примерах registry
+- [x] Обновлены `docs/skills-map.html` и `README.md`
 
 ## 9. Источники
 
