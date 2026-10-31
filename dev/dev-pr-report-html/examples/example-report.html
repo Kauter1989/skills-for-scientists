@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Отчёт об изменениях</title>
+<style>
+  :root {
+    --paper: #f6f5f2;
+    --card: #ffffff;
+    --ink: #14181f;
+    --muted: #5f6875;
+    --line: #dfe2e7;
+    --line-strong: #c4cad2;
+    --accent: #1f5f5b;
+    --accent-soft: #e6efee;
+    --green: #1f7a4d;
+    --green-soft: #e7f4ec;
+    --amber: #a96500;
+    --amber-soft: #fbf0dc;
+    --red: #b42318;
+    --red-soft: #fbe9e7;
+    --violet: #6d5aa8;
+    --violet-soft: #efebf9;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(20, 24, 31, .04), 0 8px 24px rgba(20, 24, 31, .04);
+    --mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 15px/1.55 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(246, 245, 242, .92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .wrap {
+    display: flex; align-items: center; gap: 16px;
+    min-height: 52px; flex-wrap: wrap;
+  }
+  .topbar .brand {
+    font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    font-size: 11px; color: var(--accent);
+  }
+  .topbar nav { display: flex; gap: 14px; flex-wrap: wrap; margin-left: auto; }
+  .topbar nav a {
+    font-size: 12px; color: var(--muted); text-decoration: none;
+    padding: 4px 0; border-bottom: 2px solid transparent;
+  }
+  .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--ink); border-color: var(--accent); }
+
+  header.hero { padding: 44px 0 8px; }
+  .kicker {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+  }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; margin: 0 0 8px; letter-spacing: -.02em; }
+  .subtitle { font-size: 18px; color: var(--muted); margin: 0 0 20px; max-width: 900px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--line); background: var(--card);
+    border-radius: 999px; padding: 5px 11px; font-size: 12px; color: var(--muted);
+  }
+  .chip b { color: var(--ink); font-weight: 600; }
+  .chip.mono { font-family: var(--mono); font-size: 11px; }
+
+  .verdict {
+    background: var(--card); border: 1px solid var(--line);
+    border-left: 5px solid var(--muted); border-radius: var(--radius);
+    padding: 20px 22px; box-shadow: var(--shadow); margin-bottom: 26px;
+  }
+  .verdict[data-status="green"] { border-left-color: var(--green); }
+  .verdict[data-status="amber"] { border-left-color: var(--amber); }
+  .verdict[data-status="red"] { border-left-color: var(--red); }
+  .verdict .label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
+    color: var(--muted); font-weight: 700; margin-bottom: 6px;
+  }
+  .verdict h2 { font-size: 21px; line-height: 1.3; margin: 0 0 8px; letter-spacing: -.01em; }
+  .verdict p { margin: 0; color: var(--muted); max-width: 900px; }
+
+  .kpis {
+    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px; margin-bottom: 30px;
+  }
+  .kpi {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 14px 12px; position: relative; overflow: hidden;
+    box-shadow: var(--shadow); min-height: 132px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .kpi::after {
+    content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+    background: var(--muted); opacity: .85;
+  }
+  .kpi[data-status="green"]::after { background: var(--green); }
+  .kpi[data-status="amber"]::after { background: var(--amber); }
+  .kpi[data-status="red"]::after { background: var(--red); }
+  .kpi .k-emoji { font-size: 18px; line-height: 1; }
+  .kpi .k-label {
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--muted); font-weight: 700; margin: 8px 0 6px; line-height: 1.3;
+  }
+  .kpi .k-value {
+    font-size: 25px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi .k-value small { font-size: 11px; font-weight: 500; color: var(--muted); margin-left: 3px; }
+  .kpi .k-foot { font-size: 10.5px; color: var(--muted); margin-top: 6px; display: flex; gap: 6px; align-items: center; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; background: var(--muted); }
+  .dot.green { background: var(--green); } .dot.amber { background: var(--amber); }
+  .dot.red { background: var(--red); } .dot.unknown { background: var(--muted); }
+
+  section.block {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    margin: 0 0 18px; scroll-margin-top: 70px; overflow: hidden;
+  }
+  .sec-head {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px 24px 18px; border-bottom: 1px solid var(--line);
+    border-top: 4px solid var(--muted);
+  }
+  section.block[data-status="green"] .sec-head { border-top-color: var(--green); }
+  section.block[data-status="amber"] .sec-head { border-top-color: var(--amber); }
+  section.block[data-status="red"] .sec-head { border-top-color: var(--red); }
+  .sec-no {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 8px; padding: 3px 7px;
+    margin-top: 2px; flex: none;
+  }
+  .sec-title { flex: 1 1 auto; min-width: 200px; }
+  .sec-title h2 { font-size: 23px; line-height: 1.25; margin: 0 0 4px; letter-spacing: -.01em; }
+  .sec-title .q { color: var(--muted); font-size: 12.5px; margin: 0; }
+  .sec-value {
+    text-align: right; font-size: 38px; font-weight: 700; line-height: 1;
+    letter-spacing: -.03em; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .sec-value small { display: block; font-size: 10.5px; font-weight: 500; color: var(--muted); letter-spacing: .02em; margin-top: 4px; }
+  .badges { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; flex: none; }
+  .badge {
+    font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+    border-radius: 5px; padding: 3px 7px; border: 1px solid transparent; white-space: nowrap;
+  }
+  .badge.q-measured { background: var(--green-soft); color: var(--green); border-color: #bfe0cb; }
+  .badge.q-derived { background: #e8eef7; color: #244f86; border-color: #c6d6ea; }
+  .badge.q-estimated { background: var(--amber-soft); color: var(--amber); border-color: #ead3a8; }
+  .badge.q-expert { background: var(--violet-soft); color: var(--violet); border-color: #d8cff0; }
+  .badge.q-missing { background: #eef0f3; color: var(--muted); border-color: var(--line); }
+  .badge.s-green { background: var(--green-soft); color: var(--green); }
+  .badge.s-amber { background: var(--amber-soft); color: var(--amber); }
+  .badge.s-red { background: var(--red-soft); color: var(--red); }
+  .badge.s-unknown { background: #eef0f3; color: var(--muted); }
+
+  .sec-body { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, .85fr); gap: 0; }
+  .sec-main { padding: 20px 24px 22px; min-width: 0; }
+  .sec-side { border-left: 1px solid var(--line); padding: 20px 22px 22px; background: #fcfcfb; min-width: 0; }
+  .summary { margin: 0 0 16px; font-size: 15.5px; }
+  .sec-side h3 {
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); margin: 0 0 7px;
+  }
+  .sec-side h3:not(:first-child) { margin-top: 18px; }
+  .sec-side ul { margin: 0; padding-left: 17px; }
+  .sec-side li { margin: 0 0 5px; font-size: 13px; color: #333a44; }
+  .sec-side p { margin: 0; font-size: 13px; color: #333a44; }
+
+  .drivers { margin: 16px 0 0; }
+  .drivers h3 { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 7px; }
+  .drivers ul { margin: 0; padding-left: 17px; }
+  .drivers li { font-size: 13.5px; margin-bottom: 4px; }
+
+  .visual { margin: 6px 0 4px; }
+  .viz-title { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; font-weight: 700; }
+
+  .stack {
+    display: flex; height: 26px; border-radius: 6px; overflow: hidden;
+    background: #eef0f3; border: 1px solid var(--line);
+  }
+  .stack span { display: block; height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 9px; }
+  .legend span { font-size: 11.5px; color: var(--muted); display: inline-flex; align-items: center; gap: 5px; }
+  .legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .stat {
+    border: 1px solid var(--line); border-radius: 9px; padding: 8px 11px;
+    min-width: 112px; background: #fff;
+  }
+  .stat b { display: block; font-size: 19px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+
+  .scale { margin-top: 8px; }
+  .scale-track {
+    position: relative; display: flex; height: 16px; border-radius: 5px; overflow: hidden;
+    background: #eef0f3;
+  }
+  .scale-track .z { height: 100%; }
+  .scale-marker {
+    position: absolute; top: -5px; bottom: -5px; width: 3px; background: var(--ink);
+    border-radius: 2px; transform: translateX(-50%);
+  }
+  .scale-marker::after {
+    content: attr(data-label); position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; font-weight: 700; background: var(--ink); color: #fff;
+    padding: 1px 5px; border-radius: 4px; white-space: nowrap;
+  }
+  .scale-labels { display: flex; justify-content: space-between; margin-top: 5px; font-size: 10.5px; color: var(--muted); font-family: var(--mono); }
+
+  table.data { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12.5px; }
+  table.data caption { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; margin-bottom: 7px; }
+  table.data th {
+    text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 6px 8px;
+    white-space: nowrap;
+  }
+  table.data td { border-bottom: 1px solid var(--line); padding: 7px 8px; vertical-align: top; }
+  table.data tr:last-child td { border-bottom: 0; }
+  table.data td.mono, table.data td code { font-family: var(--mono); font-size: 11.5px; }
+  .sev { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 2px 5px; border-radius: 4px; white-space: nowrap; }
+  .sev.critical { background: var(--red-soft); color: var(--red); }
+  .sev.major { background: var(--amber-soft); color: var(--amber); }
+  .sev.minor { background: #eef0f3; color: var(--muted); }
+  .sev.ok { background: var(--green-soft); color: var(--green); }
+
+  .bars { display: grid; gap: 7px; margin-top: 4px; }
+  .bar-row { display: grid; grid-template-columns: 118px minmax(0,1fr) 58px; gap: 9px; align-items: center; font-size: 12px; }
+  .bar-row .bl { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar-row .bt { background: #eef0f3; height: 12px; border-radius: 3px; overflow: hidden; }
+  .bar-row .bt i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+  .bar-row .bv { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 11.5px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .mini-card { border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; background: #fff; }
+  .mini-card h4 { margin: 0 0 6px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .mini-card ul { margin: 0; padding-left: 15px; }
+  .mini-card li { font-size: 12px; margin-bottom: 3px; }
+  .mono-list { font-family: var(--mono); font-size: 11px; color: #333a44; }
+
+  .matrix-wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(250px, .9fr); gap: 22px; align-items: center; }
+  .matrix-svg { width: 100%; height: auto; display: block; }
+  .matrix-side .q-title { font-size: 20px; margin: 0 0 6px; letter-spacing: -.01em; }
+  .matrix-side .q-text { color: var(--muted); font-size: 13.5px; margin: 0 0 14px; }
+  .q-badge { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; padding: 3px 7px; border-radius: 5px; margin-bottom: 10px; }
+
+  .evidence-table td:first-child { width: 45%; }
+  .actions { display: grid; gap: 8px; }
+  .action { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .action:last-child { border-bottom: 0; }
+  .action .pri { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 6px; border-radius: 4px; text-align: center; }
+  .pri.now { background: var(--red-soft); color: var(--red); }
+  .pri.next { background: var(--amber-soft); color: var(--amber); }
+  .pri.accept { background: var(--green-soft); color: var(--green); }
+  .action .txt { font-size: 13.5px; }
+  .action .own { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+  .method { font-size: 12.5px; color: var(--muted); }
+  .method code { font-family: var(--mono); font-size: 11.5px; background: #f1f2f4; padding: 1px 4px; border-radius: 3px; color: #333a44; }
+  .method ul { padding-left: 17px; }
+
+  footer { padding: 22px 0 42px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  .empty {
+    border: 1px dashed var(--line-strong); border-radius: 10px; padding: 18px;
+    color: var(--muted); font-size: 13px; background: #fcfcfb;
+  }
+  .empty b { color: var(--ink); }
+
+  @media (max-width: 980px) {
+    .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sec-body { grid-template-columns: 1fr; }
+    .sec-side { border-left: 0; border-top: 1px solid var(--line); }
+    .matrix-wrap { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 620px) {
+    .wrap { padding: 0 14px; }
+    .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sec-head { flex-wrap: wrap; }
+    .sec-value { font-size: 30px; text-align: left; }
+    .badges { flex-direction: row; align-items: center; }
+    .bar-row { grid-template-columns: 86px minmax(0,1fr) 48px; }
+    .two-col { grid-template-columns: 1fr; }
+    .action { grid-template-columns: 58px 1fr; }
+    .action .own { grid-column: 2; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+  }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10.5pt; }
+    .topbar, nav { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    header.hero { padding-top: 0; }
+    .kpis { grid-template-columns: repeat(3, 1fr); }
+    section.block, .verdict, .kpi { box-shadow: none; break-inside: avoid; }
+    section.block { page-break-inside: avoid; }
+    .sec-body { grid-template-columns: 1fr; }
+    .sec-side { border-left: 0; border-top: 1px solid #ddd; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">Change report</span>
+    <nav aria-label="Секции отчёта">
+      <a href="#summary">Сводка</a>
+      <a href="#ftb">Токены</a>
+      <a href="#ads">Дрейф</a>
+      <a href="#cli">Нагрузка</a>
+      <a href="#air">Итерации</a>
+      <a href="#hr">Галлюцинации</a>
+      <a href="#cwu">Контекст</a>
+      <a href="#evidence">Доказательства</a>
+      <a href="#actions">Решения</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header class="hero" id="summary">
+    <div class="kicker" id="scope-kicker">Отчёт об изменениях</div>
+    <h1 id="doc-title">—</h1>
+    <p class="subtitle" id="doc-subtitle"></p>
+    <div class="chips" id="meta-chips"></div>
+    <div class="verdict" id="verdict" data-status="unknown">
+      <div class="label">Вердикт</div>
+      <h2 id="verdict-headline">—</h2>
+      <p id="verdict-text"></p>
+    </div>
+    <div class="kpis" id="kpis" aria-label="Ключевые показатели"></div>
+  </header>
+
+  <section class="block" id="matrix-block" aria-labelledby="matrix-title">
+    <div class="sec-head">
+      <div class="sec-no">◎</div>
+      <div class="sec-title">
+        <h2 id="matrix-title">Матрица CWU × ADS</h2>
+        <p class="q">Понимал ли агент правила и соблюдал ли их</p>
+      </div>
+      <div class="badges"><span class="badge q-derived">вычислено</span></div>
+    </div>
+    <div class="sec-main">
+      <div class="matrix-wrap">
+        <div id="matrix-plot"></div>
+        <div class="matrix-side" id="matrix-side"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="block" id="evidence" aria-labelledby="evidence-title">
+    <div class="sec-head">
+      <div class="sec-no">§</div>
+      <div class="sec-title">
+        <h2 id="evidence-title">Реестр доказательств</h2>
+        <p class="q">Утверждение → источник → дата</p>
+      </div>
+    </div>
+    <div class="sec-main" id="evidence-body"></div>
+  </section>
+
+  <section class="block" id="actions" aria-labelledby="actions-title">
+    <div class="sec-head">
+      <div class="sec-no">→</div>
+      <div class="sec-title">
+        <h2 id="actions-title">Решения</h2>
+        <p class="q">Что делать сейчас, что позже, что принять</p>
+      </div>
+    </div>
+    <div class="sec-main" id="actions-body"></div>
+  </section>
+
+  <section class="block" id="method" aria-labelledby="method-title">
+    <div class="sec-head">
+      <div class="sec-no">i</div>
+      <div class="sec-title">
+        <h2 id="method-title">Метод и ограничения</h2>
+        <p class="q">Команды сбора, допущения, чего проверить не удалось</p>
+      </div>
+    </div>
+    <div class="sec-main method" id="method-body"></div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span id="footer-left">dev-pr-report-html</span>
+      <span id="footer-right"></span>
+    </div>
+  </footer>
+</main>
+
+<script type="application/json" id="report-data">{"schema_version":1,"meta":{"title":"public-share-link","subtitle":"Публичная ссылка на задачу без входа в систему","scope":"feature","range":"v1.4.0..HEAD","date":"2026-10-31","repo":"example-service","branch":"feature/public-share-link","agent":"opencode / deepseek-v4.1-flash","commits":9,"changed_loc":1840,"files":37,"quality":"derived","budget":{"tokens":1500000,"amount":3.4,"currency":"USD"},"notes":"Снимок на момент сдачи фичи. Токены — из usage сессий; ADS проверен вручную."},"verdict":{"status":"red","headline":"Архитектурное противоречие: контекст прочитан, границы слоёв нарушены.","text":"Агент прочитал контракт и релевантные модули (CWU 74 %), но добавил импорт инфраструктуры в домен и новый публичный API без ADR. Это не дефицит контекста: решение нужно зафиксировать и обсудить."},"metrics":{"ftb":{"value":1842000,"unit":"tokens","quality":"measured","status":"amber","summary":"Бюджет превышен на 23 % к плану 1,5 млн; четверть ушла на переделки после первого зелёного прогона.","drivers":["9 коммитов, 1840 изменённых LOC, 37 файлов.","Два цикла переписывания слоя доступа после отказа в правах.","Пик потребления — цикл 4: 410 тыс. tokens на разбор e2e."],"evidence":[{"claim":"usage по трём сессиям фичи","source":"sessions/2026-10-28.jsonl, sessions/2026-10-30.jsonl"},{"claim":"план бюджета 1,5 млн tokens","source":"docs/features/public-share-link/alignment.md"}],"verdict":"Дорого для фичи такого размера: 100 тыс. tokens на 100 LOC при медиане 71 тыс.","actions":["Разбивать исследование и реализацию на отдельные сессии с бюджетом.","Не перезапускать полный e2e на каждой правке слоя доступа."],"parts":[{"label":"input","value":1240000},{"label":"output","value":182000},{"label":"cache read","value":380000},{"label":"cache write","value":40000}],"normalized":[{"label":"tokens / 100 LOC","value":"100 109"},{"label":"tokens / сущность","value":"40 044"},{"label":"доля переделок","value":"27 %"}],"series":[{"label":"c1","value":310000},{"label":"c2","value":280000},{"label":"c3","value":260000},{"label":"c4","value":410000},{"label":"c5","value":320000},{"label":"c6","value":262000}]},"ads":{"value":18.4,"unit":"%","quality":"expert","status":"red","summary":"Три архитектурных решения из шестнадцати нарушили контракт; одно из них критическое.","drivers":["Домен импортирует SessionLocal ради проверки остатка токена.","Новый публичный endpoint отдаёт модель без контракта и теста границ.","Утилита хеширования скопирована из services/audit.py вместо переиспользования."],"evidence":[{"claim":"запрет domain → infrastructure","source":"docs/adr/0003-layers.md#L18-L24"},{"claim":"правило нового публичного API","source":"CONVENTIONS.md#L44"}],"verdict":"Изменение переопределяет границу слоя; зелёные тесты этого не показывают.","actions":["Вынести проверку остатка в сервис, домен оставить чистым.","Добавить ADR на публичный доступ к задаче либо убрать endpoint из фичи.","Заменить копию утилиты импортом."],"contract":{"name":"Слои приложения и направление зависимостей","source":"docs/adr/0003-layers.md","assumed":false},"violations":[{"severity":"critical","rule":"domain не импортирует infrastructure","location":"src/app/domain/share.py:14","note":"Импорт SessionLocal ради проверки остатка; решение принимается в домене.","weight":5},{"severity":"major","rule":"новый публичный API требует контракта и теста границ","location":"src/app/app.py:2210","note":"Callback отдаёт share-модель без проверки владельца при прямом вызове.","weight":3},{"severity":"minor","rule":"не дублировать capability","location":"src/app/services/share.py:41","note":"Копия хеширования из services/audit.py.","weight":1}],"compliant":[{"rule":"новый модуль размещён в services","note":"слой выбран верно"},{"rule":"зависимость направлена к домену","note":"services → domain"},{"rule":"маршрут зарегистрирован в app","note":"без обхода RBAC"}]},"cli":{"value":1.8,"unit":"×","quality":"derived","status":"amber","summary":"Изменение затрагивает 12 модулей и 9 публичных функций; blast radius — 9 импортёров.","drivers":["Сырой индекс 59,3 балла при медиане 33,0 по последним пяти фичам.","Две новые миграции и один новый слой доступа.","7 тестовых файлов и 4 документа."],"evidence":[{"claim":"12 модулей, 1840 LOC","source":"git diff --numstat v1.4.0..HEAD"},{"claim":"blast radius 9","source":"граф импортёров, 2 уровня"}],"verdict":"Ревью одним проходом невозможно: слой доступа и UI связаны через 9 модулей.","actions":["Разделить ревью: домен и права отдельно, UI отдельно.","Приложить карту затронутых модулей к PR."],"entities":[{"kind":"modules","count":12,"weight":1,"total":12},{"kind":"public functions","count":9,"weight":2,"total":18},{"kind":"classes","count":3,"weight":2,"total":6},{"kind":"routes","count":2,"weight":2,"total":4},{"kind":"models","count":1,"weight":3,"total":3},{"kind":"migrations","count":1,"weight":3,"total":3},{"kind":"dependencies","count":1,"weight":2,"total":2},{"kind":"layers","count":2,"weight":3,"total":6},{"kind":"test files","count":7,"weight":0.5,"total":3.5},{"kind":"docs","count":4,"weight":0.5,"total":2}],"blast_radius":9,"top_modules":[{"name":"services/share.py","importers":6},{"name":"domain/share.py","importers":4},{"name":"pages/tasks.py","importers":3}]},"air":{"value":26.5,"unit":"%","quality":"measured","status":"amber","summary":"9 из 34 проверок упали; дважды агент повторял одну и ту же команду без новой гипотезы.","drivers":["Цикл 1: три падения e2e из-за общей фикстуры.","Цикл 4: повторный запуск того же теста после правки не того модуля.","Одно ручное вмешательство: уточнение правила прав."],"evidence":[{"claim":"34 проверки, 9 провалов","source":"session tool log, 2026-10-28..30"},{"claim":"2 повтора одной команды","source":"history цикла 4"}],"verdict":"Средний процент приемлемый, но thrash=2 показывает слабую обратную связь.","actions":["Перед повторным прогоном формулировать новую гипотезу.","Остановиться после второго одинакового падения и разобрать лог."],"attempts":34,"failed":9,"cycles":7,"loops":1.4,"thrash":2,"interventions":1,"series":[{"label":"c1","attempts":4,"failed":3},{"label":"c2","attempts":5,"failed":2},{"label":"c3","attempts":3,"failed":0},{"label":"c4","attempts":6,"failed":1},{"label":"c5","attempts":4,"failed":1},{"label":"c6","attempts":7,"failed":1},{"label":"c7","attempts":5,"failed":1}]},"hr":{"value":1.63,"unit":"на 1000 LOC","quality":"derived","status":"red","summary":"Один неразрешённый внутренний импорт и одна ссылка на несуществующий документ.","drivers":["Импорт app.services.share_tokens не резолвится: модуль переименован.","Ссылка на docs/features/public-share-link/alignment.md до создания файла."],"evidence":[{"claim":"импорт не найден в индексе","source":"collect_metrics.py, internal imports"},{"claim":"путь отсутствует","source":"проверка file references"}],"verdict":"Фантомного API нет, но 1,63 случая на 1000 LOC выше порога 1 — риск подтверждён.","actions":["Исправить импорт на services/share.py.","Создать alignment.md или убрать ссылку."],"confirmed":[{"type":"missing_import","symbol":"app.services.share_tokens","location":"src/app/services/share.py:9","evidence":"модуль не найден в индексе репозитория"},{"type":"stale_reference","symbol":"docs/features/public-share-link/alignment.md","location":"docs/features/public-share-link/overview.md","evidence":"ссылка на несуществующий файл"}],"unconfirmed":[{"type":"missing_import","symbol":"dash_extensions","note":"не установлен в среде проверки, объявлен в зависимостях"}],"checks":[{"name":"internal imports","result":"37 / 38","note":"1 неразрешённый"},{"name":"external imports","result":"14 unverified","note":"проверять в venv проекта"},{"name":"file references","result":"1 missing","note":"пути из добавленных строк"}]},"cwu":{"value":74,"unit":"%","quality":"measured","status":"green","summary":"До первой правки прочитано 25 из 34 релевантных файлов, включая контракт и ADR; окно заполнено на 41 %.","drivers":["Прочитаны docs/adr/0003-layers.md, CONVENTIONS.md и тесты затрагиваемых модулей.","Не прочитаны сервисы бюджета и аудита, от которых зависит новый слой.","Пик окна 82 тыс. из 200 тыс. tokens: вытеснения инструкций не было."],"evidence":[{"claim":"25 чтений до первой правки","source":"session tool log, 2026-10-28"},{"claim":"34 релевантных файла","source":"blast radius + тесты + ADR"}],"verdict":"Контекст достаточный: нарушения ADS не объясняются слепотой.","actions":["Разобрать архитектурное решение отдельно от вопроса контекста.","Дочитать services/budget.py перед изменением прав."],"coverage":74,"window":41,"relevant":34,"read":25,"read_list":["docs/adr/0003-layers.md","CONVENTIONS.md","src/app/domain/share.py","src/app/services/share.py","tests/test_share_link.py"],"missed_list":["src/app/services/budget.py","src/app/services/audit.py"]}},"matrix":{"cw":"high","ads":"high","title":"Архитектурное противоречие","text":"Агент прочитал контракт и релевантные модули, но добавил импорт инфраструктуры в домен и публичный API без ADR. Это конфликт решения с архитектурой, а не дефицит контекста."},"evidence":[{"claim":"9 коммитов, 1840 LOC, 37 файлов","source":"git diff --numstat v1.4.0..HEAD","date":"2026-10-31"},{"claim":"1 842 000 tokens по трём сессиям","source":"usage export, sessions/*.jsonl","date":"2026-10-31"},{"claim":"ADS 18,4 % против docs/adr/0003-layers.md","source":"ручная проверка, файл и строка","date":"2026-10-31"},{"claim":"34 проверки, 9 провалов","source":"session tool log","date":"2026-10-31"},{"claim":"1 неразрешённый внутренний импорт","source":"collect_metrics.py","date":"2026-10-31"},{"claim":"CWU 74 %: 25 из 34 файлов","source":"лог чтения сессии","date":"2026-10-31"}],"actions":[{"priority":"now","text":"Убрать импорт SessionLocal из domain/share.py и вынести проверку остатка в сервис.","owner":"автор изменения"},{"priority":"now","text":"Зафиксировать ADR на публичный доступ к задаче или убрать endpoint из фичи.","owner":"архитектурный ревьюер"},{"priority":"next","text":"Разбить ревью на домен/права и UI; приложить карту blast radius.","owner":"ревьюер"},{"priority":"accept","text":"Бюджет 1,84 млн tokens и CWU 74 % принять как стоимость фичи; учредить бюджет 1,5 млн для следующей.","owner":"руководитель"}],"method":{"commands":["python scripts/collect_metrics.py --repo example-service --from v1.4.0 --to HEAD --telemetry telemetry.json","python scripts/build_report.py metrics.json -o public-share-link.html --strict"],"notes":["ADS проверен вручную по docs/adr/0003-layers.md; каждое нарушение подтверждено файлом и строкой.","Токены — сумма input, output, cache read и cache write по трём сессиям.","CWU coverage = прочитанные релевантные файлы / все релевантные; окно — пик к лимиту модели."],"limitations":["Внешние импорты не проверялись в venv проекта: 14 помечены unverified.","CLI нормирован по медиане пяти предыдущих фич; выборка мала.","Стоимость в деньгах — по тарифу провайдера на дату снимка, без скидок."]}}</script>
+<script>
+(function () {
+  "use strict";
+
+  var DATA = {};
+  try {
+    DATA = JSON.parse(document.getElementById("report-data").textContent);
+  } catch (e) {
+    document.getElementById("doc-title").textContent = "Ошибка данных";
+    document.getElementById("doc-subtitle").textContent =
+      "Не удалось разобрать JSON отчёта: " + e.message;
+    return;
+  }
+
+  var QUALITY = {
+    measured: "измерено",
+    derived: "вычислено",
+    estimated: "оценка",
+    expert: "эксперт",
+    missing: "нет данных"
+  };
+  var STATUS = {
+    green: "норма",
+    amber: "внимание",
+    red: "нарушение",
+    unknown: "не определено"
+  };
+  var SECTION_SPECS = [
+    { key: "ftb", no: "01", emoji: "💰", title: "Feature Token Budget", q: "Сколько стоила фича в токенах" },
+    { key: "ads", no: "02", emoji: "🏗", title: "Architecture Drift Score", q: "Доля изменений, ломающих архитектурные правила" },
+    { key: "cli", no: "03", emoji: "🧠", title: "Cognitive Load Index", q: "Сколько сущностей и модулей затронуто" },
+    { key: "air", no: "04", emoji: "🔄", title: "Agent Iteration Rate", q: "Сколько retry-циклов потребовал агент" },
+    { key: "hr", no: "05", emoji: "👻", title: "Hallucination Risk", q: "Несуществующие API, импорты и ссылки" },
+    { key: "cwu", no: "06", emoji: "📏", title: "Context Window Utilization", q: "Насколько полно использован контекст репозитория" }
+  ];
+
+  function $(id) { return document.getElementById(id); }
+  function arr(x) { return Array.isArray(x) ? x : []; }
+  function obj(x) { return x && typeof x === "object" ? x : {}; }
+  function h(tag, attrs) {
+    var node = document.createElement(tag);
+    var a = attrs || {};
+    Object.keys(a).forEach(function (k) {
+      if (k === "text") { node.textContent = a[k]; }
+      else if (k === "className") { node.className = a[k]; }
+      else if (k === "dataset") { Object.keys(a[k]).forEach(function (d) { node.dataset[d] = a[k][d]; }); }
+      else if (k.indexOf("on") === 0 && typeof a[k] === "function") { node.addEventListener(k.slice(2), a[k]); }
+      else if (a[k] !== null && a[k] !== undefined && a[k] !== false) { node.setAttribute(k, a[k]); }
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var child = arguments[i];
+      if (child === null || child === undefined || child === false) continue;
+      if (Array.isArray(child)) { child.forEach(function (c) { if (c !== null && c !== undefined) node.appendChild(c); }); }
+      else if (typeof child === "string" || typeof child === "number") { node.appendChild(document.createTextNode(String(child))); }
+      else { node.appendChild(child); }
+    }
+    return node;
+  }
+  function svg(tag, attrs) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    Object.keys(attrs || {}).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+    return node;
+  }
+  function fmtInt(n) {
+    if (typeof n !== "number" || !isFinite(n)) return "—";
+    return new Intl.NumberFormat("ru-RU").format(Math.round(n));
+  }
+  function fmtNum(n, digits) {
+    if (typeof n !== "number" || !isFinite(n)) return "—";
+    return new Intl.NumberFormat("ru-RU", { maximumFractionDigits: digits === undefined ? 1 : digits, minimumFractionDigits: 0 }).format(n);
+  }
+  function fmtCompact(n) {
+    if (typeof n !== "number" || !isFinite(n)) return "—";
+    var abs = Math.abs(n);
+    if (abs >= 1e6) return fmtNum(n / 1e6, abs >= 1e7 ? 0 : 1) + "M";
+    if (abs >= 1e3) return Math.round(n / 1e3) + "k";
+    return String(Math.round(n));
+  }
+  function fmtValue(m) {
+    if (!m || m.value === null || m.value === undefined) return "—";
+    var v = m.value, unit = m.unit || "";
+    var s;
+    if (typeof v !== "number") { s = String(v); }
+    else if (unit === "%" ) { s = fmtNum(v, 1) + " %"; }
+    else if (unit === "×") { s = fmtNum(v, 2) + "×"; }
+    else if (unit === "tokens") { s = fmtInt(v); }
+    else if (unit.indexOf("1000") >= 0) { s = fmtNum(v, 2); }
+    else { s = fmtNum(v, 2) + (unit ? " " + unit : ""); }
+    if (m.quality === "estimated" && s.indexOf("~") !== 0) s = "~" + s;
+    return s;
+  }
+  function valParts(m) {
+    if (!m || m.value === null || m.value === undefined) return ["—", ""];
+    var v = m.value;
+    if (typeof v !== "number") return [String(v), ""];
+    if (m.unit === "%") return [fmtNum(v, 1), "%"];
+    if (m.unit === "×") return [fmtNum(v, 2), "×"];
+    if (m.unit === "tokens") return [fmtInt(v), "tokens"];
+    if ((m.unit || "").indexOf("1000") >= 0) return [fmtNum(v, 2), m.unit];
+    return [fmtNum(v, 2), m.unit || ""];
+  }
+  function statusOf(m) { return (m && STATUS[m.status]) ? m.status : "unknown"; }
+
+  function qualityBadge(q) {
+    var k = QUALITY[q] ? q : "missing";
+    return h("span", { className: "badge q-" + k, text: QUALITY[k] });
+  }
+  function statusBadge(s) {
+    var k = STATUS[s] ? s : "unknown";
+    return h("span", { className: "badge s-" + k, text: STATUS[k] });
+  }
+
+  function renderMeta() {
+    var meta = obj(DATA.meta);
+    document.title = (meta.title || "Отчёт об изменениях") + " — change report";
+    $("doc-title").textContent = meta.title || "Отчёт об изменениях";
+    $("doc-subtitle").textContent = meta.subtitle || "";
+    $("scope-kicker").textContent =
+      (meta.scope === "milestone" ? "Отчёт по майлстоуну" :
+       meta.scope === "session" ? "Отчёт по сессии агента" : "Отчёт по фиче") +
+      (meta.repo ? " · " + meta.repo : "");
+
+    var chips = [];
+    function chip(label, value, mono) {
+      if (value === null || value === undefined || value === "") return;
+      chips.push(h("span", { className: "chip" + (mono ? " mono" : "") },
+        h("span", { text: label + " " }),
+        h("b", { text: String(value) })
+      ));
+    }
+    chip("Диапазон", meta.range, true);
+    chip("Дата снимка", meta.date);
+    chip("Ветка", meta.branch, true);
+    chip("Агент", meta.agent);
+    chip("Коммитов", meta.commits);
+    chip("LOC", meta.changed_loc);
+    chip("Файлов", meta.files);
+    if (meta.budget && meta.budget.tokens) {
+      var b = "бюджет " + fmtInt(meta.budget.tokens) + " tokens";
+      if (meta.budget.amount) b += " · " + fmtNum(meta.budget.amount, 2) + " " + (meta.budget.currency || "");
+      chip("Бюджет", b);
+    }
+    if (meta.quality) chips.push(qualityBadge(meta.quality));
+    $("meta-chips").replaceChildren.apply($("meta-chips"), chips);
+  }
+
+  function renderVerdict() {
+    var v = obj(DATA.verdict);
+    var status = STATUS[v.status] ? v.status : "unknown";
+    $("verdict").dataset.status = status;
+    $("verdict-headline").textContent = v.headline || "Вердикт не сформулирован";
+    $("verdict-text").textContent = v.text || "";
+    $("verdict").appendChild(statusBadge(status));
+  }
+
+  function renderKpis() {
+    var wrap = $("kpis");
+    var metrics = obj(DATA.metrics);
+    SECTION_SPECS.forEach(function (spec) {
+      var m = obj(metrics[spec.key]);
+      var status = statusOf(m);
+      var parts = valParts(m);
+      var card = h("div", { className: "kpi", dataset: { status: status } },
+        h("div", { className: "k-emoji", text: spec.emoji }),
+        h("div", { className: "k-label", text: spec.title }),
+        h("div", { className: "k-value" }, parts[0], h("small", { text: parts[1] })),
+        h("div", { className: "k-foot" },
+          h("span", { className: "dot " + status }),
+          h("span", { text: STATUS[status] }),
+          h("span", { text: "·" }),
+          h("span", { text: QUALITY[m.quality] || QUALITY.missing })
+        )
+      );
+      wrap.appendChild(card);
+    });
+  }
+
+  function sectionShell(spec, m) {
+    var status = statusOf(m);
+    var parts = valParts(m);
+    var sec = h("section", { className: "block", id: spec.key, dataset: { status: status }, "aria-labelledby": spec.key + "-title" });
+    var head = h("div", { className: "sec-head" },
+      h("div", { className: "sec-no", text: spec.no }),
+      h("div", { className: "sec-title" },
+        h("h2", { id: spec.key + "-title", text: spec.emoji + " " + spec.title }),
+        h("p", { className: "q", text: spec.q })
+      ),
+      h("div", { className: "sec-value" }, parts[0], parts[1] ? h("small", { text: parts[1] }) : null),
+      h("div", { className: "badges" }, qualityBadge(m.quality), statusBadge(status))
+    );
+    var body = h("div", { className: "sec-body" });
+    var main = h("div", { className: "sec-main" });
+    var side = h("div", { className: "sec-side" });
+    body.appendChild(main);
+    body.appendChild(side);
+    sec.appendChild(head);
+    sec.appendChild(body);
+    return { sec: sec, main: main, side: side };
+  }
+
+  function missingBlock(m) {
+    return h("div", { className: "empty" },
+      h("b", { text: "Нет данных. " }),
+      h("span", { text: (m && m.summary) ? m.summary : "Соберите телеметрию и пересоберите отчёт; поля описаны в references/metrics.md." })
+    );
+  }
+
+  function addSide(side, m) {
+    var evidence = arr(m.evidence);
+    side.appendChild(h("h3", { text: "Доказательства" }));
+    if (evidence.length) {
+      var ul = h("ul");
+      evidence.forEach(function (e) {
+        ul.appendChild(h("li", {}, h("span", { text: (e.claim || "") + " " }), h("span", { className: "mono-list", text: "→ " + (e.source || "") })));
+      });
+      side.appendChild(ul);
+    } else {
+      side.appendChild(h("p", { text: "Источники не указаны." }));
+    }
+    side.appendChild(h("h3", { text: "Вывод" }));
+    side.appendChild(h("p", { text: m.verdict || "Не сформулирован." }));
+    var actions = arr(m.actions);
+    side.appendChild(h("h3", { text: "Действия" }));
+    if (actions.length) {
+      var u2 = h("ul");
+      actions.forEach(function (a) { u2.appendChild(h("li", { text: String(a) })); });
+      side.appendChild(u2);
+    } else {
+      side.appendChild(h("p", { text: "Не требуются." }));
+    }
+  }
+
+  function bars(entities, valueKey, labelKey, maxOverride) {
+    var max = maxOverride || 1;
+    entities.forEach(function (e) { max = Math.max(max, Number(e[valueKey]) || 0); });
+    var box = h("div", { className: "bars" });
+    entities.forEach(function (e) {
+      var v = Number(e[valueKey]) || 0;
+      var pct = max > 0 ? Math.max(1.5, Math.round(v / max * 100)) : 0;
+      box.appendChild(h("div", { className: "bar-row" },
+        h("span", { className: "bl", text: String(e[labelKey] || "") }),
+        h("span", { className: "bt" }, h("i", { style: "width:" + pct + "%" })),
+        h("span", { className: "bv", text: fmtNum(v, 1) })
+      ));
+    });
+    return box;
+  }
+
+  function scaleBar(value, max, zones, labels) {
+    var pct = Math.max(0, Math.min(100, (value / max) * 100));
+    var track = h("div", { className: "scale-track" });
+    zones.forEach(function (z) {
+      track.appendChild(h("span", {
+        className: "z",
+        style: "width:" + z.width + "%;background:" + z.color,
+        title: z.title || ""
+      }));
+    });
+    track.appendChild(h("span", {
+      className: "scale-marker",
+      style: "left:" + pct + "%",
+      dataset: { label: fmtNum(value, 1) }
+    }));
+    return h("div", { className: "scale" }, track,
+      h("div", { className: "scale-labels" },
+        labels.map(function (l) { return h("span", { text: l }); })
+      )
+    );
+  }
+
+  function columnChart(series, opts) {
+    var o = opts || {};
+    var W = 620, H = 170, padL = 46, padB = 26, padT = 12, padR = 8;
+    var innerW = W - padL - padR, innerH = H - padT - padB;
+    var n = Math.max(series.length, 1);
+    var slot = innerW / n;
+    var barW = Math.max(3, Math.min(28, slot * 0.46));
+    var max = 1;
+    series.forEach(function (s) {
+      max = Math.max(max, Number(s.attempts || s.value || 0), Number(s.failed || 0));
+    });
+    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": o.aria || "Динамика по циклам" });
+    [0, 0.5, 1].forEach(function (t) {
+      var y = padT + innerH * (1 - t);
+      s.appendChild(svg("line", { x1: padL, y1: y, x2: W - padR, y2: y, stroke: "#e5e8ec", "stroke-width": 1 }));
+      s.appendChild(svg("text", { x: padL - 6, y: y + 4, "text-anchor": "end", "font-size": 9, fill: "#5f6875" })).textContent = fmtCompact(max * t);
+    });
+    series.forEach(function (pt, i) {
+      var x = padL + slot * i + slot / 2;
+      var total = Number(pt.attempts || pt.value || 0);
+      var failed = Number(pt.failed || 0);
+      var h1 = innerH * (total / max);
+      var h2 = innerH * (failed / max);
+      s.appendChild(svg("rect", {
+        x: x - barW / 2, y: padT + innerH - h1, width: barW, height: Math.max(1, h1),
+        rx: 2, fill: o.color || "#cfd8d7"
+      }));
+      if (failed > 0) {
+        s.appendChild(svg("rect", {
+          x: x - barW / 2, y: padT + innerH - h2, width: barW, height: Math.max(1, h2),
+          rx: 2, fill: "#b42318"
+        }));
+      }
+      s.appendChild(svg("text", {
+        x: x, y: H - 8, "text-anchor": "middle", "font-size": 9, fill: "#5f6875"
+      })).textContent = String(pt.label || ("c" + (i + 1)));
+      s.appendChild(svg("title")).textContent = (pt.label || "") + ": " + total + ", провалов " + failed;
+    });
+    return s;
+  }
+
+  function renderFtb(m, main) {
+    if (!m || m.value === null) { main.appendChild(missingBlock(m)); addSide(main.parentNode.querySelector(".sec-side"), m); return; }
+    main.appendChild(h("p", { className: "summary", text: m.summary || "" }));
+    var parts = arr(m.parts);
+    if (parts.length) {
+      var total = parts.reduce(function (a, p) { return a + (Number(p.value) || 0); }, 0) || 1;
+      var colors = ["#1f5f5b", "#7fa8a4", "#c9a26b", "#8d7bbf", "#c4cad2"];
+      var stack = h("div", { className: "stack" });
+      var legend = h("div", { className: "legend" });
+      parts.forEach(function (p, i) {
+        var pct = (Number(p.value) || 0) / total * 100;
+        stack.appendChild(h("span", {
+          style: "width:" + pct + "%;background:" + colors[i % colors.length],
+          title: p.label + ": " + fmtInt(p.value)
+        }));
+        legend.appendChild(h("span", {},
+          h("i", { style: "background:" + colors[i % colors.length] }),
+          p.label + " — " + fmtInt(p.value) + " (" + fmtNum(pct, 1) + " %)"
+        ));
+      });
+      main.appendChild(h("div", { className: "visual" }, h("p", { className: "viz-title", text: "Состав бюджета" }), stack, legend));
+    }
+    var norm = arr(m.normalized);
+    if (norm.length) {
+      main.appendChild(h("div", { className: "stats" },
+        norm.map(function (n) {
+          return h("div", { className: "stat" }, h("b", { text: String(n.value) }), h("span", { text: String(n.label) }));
+        })
+      ));
+    }
+    var series = arr(m.series);
+    if (series.length > 1) {
+      main.appendChild(h("div", { className: "visual" },
+        h("p", { className: "viz-title", text: "Динамика по циклам, tokens" }),
+        columnChart(series, { aria: "Токены по циклам", color: "#7fa8a4" })
+      ));
+    }
+    addSide(main.parentNode.querySelector(".sec-side"), m);
+  }
+
+  function renderAds(m, main) {
+    if (!m || m.value === null) { main.appendChild(missingBlock(m)); addSide(main.parentNode.querySelector(".sec-side"), m); return; }
+    main.appendChild(h("p", { className: "summary", text: m.summary || "" }));
+    var contract = obj(m.contract);
+    if (contract.name || contract.source) {
+      main.appendChild(h("p", { className: "viz-title", text: "Архитектурный контракт" }));
+      main.appendChild(h("p", { className: "mono-list" },
+        (contract.name || "контракт") + " · " + (contract.source || "источник не указан") +
+        (contract.assumed ? " · допущение, не машинная проверка" : "")
+      ));
+    }
+    main.appendChild(h("div", { className: "visual" },
+      h("p", { className: "viz-title", text: "Доля нарушенных архитектурных решений" }),
+      scaleBar(Number(m.value) || 0, 30, [
+        { width: 16.7, color: "#bfe0cb", title: "0–5 % норма" },
+        { width: 33.3, color: "#ead3a8", title: "5–15 % внимание" },
+        { width: 50, color: "#f0c1bc", title: "15–30 % нарушение" }
+      ], ["0 %", "5 %", "15 %", "30 %+"])
+    ));
+    var violations = arr(m.violations);
+    if (violations.length) {
+      var rows = violations.map(function (v) {
+        return h("tr", {},
+          h("td", {}, h("span", { className: "sev " + (v.severity || "minor"), text: v.severity || "minor" })),
+          h("td", { text: v.rule || "" }),
+          h("td", { className: "mono", text: v.location || "" }),
+          h("td", { text: v.note || "" })
+        );
+      });
+      main.appendChild(h("table", { className: "data" },
+        h("caption", { text: "Нарушения" }),
+        h("thead", {}, h("tr", {},
+          h("th", { text: "Severity" }), h("th", { text: "Правило" }),
+          h("th", { text: "Место" }), h("th", { text: "Пояснение" })
+        )),
+        h("tbody", {}, rows)
+      ));
+    } else {
+      main.appendChild(h("p", { className: "viz-title", text: "Нарушений не зафиксировано" }));
+    }
+    var compliant = arr(m.compliant);
+    if (compliant.length) {
+      var ok = h("ul");
+      compliant.forEach(function (c) { ok.appendChild(h("li", { text: (c.rule || "") + (c.note ? " — " + c.note : "") })); });
+      main.appendChild(h("div", { className: "two-col" }, h("div", { className: "mini-card" }, h("h4", { text: "Соблюдено" }), ok)));
+    }
+    addSide(main.parentNode.querySelector(".sec-side"), m);
+  }
+
+  function renderCli(m, main) {
+    if (!m || m.value === null) { main.appendChild(missingBlock(m)); addSide(main.parentNode.querySelector(".sec-side"), m); return; }
+    main.appendChild(h("p", { className: "summary", text: m.summary || "" }));
+    var entities = arr(m.entities);
+    if (entities.length) {
+      main.appendChild(h("div", { className: "visual" },
+        h("p", { className: "viz-title", text: "Вес сущностей" }),
+        bars(entities, "total", "kind")
+      ));
+    }
+    var stats = [];
+    if (m.blast_radius !== undefined) stats.push({ v: String(m.blast_radius), l: "blast radius, модулей" });
+    if (m.value !== undefined) stats.push({ v: fmtNum(m.value, 2) + "×", l: "к медиане фич" });
+    if (stats.length) {
+      main.appendChild(h("div", { className: "stats" }, stats.map(function (s) {
+        return h("div", { className: "stat" }, h("b", { text: s.v }), h("span", { text: s.l }));
+      })));
+    }
+    var top = arr(m.top_modules);
+    if (top.length) {
+      var t = h("table", { className: "data" },
+        h("caption", { text: "Наибольшая связность" }),
+        h("thead", {}, h("tr", {})),
+        h("tbody", {})
+      );
+      t.querySelector("thead tr").appendChild(h("th", { text: "Модуль" }));
+      t.querySelector("thead tr").appendChild(h("th", { text: "Импортёров" }));
+      top.forEach(function (x) {
+        t.querySelector("tbody").appendChild(h("tr", {},
+          h("td", { className: "mono", text: x.name || "" }),
+          h("td", { text: String(x.importers === undefined ? "" : x.importers) })
+        ));
+      });
+      main.appendChild(t);
+    }
+    addSide(main.parentNode.querySelector(".sec-side"), m);
+  }
+
+  function renderAir(m, main) {
+    if (!m || m.value === null) { main.appendChild(missingBlock(m)); addSide(main.parentNode.querySelector(".sec-side"), m); return; }
+    main.appendChild(h("p", { className: "summary", text: m.summary || "" }));
+    main.appendChild(h("div", { className: "visual" },
+      h("p", { className: "viz-title", text: "Доля неудачных проверок" }),
+      scaleBar(Number(m.value) || 0, 50, [
+        { width: 30, color: "#bfe0cb", title: "0–15 % норма" },
+        { width: 30, color: "#ead3a8", title: "15–30 % внимание" },
+        { width: 40, color: "#f0c1bc", title: "30–50 % нарушение" }
+      ], ["0 %", "15 %", "30 %", "50 %+"])
+    ));
+    var stats = [
+      { v: m.attempts === undefined ? "—" : String(m.attempts), l: "проверок" },
+      { v: m.failed === undefined ? "—" : String(m.failed), l: "неудачных" },
+      { v: m.cycles === undefined ? "—" : String(m.cycles), l: "циклов" },
+      { v: m.loops === undefined ? "—" : fmtNum(m.loops, 2), l: "циклов / задачу" },
+      { v: m.thrash === undefined ? "—" : String(m.thrash), l: "max повторов" },
+      { v: m.interventions === undefined ? "—" : String(m.interventions), l: "вмешательств" }
+    ];
+    main.appendChild(h("div", { className: "stats" }, stats.map(function (s) {
+      return h("div", { className: "stat" }, h("b", { text: s.v }), h("span", { text: s.l }));
+    })));
+    var series = arr(m.series);
+    if (series.length) {
+      main.appendChild(h("div", { className: "visual" },
+        h("p", { className: "viz-title", text: "Попытки и провалы по циклам" }),
+        columnChart(series, { aria: "Попытки и провалы по циклам" })
+      ));
+    }
+    addSide(main.parentNode.querySelector(".sec-side"), m);
+  }
+
+  function renderHr(m, main) {
+    if (!m || m.value === null) { main.appendChild(missingBlock(m)); addSide(main.parentNode.querySelector(".sec-side"), m); return; }
+    main.appendChild(h("p", { className: "summary", text: m.summary || "" }));
+    main.appendChild(h("div", { className: "visual" },
+      h("p", { className: "viz-title", text: "Подтверждённые случаи на 1000 LOC" }),
+      scaleBar(Number(m.value) || 0, 5, [
+        { width: 20, color: "#bfe0cb", title: "0 — норма" },
+        { width: 40, color: "#ead3a8", title: "0–2 — внимание" },
+        { width: 40, color: "#f0c1bc", title: "2–5 — нарушение" }
+      ], ["0", "1", "2", "5+"])
+    ));
+    var confirmed = arr(m.confirmed);
+    if (confirmed.length) {
+      var rows = confirmed.map(function (c) {
+        return h("tr", {},
+          h("td", { className: "mono", text: c.type || "" }),
+          h("td", { className: "mono", text: c.symbol || "" }),
+          h("td", { className: "mono", text: c.location || "" }),
+          h("td", { text: c.evidence || "" })
+        );
+      });
+      main.appendChild(h("table", { className: "data" },
+        h("caption", { text: "Подтверждённые" }),
+        h("thead", {}, h("tr", {},
+          h("th", { text: "Тип" }), h("th", { text: "Символ" }),
+          h("th", { text: "Место" }), h("th", { text: "Доказательство" })
+        )),
+        h("tbody", {}, rows)
+      ));
+    }
+    var checks = arr(m.checks);
+    if (checks.length) {
+      main.appendChild(h("table", { className: "data" },
+        h("caption", { text: "Проверки" }),
+        h("thead", {}, h("tr", {})),
+        h("tbody", {})
+      ));
+      var t = main.lastChild;
+      t.querySelector("thead tr").appendChild(h("th", { text: "Проверка" }));
+      t.querySelector("thead tr").appendChild(h("th", { text: "Результат" }));
+      t.querySelector("thead tr").appendChild(h("th", { text: "Примечание" }));
+      checks.forEach(function (c) {
+        t.querySelector("tbody").appendChild(h("tr", {},
+          h("td", { text: c.name || "" }),
+          h("td", { className: "mono", text: c.result || "" }),
+          h("td", { text: c.note || "" })
+        ));
+      });
+    }
+    var unc = arr(m.unconfirmed);
+    if (unc.length) {
+      var ul = h("ul");
+      unc.forEach(function (u) { ul.appendChild(h("li", { text: (u.type || "") + ": " + (u.symbol || "") + (u.note ? " — " + u.note : "") })); });
+      main.appendChild(h("div", { className: "two-col" }, h("div", { className: "mini-card" }, h("h4", { text: "Не подтверждено" }), ul)));
+    }
+    addSide(main.parentNode.querySelector(".sec-side"), m);
+  }
+
+  function renderCwu(m, main) {
+    if (!m || m.value === null) { main.appendChild(missingBlock(m)); addSide(main.parentNode.querySelector(".sec-side"), m); return; }
+    main.appendChild(h("p", { className: "summary", text: m.summary || "" }));
+    var coverage = Number(m.coverage !== undefined ? m.coverage : m.value) || 0;
+    var windowPct = Number(m.window) || 0;
+    main.appendChild(h("div", { className: "visual" },
+      h("p", { className: "viz-title", text: "Покрытие релевантного контекста" }),
+      scaleBar(coverage, 100, [
+        { width: 40, color: "#f0c1bc", title: "0–40 % слепота" },
+        { width: 30, color: "#ead3a8", title: "40–70 % внимание" },
+        { width: 30, color: "#bfe0cb", title: "70–100 % норма" }
+      ], ["0 %", "40 %", "70 %", "100 %"])
+    ));
+    main.appendChild(h("div", { className: "visual" },
+      h("p", { className: "viz-title", text: "Пиковое заполнение окна" }),
+      scaleBar(windowPct, 100, [{ width: 100, color: "#cfd8d7", title: "окно" }], ["0 %", "50 %", "100 %"])
+    ));
+    var stats = [
+      { v: "—", l: "релевантных файлов" },
+      { v: "—", l: "прочитано до правки" },
+      { v: fmtNum(coverage, 0) + " %", l: "coverage" },
+      { v: fmtNum(windowPct, 0) + " %", l: "window" }
+    ];
+    if (m.relevant !== undefined) stats[0].v = String(m.relevant);
+    if (m.read !== undefined) stats[1].v = String(m.read);
+    main.appendChild(h("div", { className: "stats" }, stats.map(function (s) {
+      return h("div", { className: "stat" }, h("b", { text: s.v }), h("span", { text: s.l }));
+    })));
+    var readList = arr(m.read_list), missed = arr(m.missed_list);
+    if (readList.length || missed.length) {
+      var two = h("div", { className: "two-col" });
+      if (readList.length) {
+        var ul1 = h("ul");
+        readList.forEach(function (x) { ul1.appendChild(h("li", { className: "mono-list", text: String(x) })); });
+        two.appendChild(h("div", { className: "mini-card" }, h("h4", { text: "Прочитано" }), ul1));
+      }
+      if (missed.length) {
+        var ul2 = h("ul");
+        missed.forEach(function (x) { ul2.appendChild(h("li", { className: "mono-list", text: String(x) })); });
+        two.appendChild(h("div", { className: "mini-card" }, h("h4", { text: "Не прочитано" }), ul2));
+      }
+      main.appendChild(two);
+    }
+    addSide(main.parentNode.querySelector(".sec-side"), m);
+  }
+
+  var RENDERERS = { ftb: renderFtb, ads: renderAds, cli: renderCli, air: renderAir, hr: renderHr, cwu: renderCwu };
+
+  function renderSections() {
+    var wrap = $("sections");
+    var metrics = obj(DATA.metrics);
+    SECTION_SPECS.forEach(function (spec) {
+      var m = obj(metrics[spec.key]);
+      var shell = sectionShell(spec, m);
+      RENDERERS[spec.key](m, shell.main);
+      wrap.appendChild(shell.sec);
+    });
+  }
+
+  function matrixQuadrant(cw, ads) {
+    var c = (cw === null || cw === undefined) ? "unknown" : cw < 40 ? "low" : cw > 70 ? "high" : "mid";
+    var a = (ads === null || ads === undefined) ? "unknown" : ads < 5 ? "low" : ads > 15 ? "high" : "mid";
+    var key = c + "/" + a;
+    if (c === "unknown" || a === "unknown") {
+      if (c === "unknown" && a === "unknown") {
+        return { title: "Недостаточно данных", text: "Нет CWU и ADS. Соберите телеметрию чтения и зафиксируйте архитектурный контракт." };
+      }
+      if (a === "unknown") {
+        return { title: "ADS не измерен", text: "Контекст измерен, архитектурный дрейф — нет. Без контракта любое число ADS было бы выдумкой: зафиксируйте правила слоёв и подтвердите нарушения файлом и строкой." };
+      }
+      return { title: "CWU не измерен", text: "Архитектурный дрейф оценён, покрытие контекста — нет. Включите лог чтения файлов, иначе нельзя отличить слепое нарушение от осознанного." };
+    }
+    var map = {
+      "low/low": { title: "Слепая удача", text: "Изменение малое и формально чистое, но релевантные связи не прочитаны. Проверьте blast radius и тесты: совпадение может быть случайным." },
+      "low/high": { title: "Слепое нарушение", text: "Агент не знал архитектурных правил и переопределил границы. Лечится контекстом: конституция, ADR и карта модулей в профиле скилла." },
+      "high/low": { title: "Informed compliance", text: "Агент прочитал контракт и следовал ему. Нормальный режим; следите, чтобы стоимость контекста не росла быстрее пользы." },
+      "high/high": { title: "Архитектурное противоречие", text: "Агент понял правила и нарушил их. Это не дефицит контекста, а конфликт решения с архитектурой: нужен ADR и явный разговор, а не ещё чтение." },
+      "mid/low": { title: "Серая зона: контекст", text: "Покрытие контекста пограничное, архитектурных нарушений нет. Дочитайте недостающие связи перед расширением изменения." },
+      "mid/high": { title: "Серая зона: дрейф", text: "Дрейф выше нормы при неполном контексте. Сначала подтвердите нарушения файлом и строкой, затем решайте: контекст или архитектура." },
+      "low/mid": { title: "Серая зона: дрейф", text: "Есть отдельные отклонения при низком покрытии контекста. Проверьте, не являются ли они следствием незнания правил." },
+      "high/mid": { title: "Серая зона: дрейф", text: "Контекст прочитан, но есть отклонения. Разберите каждое: локальное исключение или начало нового слоя." },
+      "mid/mid": { title: "Серая зона", text: "Оба показателя пограничные. Отчёт честно фиксирует неопределённость: нужны baseline и подтверждение нарушений." },
+      "unknown/unknown": { title: "Недостаточно данных", text: "Нет CWU или ADS. Соберите телеметрию чтения и зафиксируйте архитектурный контракт." }
+    };
+    return map[key] || map["mid/mid"];
+  }
+
+  function renderMatrix() {
+    var metrics = obj(DATA.metrics);
+    var cwu = obj(metrics.cwu);
+    var ads = obj(metrics.ads);
+    var coverage = (typeof cwu.coverage === "number") ? cwu.coverage : (typeof cwu.value === "number" ? cwu.value : null);
+    var adsVal = (typeof ads.value === "number") ? ads.value : null;
+    var given = obj(DATA.matrix);
+    var q = matrixQuadrant(coverage, adsVal);
+    var title = given.title || q.title;
+    var text = given.text || q.text;
+
+    var W = 560, H = 420, pad = 48;
+    var plotW = W - pad * 2, plotH = H - pad * 2;
+    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, className: "matrix-svg", role: "img", "aria-label": "Матрица Context Window Utilization и Architecture Drift Score" });
+
+    var quads = [
+      { x: pad, y: pad, w: plotW / 2, h: plotH / 2, fill: "#fbe9e7", label: "Слепое нарушение" },
+      { x: pad + plotW / 2, y: pad, w: plotW / 2, h: plotH / 2, fill: "#efebf9", label: "Архитектурное противоречие" },
+      { x: pad, y: pad + plotH / 2, w: plotW / 2, h: plotH / 2, fill: "#f7f6f3", label: "Слепая удача" },
+      { x: pad + plotW / 2, y: pad + plotH / 2, w: plotW / 2, h: plotH / 2, fill: "#e7f4ec", label: "Informed compliance" }
+    ];
+    quads.forEach(function (quad) {
+      s.appendChild(svg("rect", { x: quad.x, y: quad.y, width: quad.w, height: quad.h, fill: quad.fill, stroke: "#dfe2e7" }));
+      var t = svg("text", {
+        x: quad.x + 10, y: quad.y + 20, "font-size": 10, fill: "#5f6875",
+        "font-weight": 700, "letter-spacing": ".04em"
+      });
+      t.textContent = quad.label.toUpperCase();
+      s.appendChild(t);
+    });
+
+    s.appendChild(svg("line", { x1: pad, y1: pad + plotH / 2, x2: pad + plotW, y2: pad + plotH / 2, stroke: "#c4cad2", "stroke-dasharray": "4 4" }));
+    s.appendChild(svg("line", { x1: pad + plotW / 2, y1: pad, x2: pad + plotW / 2, y2: pad + plotH, stroke: "#c4cad2", "stroke-dasharray": "4 4" }));
+
+    var lx = svg("text", { x: pad + plotW / 2, y: H - 10, "text-anchor": "middle", "font-size": 11, fill: "#5f6875" });
+    lx.textContent = "CWU coverage, % →";
+    s.appendChild(lx);
+    var ly = svg("text", { x: 14, y: pad + plotH / 2, "text-anchor": "middle", "font-size": 11, fill: "#5f6875", transform: "rotate(-90 14 " + (pad + plotH / 2) + ")" });
+    ly.textContent = "ADS, % →";
+    s.appendChild(ly);
+
+    [0, 40, 70, 100].forEach(function (v) {
+      var x = pad + plotW * v / 100;
+      s.appendChild(svg("text", { x: x, y: pad + plotH + 16, "text-anchor": "middle", "font-size": 9, fill: "#8a929d" })).textContent = v + "%";
+    });
+    [0, 5, 15, 30].forEach(function (v) {
+      var y = pad + plotH * (1 - Math.min(v, 30) / 30);
+      s.appendChild(svg("text", { x: pad - 8, y: y + 3, "text-anchor": "end", "font-size": 9, fill: "#8a929d" })).textContent = v + "%";
+    });
+
+    if (coverage !== null && adsVal !== null) {
+      var px = pad + plotW * Math.max(0, Math.min(100, coverage)) / 100;
+      var py = pad + plotH * (1 - Math.max(0, Math.min(30, adsVal)) / 30);
+      s.appendChild(svg("circle", { cx: px, cy: py, r: 13, fill: "#14181f", opacity: .08 }));
+      s.appendChild(svg("circle", { cx: px, cy: py, r: 6, fill: "#14181f", stroke: "#fff", "stroke-width": 2 }));
+      var lbl = svg("text", { x: Math.min(px + 12, W - 60), y: py - 10, "font-size": 10, "font-weight": 700, fill: "#14181f" });
+      lbl.textContent = fmtNum(coverage, 0) + "% / " + fmtNum(adsVal, 1) + "%";
+      s.appendChild(lbl);
+    } else {
+      s.appendChild(svg("text", { x: W / 2, y: H / 2, "text-anchor": "middle", "font-size": 12, fill: "#8a929d" })).textContent = "Нет пары CWU × ADS";
+    }
+
+    $("matrix-plot").replaceChildren(h("div", { className: "visual" }, s));
+
+    var side = $("matrix-side");
+    side.replaceChildren(
+      h("div", { className: "q-badge", style: "background:#eef0f3;color:#5f6875", text: "CWU × ADS" }),
+      h("h3", { className: "q-title", text: title }),
+      h("p", { className: "q-text", text: text }),
+      h("p", { className: "method", text:
+        "Пороговые зоны: CWU < 40 % — низкий, > 70 % — высокий; ADS < 5 % — низкий, > 15 % — высокий. " +
+        "Точка поставлена по фактическим числам, подпись квадранта — по порогам; расхождение подписи и точки означает пограничное значение."
+      })
+    );
+  }
+
+  function renderEvidence() {
+    var body = $("evidence-body");
+    var rows = arr(DATA.evidence);
+    if (!rows.length) {
+      body.appendChild(h("div", { className: "empty" }, h("b", { text: "Реестр пуст. " }), "Добавьте утверждение и источник для каждого числа."));
+      return;
+    }
+    var t = h("table", { className: "data evidence-table" },
+      h("caption", { text: "Утверждение → источник → дата" }),
+      h("thead", {}, h("tr", {},
+        h("th", { text: "Утверждение" }),
+        h("th", { text: "Источник" }),
+        h("th", { text: "Дата" })
+      )),
+      h("tbody")
+    );
+    rows.forEach(function (r) {
+      t.querySelector("tbody").appendChild(h("tr", {},
+        h("td", { text: r.claim || "" }),
+        h("td", { className: "mono", text: r.source || "" }),
+        h("td", { className: "mono", text: r.date || "" })
+      ));
+    });
+    body.appendChild(t);
+  }
+
+  function renderActions() {
+    var body = $("actions-body");
+    var rows = arr(DATA.actions);
+    if (!rows.length) {
+      body.appendChild(h("div", { className: "empty" }, h("b", { text: "Решения не зафиксированы. " }), "Добавьте хотя бы одно действие или явно примите изменение."));
+      return;
+    }
+    var wrap = h("div", { className: "actions" });
+    rows.forEach(function (a) {
+      var pri = (a.priority === "now" || a.priority === "next" || a.priority === "accept") ? a.priority : "next";
+      wrap.appendChild(h("div", { className: "action" },
+        h("span", { className: "pri " + pri, text: pri }),
+        h("span", { className: "txt", text: a.text || "" }),
+        h("span", { className: "own", text: a.owner || "" })
+      ));
+    });
+    body.appendChild(wrap);
+  }
+
+  function renderMethod() {
+    var body = $("method-body");
+    var m = obj(DATA.method);
+    var cmds = arr(m.commands), notes = arr(m.notes), lim = arr(m.limitations);
+    if (!cmds.length && !notes.length && !lim.length) {
+      body.appendChild(h("p", { text: "Метод не описан. Укажите команды сбора и допущения." }));
+      return;
+    }
+    if (cmds.length) {
+      body.appendChild(h("h3", { text: "Команды" }));
+      var ul = h("ul");
+      cmds.forEach(function (c) { ul.appendChild(h("li", {}, h("code", { text: String(c) }))); });
+      body.appendChild(ul);
+    }
+    if (notes.length) {
+      body.appendChild(h("h3", { text: "Допущения" }));
+      var ul2 = h("ul");
+      notes.forEach(function (c) { ul2.appendChild(h("li", { text: String(c) })); });
+      body.appendChild(ul2);
+    }
+    if (lim.length) {
+      body.appendChild(h("h3", { text: "Ограничения" }));
+      var ul3 = h("ul");
+      lim.forEach(function (c) { ul3.appendChild(h("li", { text: String(c) })); });
+      body.appendChild(ul3);
+    }
+  }
+
+  function renderFooter() {
+    var meta = obj(DATA.meta);
+    $("footer-left").textContent = "dev-pr-report-html · схема v" + (DATA.schema_version || 1);
+    $("footer-right").textContent =
+      (meta.repo || "") + (meta.date ? " · снимок " + meta.date : "") + (meta.agent ? " · " + meta.agent : "");
+  }
+
+  renderMeta();
+  renderVerdict();
+  renderKpis();
+  renderMatrix();
+  renderSections();
+  renderEvidence();
+  renderActions();
+  renderMethod();
+  renderFooter();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>План разработки системы скиллов — opencode-skills</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --green: #1f7a4d; --amber: #a96500; --red: #b42318; --violet: #6d5aa8;
+    --dev: #2f6f6a; --sci: #5b4b9a; --harness: #59636e; --reports: #a8622a;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); }
+  .topbar { position: sticky; top: 0; z-index: 30; background: rgba(246,245,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; gap: 14px; min-height: 52px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 13px; flex-wrap: wrap; }
+  nav a { font-size: 12px; color: var(--muted); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
+  nav a:hover, nav a:focus-visible { color: var(--ink); border-color: var(--accent); }
+  header.hero { padding: 46px 0 12px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(32px, 4.4vw, 50px); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 12px; }
+  .lead { font-size: 18px; color: var(--muted); max-width: 920px; margin: 0 0 22px; }
+  .stats { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; margin-bottom: 22px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px 14px; box-shadow: 0 1px 2px rgba(20,24,31,.04); }
+  .stat b { display: block; font-size: 26px; line-height: 1.1; letter-spacing: -.02em; }
+  .stat span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  .callout { border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: 12px; padding: 16px 18px; background: var(--card); margin-bottom: 20px; }
+  .callout b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 6px; }
+  .callout p { margin: 0; }
+
+  section.panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 18px; overflow: hidden; scroll-margin-top: 68px; }
+  .panel-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .panel-head h2 { margin: 0; font-size: 22px; letter-spacing: -.01em; }
+  .panel-head p { margin: 0; color: var(--muted); font-size: 12.5px; }
+  .panel-head .count { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .panel-body { padding: 18px 22px 22px; }
+
+  .gates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+  .gate { border: 1px solid var(--line); border-top: 3px solid var(--line-strong); border-radius: 10px; padding: 12px 13px; background: #fff; }
+  .gate:nth-child(1) { border-top-color: var(--sci); }
+  .gate:nth-child(2) { border-top-color: var(--reports); }
+  .gate:nth-child(3) { border-top-color: var(--dev); }
+  .gate:nth-child(4) { border-top-color: var(--green); }
+  .gate .gn { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .gate h3 { margin: 3px 0 6px; font-size: 14px; }
+  .gate p { margin: 0; font-size: 11.5px; color: var(--muted); }
+  .gate .out { margin-top: 8px; font-size: 10.5px; color: var(--ink); font-family: var(--mono); }
+
+  .phase { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .phase:last-child { border-bottom: 0; }
+  .phase .pn { flex: none; width: 54px; height: 54px; border-radius: 10px; background: #f1f2f4; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .phase h3 { margin: 0 0 4px; font-size: 17px; }
+  .phase p { margin: 0 0 6px; font-size: 13px; color: #3c434d; }
+  .phase .meta { display: flex; gap: 8px; flex-wrap: wrap; font-size: 10.5px; color: var(--muted); }
+  .phase .meta span { background: #f4f5f6; border-radius: 4px; padding: 2px 6px; }
+
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+  .skill-card { border: 1px solid var(--line); border-radius: 11px; padding: 14px 15px; background: #fff; border-left: 3px solid var(--harness); }
+  .skill-card.dev { border-left-color: var(--dev); }
+  .skill-card.sci { border-left-color: var(--sci); }
+  .skill-card.reports { border-left-color: var(--reports); }
+  .card-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 7px; }
+  .ord { font-family: var(--mono); font-size: 10px; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
+  .skill-card h3 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
+  .skill-card h3 code { font-family: var(--mono); font-size: 13px; }
+  .pri { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 2px 5px; border-radius: 3px; }
+  .pri.p0 { background: #fbe9e7; color: var(--red); }
+  .pri.p1 { background: #fbf0dc; color: var(--amber); }
+  .pri.p2 { background: #eef0f3; color: var(--muted); }
+  .eff { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .skill-card p { margin: 0 0 9px; font-size: 12.5px; }
+  .skill-card dl { margin: 0; display: grid; grid-template-columns: 86px 1fr; gap: 4px 8px; font-size: 11.5px; }
+  .skill-card dt { color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-size: 9.5px; padding-top: 2px; }
+  .skill-card dd { margin: 0; color: #3c434d; }
+
+  .deep-dive { margin-top: 16px; border: 1px solid var(--line); border-left: 4px solid var(--harness); border-radius: 11px; padding: 16px 18px; background: #fcfcfb; }
+  .deep-dive h3 { margin: 0 0 8px; font-size: 18px; letter-spacing: -.01em; }
+  .deep-dive h4 { margin: 14px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .deep-dive p { margin: 0 0 10px; font-size: 13.5px; }
+  .deep-dive table { margin-top: 6px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  caption { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding-bottom: 7px; }
+  th { text-align: left; font-size: 9.5px; text-transform: uppercase; letter-spacing: .045em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 7px 8px; white-space: nowrap; }
+  td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, code { font-family: var(--mono); font-size: 11.5px; }
+  .small { font-size: 11px; color: var(--muted); }
+  .tag { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 2px 5px; border-radius: 3px; background: #eef0f3; color: var(--muted); }
+  .tag.harness { background: #eef0f3; color: var(--harness); }
+  .tag.dev { background: #e6efee; color: var(--dev); }
+  .tag.sci { background: #efebf9; color: var(--sci); }
+  .tag.reports { background: #fbf0dc; color: var(--reports); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: #fcfcfb; }
+  .box h3 { margin: 0 0 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .box ul, .box ol { margin: 0; padding-left: 17px; }
+  .box li { font-size: 12.5px; margin-bottom: 4px; }
+
+  .check { list-style: none; padding: 0; margin: 0; }
+  .check li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .check li:last-child { border-bottom: 0; }
+  .check li::before { content: "☐"; margin-right: 8px; color: var(--muted); }
+
+  .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .decision div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+  .decision div.ok { border-color: #bfe0cb; background: #e7f4ec; color: var(--green); font-weight: 700; }
+
+  footer { padding: 8px 0 44px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 1050px) {
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .gates { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .wrap { padding: 0 14px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .gates { grid-template-columns: 1fr; }
+    .grid2 { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr 1fr; }
+    table { font-size: 11.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body { background: #fff; font-size: 9pt; }
+    .topbar { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section.panel, .skill-card, .stat, .gate { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">opencode-skills · план разработки</span>
+    <nav aria-label="Разделы плана">
+      <a href="#gates">Гейты</a>
+      <a href="#phases">Фазы</a>
+      <a href="#harness">Harness</a>
+      <a href="#dev">Dev</a>
+      <a href="#science">Science</a>
+      <a href="#reports">Reports</a>
+      <a href="#protocol">Research</a>
+      <a href="#review">Review</a>
+      <a href="#dod">DoD</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header class="hero">
+    <div class="kicker">План разработки · версия 1 · 2026-10-31</div>
+    <h1>Система скиллов:<br>от исследования до проверяемого навыка</h1>
+    <p class="lead">
+      План задаёт очередь разработки, обязательный Research Gate для каждого
+      навыка и формат HTML-ревью. Приоритет: harness → dev → science.
+      Отчётные навыки остаются в поддержке; новые — после science.
+    </p>
+    <div class="stats">
+      <div class="stat"><b>2</b><span>навыка в репозитории</span></div>
+      <div class="stat"><b>40</b><span>в очереди</span></div>
+      <div class="stat"><b>4</b><span>обязательных гейта</span></div>
+      <div class="stat"><b>7 / 17 / 9</b><span>harness / dev / science</span></div>
+      <div class="stat"><b>3 + 2</b><span>минимум GitHub + научных источников</span></div>
+    </div>
+    <div class="callout">
+      <b>Запрос решения</b>
+      <p>
+        Утвердить порядок фаз, обязательность Research Gate и Review Gate,
+        минимум источников и формат HTML-ревью. После утверждения первый
+        навык — <code>harness-skill-template</code>: он задаёт форму всем
+        остальным.
+      </p>
+    </div>
+  </header>
+
+  <section class="panel" id="gates">
+    <div class="panel-head">
+      <h2>Четыре гейта</h2>
+      <p>Ни один навык не переходит на следующий шаг без артефакта предыдущего</p>
+      <span class="count">AGENTS.md §4</span>
+    </div>
+    <div class="panel-body">
+      <div class="gates">
+        <div class="gate">
+          <div class="gn">GATE 1</div>
+          <h3>Research</h3>
+          <p>GitHub-аналоги, научные источники и стандарты. Фиксация того, что берём и что отвергаем.</p>
+          <div class="out">→ docs/research/&lt;skill&gt;.md</div>
+        </div>
+        <div class="gate">
+          <div class="gn">GATE 2</div>
+          <h3>Review</h3>
+          <p>План в виде автономного HTML. Разработчик читает источники, дизайн, риски и выносит решение.</p>
+          <div class="out">→ docs/reviews/&lt;skill&gt;.html · approved</div>
+        </div>
+        <div class="gate">
+          <div class="gn">GATE 3</div>
+          <h3>Implementation</h3>
+          <p>SKILL.md, references, scripts, templates, examples. Ничего сверх утверждённого плана.</p>
+          <div class="out">→ &lt;domain&gt;/&lt;skill&gt;/</div>
+        </div>
+        <div class="gate">
+          <div class="gn">GATE 4</div>
+          <h3>Verification</h3>
+          <p>Пример воспроизводится, скрипты работают, HTML открывается без сети, карта обновлена.</p>
+          <div class="out">→ DoD + запись в README / карте</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="phases">
+    <div class="panel-head">
+      <h2>Фазы</h2>
+      <p>Последовательность, а не календарь: следующая фаза начинается после проверяемого результата предыдущей</p>
+    </div>
+    <div class="panel-body">
+      <div class="phase">
+        <div class="pn">0</div>
+        <div>
+          <h3>Foundation — процесс и шаблоны</h3>
+          <p>AGENTS.md, research ledger, HTML-шаблон ревью, обновление карты и README. Разработка навыков ещё не начинается.</p>
+          <div class="meta"><span>выход: 4 документа</span><span>гейт: ревью плана</span><span>оценка: S</span></div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="pn">1</div>
+        <div>
+          <h3>Harness — качество самой системы</h3>
+          <p>Семь навыков: как писать, проверять, измерять и внедрять скиллы. Каждый проходит research → review → implementation.</p>
+          <div class="meta"><span>7 навыков</span><span>P0: 3</span><span>зависит от Phase 0</span></div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="pn">2</div>
+        <div>
+          <h3>Dev — разработка ПО</h3>
+          <p>Ретро-ревью существующего <code>dev-pr-report-html</code> и 16 новых навыков: от открытия фичи до релиза и разбора инцидента.</p>
+          <div class="meta"><span>17 навыков</span><span>P0: 7</span><span>зависит от Phase 1</span></div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="pn">3</div>
+        <div>
+          <h3>Science — исследовательская работа</h3>
+          <p>Девять навыков: обзор, протокол, воспроизводимость, статистика, фигуры, состязательная проверка.</p>
+          <div class="meta"><span>9 навыков</span><span>P1: 5</span><span>зависит от Phase 2</span></div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="pn">4</div>
+        <div>
+          <h3>Reports — поддержка и backlog</h3>
+          <p><code>pptx-report</code> поддерживается; восемь предложенных отчётных навыков ждут решения и не входят в текущий приоритет.</p>
+          <div class="meta"><span>1 в поддержке</span><span>8 в backlog</span><span>вне очереди</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="harness">
+    <div class="panel-head">
+      <h2>Phase 1 · Harness</h2>
+      <p>Первый приоритет: сначала то, что определяет форму и проверку остальных навыков</p>
+      <span class="count">7 навыков · 3 × P0</span>
+    </div>
+    <div class="panel-body">
+      <div class="cards">
+        <article class="skill-card">
+          <div class="card-head">
+            <span class="ord">H1</span>
+            <h3><code>harness-skill-template</code></h3>
+            <span class="pri p0">P0</span><span class="eff">M</span>
+          </div>
+          <p>Шаблон и правила написания навыка: триггеры, вход, процедура, выход, доказательство, границы, отличие от соседей.</p>
+          <dl>
+            <dt>GitHub</dt><dd>каталоги SKILL.md, agent skills, prompt libraries, convention-over-configuration.</dd>
+            <dt>Наука</dt><dd>инструкции и процедурные знания, чек-листы, когнитивная нагрузка, воспроизводимость процедур.</dd>
+            <dt>Выход</dt><dd>шаблон SKILL.md, чек-лист автора, 2 эталонных навыка.</dd>
+            <dt>Приёмка</dt><dd>два новых навыка собраны по шаблону и проходят audit без исключений.</dd>
+          </dl>
+        </article>
+
+        <article class="skill-card">
+          <div class="card-head">
+            <span class="ord">H2</span>
+            <h3><code>harness-rule-to-mechanism</code></h3>
+            <span class="pri p0">P0</span><span class="eff">M</span>
+          </div>
+          <p>Превращает договорённость из текста в исполняемую проверку: хук, lint-правило, тест или шаг CI.</p>
+          <dl>
+            <dt>GitHub</dt><dd>policy-as-code, pre-commit, architecture tests, линтеры и хуки агентов.</dd>
+            <dt>Наука</dt><dd>комплаенс и контроль, implementation intentions, автоматизация проверок, ложные срабатывания.</dd>
+            <dt>Выход</dt><dd>матрица «правило → механизм», пример хука и теста.</dd>
+            <dt>Приёмка</dt><dd>три правила репозитория переведены в проверки, каждая падает на нарушении.</dd>
+          </dl>
+        </article>
+
+        <article class="skill-card">
+          <div class="card-head">
+            <span class="ord">H3</span>
+            <h3><code>harness-skill-audit</code></h3>
+            <span class="pri p0">P0</span><span class="eff">M</span>
+          </div>
+          <p>Ревизия библиотеки: дубли триггеров, навыки без артефакта, устаревшие команды, покрытие домена.</p>
+          <dl>
+            <dt>GitHub</dt><dd>skill linters, docs lint, prompt evaluation, awesome-list curation.</dd>
+            <dt>Наука</dt><dd>чек-листы качества, межэкспертная надёжность, валидность измерений.</dd>
+            <dt>Выход</dt><dd>чек-лист аудита, скрипт проверки структуры и триггеров, отчёт.</dd>
+            <dt>Приёмка</dt><dd>аудит находит заранее внесённые дефекты и не даёт ложных срабатываний на эталонах.</dd>
+          </dl>
+        </article>
+
+        <article class="skill-card">
+          <div class="card-head">
+            <span class="ord">H4</span>
+            <h3><code>harness-skill-eval</code></h3>
+            <span class="pri p1">P1</span><span class="eff">L</span>
+          </div>
+          <p>Проверка навыка на реальных задачах: срабатывает ли триггер, воспроизводим ли результат, не деградирует ли качество.</p>
+          <dl>
+            <dt>GitHub</dt><dd>promptfoo, Inspect AI, lm-evaluation-harness, agent benchmarks.</dd>
+            <dt>Наука</dt><dd>методология оценки, валидность, загрязнение бенчмарков, воспроизводимость.</dd>
+            <dt>Выход</dt><dd>протокол оценки, набор задач, отчёт с метриками.</dd>
+            <dt>Приёмка</dt><dd>два прогона на одних задачах дают сопоставимый результат; известен порог.</dd>
+          </dl>
+        </article>
+
+        <article class="skill-card">
+          <div class="card-head">
+            <span class="ord">H5</span>
+            <h3><code>harness-init</code></h3>
+            <span class="pri p1">P1</span><span class="eff">M</span>
+          </div>
+          <p>Разворачивает процесс в новом репозитории: профиль проекта, конституция, хуки, CI, шаблоны документов.</p>
+          <dl>
+            <dt>GitHub</dt><dd>repo templates, copier/cookiecutter, AGENTS.md, spec-kit, pre-commit.</dd>
+            <dt>Наука</dt><dd>онбординг, организационные соглашения, эмпирика внедрения практик.</dd>
+            <dt>Выход</dt><dd>профиль проекта, стартовый набор хуков и CI, чек-лист.</dd>
+            <dt>Приёмка</dt><dd>новый репозиторий поднимается с нуля и проходит первую проверку без ручных правок.</dd>
+          </dl>
+        </article>
+
+        <article class="skill-card">
+          <div class="card-head">
+            <span class="ord">H6</span>
+            <h3><code>harness-analyze-codebase</code></h3>
+            <span class="pri p1">P1</span><span class="eff">M</span>
+          </div>
+          <p>Карта кодовой базы: слои, точки входа, граф импортов, тесты, конвенции и blast radius. Read-only.</p>
+          <dl>
+            <dt>GitHub</dt><dd>repo map, tree-sitter, code graph, aider repomap, dependency-cruiser.</dd>
+            <dt>Наука</dt><dd>понимание программ, навигация по коду, information foraging.</dd>
+            <dt>Выход</dt><dd><code>docs/codebase-map.md</code>, граф импортов, список файлов для чтения.</dd>
+            <dt>Приёмка</dt><dd>по карте новый участник находит точку изменения за один проход.</dd>
+          </dl>
+        </article>
+
+        <article class="skill-card">
+          <div class="card-head">
+            <span class="ord">H7</span>
+            <h3><code>harness-session-retrospective</code></h3>
+            <span class="pri p2">P2</span><span class="eff">S</span>
+          </div>
+          <p>Ретроспектива сессии: что сделано, что открыто, следующий шаг, где остановились и какие файлы трогать нельзя.</p>
+          <dl>
+            <dt>GitHub</dt><dd>session memory, handoff notes, continue/checkpoint tools.</dd>
+            <dt>Наука</dt><dd>распределённое познание, transactive memory, передача контекста.</dd>
+            <dt>Выход</dt><dd>шаблон ретроспективы, чек-лист полноты.</dd>
+            <dt>Приёмка</dt><dd>новая сессия продолжает работу без повторного исследования.</dd>
+          </dl>
+        </article>
+      </div>
+      <div class="deep-dive" id="analyze-codebase">
+        <h3>H6 · <code>harness-analyze-codebase</code>: области применимости и пример</h3>
+        <p>
+          Навык читает репозиторий и строит карту кодовой базы: слои, точки
+          входа, граф импортов, конвенции, тесты и запрещённые направления
+          зависимостей. Работает read-only: ничего не меняет, не запускает
+          приложение и не заменяет тесты. Результат — карта и список мест,
+          которые нужно прочитать и изменить.
+        </p>
+        <div class="grid2">
+          <div class="box">
+            <h3>Когда применять</h3>
+            <ul>
+              <li>онбординг в незнакомый или наследуемый репозиторий;</li>
+              <li>перед фичей: где менять, какие модули затронуты, какие тесты читать;</li>
+              <li>перед багфиксом: blast radius и похожие места, где дефект может повториться;</li>
+              <li>архитектурный аудит: слои, циклы, запрещённые импорты, дубли capability;</li>
+              <li>рефакторинг или миграция: coupling, обратные зависимости, точки входа;</li>
+              <li>код-ревью: контекст для ревьюера и список недостающих проверок;</li>
+              <li>передача проекта или due diligence;</li>
+              <li>подготовка контекста агенту: какие файлы прочитать до первой правки (CWU).</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>Когда не применять</h3>
+            <ul>
+              <li>runtime-профилирование и замеры производительности — для этого <code>dev-perf-baseline</code>;</li>
+              <li>модель угроз и проверка прав — для этого <code>dev-threat-model</code>;</li>
+              <li>полный статический анализ и type checking — это задачи линтера и компилятора;</li>
+              <li>автоматический рефакторинг — навык только показывает, где менять, но не меняет.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h4>Пример: публичная ссылка в example-service</h4>
+        <p>
+          Задача: добавить публичную ссылку на запись без входа в систему.
+          Пример вызова после реализации:
+          <code>python scripts/analyze_codebase.py --repo . --entry src/app/app.py --out docs/codebase-map.md</code>.
+        </p>
+        <table>
+          <caption>Пример выхода: где менять и что проверить</caption>
+          <thead><tr><th>Область</th><th>Файл / место</th><th>Что важно</th></tr></thead>
+          <tbody>
+            <tr><td>Точка входа</td><td class="mono">src/app/app.py:2210</td><td>регистрация маршрута; проверить права при прямом вызове</td></tr>
+            <tr><td>Правило</td><td class="mono">src/app/domain/share.py</td><td>срок жизни и условия ссылки; домен не знает о БД</td></tr>
+            <tr><td>Оркестрация</td><td class="mono">src/app/services/share.py</td><td>хеширование токена; 9 модулей импортируют сервис</td></tr>
+            <tr><td>Данные</td><td class="mono">alembic/versions/0042_share_link.py</td><td>новая таблица и индекс; нужен rollback</td></tr>
+            <tr><td>Тесты</td><td class="mono">tests/test_share_link.py</td><td>прочитать до правки; добавить тест на чужую запись</td></tr>
+            <tr><td>Контракт</td><td class="mono">docs/adr/0003-layers.md</td><td>domain не импортирует infrastructure</td></tr>
+            <tr><td>Пробел</td><td class="mono">docs/adr/</td><td>нет ADR на публичный endpoint — решение нужно зафиксировать</td></tr>
+          </tbody>
+        </table>
+        <p>
+          <b>Вывод навыка:</b> изменение затрагивает 5 модулей, одну миграцию
+          и два тестовых файла; 9 импортёров сервиса образуют blast radius;
+          одно архитектурное решение не имеет ADR. Агенту и ревьюеру выдан
+          список файлов для чтения до первой правки.
+        </p>
+        <p class="small">
+          Граница: навык не решает, какую архитектуру выбрать, не пишет код и
+          не подтверждает, что изменение безопасно. Он снижает слепоту и
+          делает стоимость изменения видимой до начала работы.
+        </p>
+      </div>
+
+      <p class="small" style="margin-top:12px">
+        Порядок внутри harness: H1 → H2 → H3 → H4 → H5 → H6 → H7.
+        H1 задаёт форму, H2 — принуждение, H3 — контроль, H4 — измерение,
+        H5 — упаковку, H6–H7 — непрерывность сессий.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel" id="dev">
+    <div class="panel-head">
+      <h2>Phase 2 · Dev</h2>
+      <p>После harness: 16 новых навыков и ретро-ревью существующего отчёта</p>
+      <span class="count">17 навыков · 7 × P0</span>
+    </div>
+    <div class="panel-body">
+      <table>
+        <caption>Очередь разработки: сверху вниз, внутри приоритета — по зависимости</caption>
+        <thead>
+          <tr><th>#</th><th>Навык</th><th>P</th><th>Effort</th><th>Что исследовать</th><th>Выход</th><th>Зависит от</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>D0</td><td class="mono">dev-pr-report-html</td><td><span class="tag dev">retro</span></td><td>M</td><td>DORA-метрики, code review analytics, token accounting, LLM evaluation, hallucination detection.</td><td>research/review для v2</td><td>Phase 1</td></tr>
+          <tr><td>D1</td><td class="mono">dev-feature-start</td><td><span class="tag">P0</span></td><td>S</td><td>spec-driven development, branch conventions, definition of ready, requirements engineering.</td><td>ветка + привязка к цели</td><td>H1, H2</td></tr>
+          <tr><td>D2</td><td class="mono">dev-spec-chain</td><td><span class="tag">P0</span></td><td>L</td><td>spec-kit, Kiro/spec-driven, specification by example, acceptance criteria.</td><td>spec → plan → tasks</td><td>D1</td></tr>
+          <tr><td>D3</td><td class="mono">dev-repro-first</td><td><span class="tag">P0</span></td><td>M</td><td>bug reproduction, TDD, fault localization, debugging empirical studies.</td><td>падающий тест + диагноз</td><td>H1</td></tr>
+          <tr><td>D4</td><td class="mono">dev-regression-guard</td><td><span class="tag">P0</span></td><td>M</td><td>regression tests, mutation testing, defect classes, architecture tests.</td><td>защита класса ошибок</td><td>D3</td></tr>
+          <tr><td>D5</td><td class="mono">dev-verification-live</td><td><span class="tag">P0</span></td><td>L</td><td>Playwright/Cypress, browser automation, E2E oracles, sandboxing.</td><td>доказательство вживую</td><td>H1, H3</td></tr>
+          <tr><td>D6</td><td class="mono">dev-milestone-audit</td><td><span class="tag">P0</span></td><td>L</td><td>software audit, inspection, release readiness, coverage limitations, multi-agent review.</td><td>отчёт расхождений</td><td>D5, H3</td></tr>
+          <tr><td>D7</td><td class="mono">dev-ship</td><td><span class="tag">P0</span></td><td>M</td><td>PR flow, merge queues, CI gates, self-review, trunk-based development.</td><td>ветка → main + PR</td><td>D5, D6</td></tr>
+          <tr><td>D8</td><td class="mono">dev-scope-check</td><td><span class="tag">P1</span></td><td>S</td><td>scope creep, alignment gates, project governance, portfolio management.</td><td>вердикт + запись</td><td>H1</td></tr>
+          <tr><td>D9</td><td class="mono">dev-adr</td><td><span class="tag">P1</span></td><td>S</td><td>ADR, architecture knowledge management, decision records, trade-off analysis.</td><td>docs/adr/NNN</td><td>H1</td></tr>
+          <tr><td>D10</td><td class="mono">dev-contract-migration</td><td><span class="tag">P1</span></td><td>M</td><td>expand-contract, zero-downtime migration, schema evolution, backward compatibility.</td><td>миграция + rollback</td><td>D2</td></tr>
+          <tr><td>D11</td><td class="mono">dev-threat-model</td><td><span class="tag">P1</span></td><td>M</td><td>STRIDE, threat modeling, security requirements, supply chain risk.</td><td>риски + меры</td><td>D2</td></tr>
+          <tr><td>D12</td><td class="mono">dev-release</td><td><span class="tag">P1</span></td><td>M</td><td>semantic-release, release-please, semver, release engineering, rollback.</td><td>тег на merge-коммит</td><td>D7</td></tr>
+          <tr><td>D13</td><td class="mono">dev-postmortem</td><td><span class="tag">P1</span></td><td>S</td><td>blameless postmortem, incident analysis, organizational learning.</td><td>разбор + действия</td><td>D6, D12</td></tr>
+          <tr><td>D14</td><td class="mono">dev-refactor-under-suite</td><td><span class="tag">P2</span></td><td>M</td><td>refactoring, behavior preservation, characterization tests, mutation coverage.</td><td>диф + паритет</td><td>D4</td></tr>
+          <tr><td>D15</td><td class="mono">dev-perf-baseline</td><td><span class="tag">P2</span></td><td>M</td><td>benchmarking methodology, performance regression, load testing, measurement error.</td><td>таблица чисел</td><td>D5</td></tr>
+          <tr><td>D16</td><td class="mono">dev-dependency-bump</td><td><span class="tag">P2</span></td><td>S</td><td>Dependabot/Renovate, lockfile integrity, supply chain, upgrade risk.</td><td>зелёный CI + memory</td><td>D7</td></tr>
+        </tbody>
+      </table>
+      <p class="small">
+        D0 — не новый навык, а ретро-ревью уже существующего: правило
+        «сначала исследование» действует и для v2. Для D1–D7 research
+        обязателен до любого кода; D2 не начинается без утверждённого D1.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel" id="science">
+    <div class="panel-head">
+      <h2>Phase 3 · Science</h2>
+      <p>После dev: методология, воспроизводимость и статистика</p>
+      <span class="count">9 навыков · 5 × P1</span>
+    </div>
+    <div class="panel-body">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Навык</th><th>P</th><th>Effort</th><th>Что исследовать</th><th>Выход</th><th>Зависит от</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>S1</td><td class="mono">sci-experiment-plan</td><td><span class="tag sci">P1</span></td><td>M</td><td>design of experiments, preregistration, power analysis, controls.</td><td>протокол эксперимента</td><td>H1</td></tr>
+          <tr><td>S2</td><td class="mono">sci-repro-run</td><td><span class="tag sci">P1</span></td><td>M</td><td>reproducibility, provenance, workflow engines, environment capture.</td><td>манифест + результат</td><td>S1</td></tr>
+          <tr><td>S3</td><td class="mono">sci-stats-plan</td><td><span class="tag sci">P1</span></td><td>M</td><td>statistical inference, assumptions, multiple comparisons, effect sizes.</td><td>план анализа</td><td>S1</td></tr>
+          <tr><td>S4</td><td class="mono">sci-stats-report</td><td><span class="tag sci">P1</span></td><td>M</td><td>reporting guidelines, CONSORT/STROBE, intervals, limitations.</td><td>отчёт о результате</td><td>S3</td></tr>
+          <tr><td>S5</td><td class="mono">sci-literature-review</td><td><span class="tag sci">P1</span></td><td>L</td><td>PRISMA, systematic review, inclusion criteria, evidence tables.</td><td>обзор + таблица</td><td>H1</td></tr>
+          <tr><td>S6</td><td class="mono">sci-dataset-card</td><td><span class="tag sci">P2</span></td><td>S</td><td>datasheets for datasets, provenance, licensing, bias, PII.</td><td>карточка данных</td><td>S2</td></tr>
+          <tr><td>S7</td><td class="mono">sci-figure</td><td><span class="tag sci">P2</span></td><td>M</td><td>graphical perception, chart selection, accessibility, reproducibility.</td><td>figure + скрипт</td><td>S4</td></tr>
+          <tr><td>S8</td><td class="mono">sci-red-team-results</td><td><span class="tag sci">P2</span></td><td>S</td><td>adversarial collaboration, falsification, alternative explanations.</td><td>контраргументы</td><td>S4</td></tr>
+          <tr><td>S9</td><td class="mono">sci-replication-check</td><td><span class="tag sci">P2</span></td><td>M</td><td>replication studies, reproducibility packages, blinding.</td><td>вердикт о воспроизведении</td><td>S2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="reports">
+    <div class="panel-head">
+      <h2>Phase 4 · Reports</h2>
+      <p>Поддержка существующего и backlog; не конкурирует с harness/dev/science</p>
+      <span class="count">1 в поддержке · 8 в backlog</span>
+    </div>
+    <div class="panel-body">
+      <div class="grid2">
+        <div class="box">
+          <h3>Сейчас</h3>
+          <ul>
+            <li><code>pptx-report</code> — поддержка, обновление шаблонов и проверок.</li>
+            <li>Новые отчётные навыки не разрабатываются до завершения Phase 3.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Backlog</h3>
+          <ul>
+            <li><code>evidence-ledger</code>, <code>metrics-snapshot</code></li>
+            <li><code>technical-writing</code>, <code>report</code></li>
+            <li><code>status-report</code>, <code>exec-summary</code></li>
+            <li><code>release-notes</code>, <code>grant-proposal</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="protocol">
+    <div class="panel-head">
+      <h2>Research Gate: как изучать аналоги</h2>
+      <p>Одинаковый минимум для каждого навыка, независимо от домена</p>
+      <span class="count">AGENTS.md §4.1</span>
+    </div>
+    <div class="panel-body">
+      <div class="grid2">
+        <div class="box">
+          <h3>GitHub — минимум 3</h3>
+          <ul>
+            <li>репозиторий или набор навыков с кодом, не подборка ссылок;</li>
+            <li>лицензия, последний коммит, звёзды — для оценки зрелости;</li>
+            <li>что берём: структура, команда, формат артефакта;</li>
+            <li>что отвергаем и почему.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Наука — минимум 2</h3>
+          <ul>
+            <li>рецензируемая статья, препринт или официальный стандарт;</li>
+            <li>метод, выборка, ограничения, воспроизводимость;</li>
+            <li>если литературы нет — waiver с перечнем запросов и заменой;</li>
+            <li>источник без автора и даты не считается научным.</li>
+          </ul>
+        </div>
+      </div>
+      <table style="margin-top:14px">
+        <caption>Обязательные поля research ledger</caption>
+        <thead><tr><th>Поле</th><th>Что фиксируется</th></tr></thead>
+        <tbody>
+          <tr><td>Запросы</td><td>фактические строки поиска по GitHub и научным базам — чтобы исследование можно было повторить.</td></tr>
+          <tr><td>Аналоги</td><td>ссылка, лицензия, дата коммита, подход, «берём / отвергаем».</td></tr>
+          <tr><td>Источники</td><td>DOI/URL, тип, метод, ограничение, вывод для навыка.</td></tr>
+          <tr><td>Синтез</td><td>паттерны, противоречия, пробелы, что подтверждено эмпирически.</td></tr>
+          <tr><td>Решение</td><td>какое проектное решение следует из источников и какая альтернатива отклонена.</td></tr>
+          <tr><td>Дата</td><td>дата обращения к каждому источнику.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="review">
+    <div class="panel-head">
+      <h2>Review Gate: HTML для разработчика</h2>
+      <p>Один файл, который читается без запуска и без сети</p>
+      <span class="count">docs/templates/skill-review.html</span>
+    </div>
+    <div class="panel-body">
+      <div class="grid2">
+        <div class="box">
+          <h3>Обязательные разделы</h3>
+          <ol>
+            <li>Шапка: навык, домен, приоритет, дата, автор, статус.</li>
+            <li>Запрос решения.</li>
+            <li>Проблема и границы.</li>
+            <li>GitHub-аналоги.</li>
+            <li>Научные источники и стандарты.</li>
+            <li>Синтез и дизайн.</li>
+            <li>Альтернативы и цена.</li>
+            <li>Метрики и проверка.</li>
+            <li>Риски и открытые вопросы.</li>
+            <li>Источники с датой обращения.</li>
+            <li>Чек-лист и решение.</li>
+          </ol>
+        </div>
+        <div class="box">
+          <h3>Технические требования</h3>
+          <ul>
+            <li>один HTML-файл, без CDN и внешних шрифтов;</li>
+            <li>открывается с диска, печатается в A4;</li>
+            <li>контраст не ниже 4,5:1, смысл не только цветом;</li>
+            <li>таблицы с заголовками и подписями;</li>
+            <li>статус <code>draft → approved / revise / rejected</code>;</li>
+            <li>без секретов и персональных данных.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="small" style="margin-top:12px">
+        Путь: <code>docs/reviews/&lt;skill&gt;.html</code>. Без статуса
+        <code>approved</code> каталог навыка не создаётся. Правки после
+        ревью вносятся в тот же файл, статус и дата обновляются.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel" id="dod">
+    <div class="panel-head">
+      <h2>Definition of Done</h2>
+      <p>Проверяется до объявления навыка готовым</p>
+      <span class="count">AGENTS.md §5</span>
+    </div>
+    <div class="panel-body">
+      <ul class="check">
+        <li>Research ledger заполнен: ≥3 GitHub-аналога и ≥2 научных/официальных источника или утверждённый waiver.</li>
+        <li>Review HTML имеет статус <code>approved</code> и подпись ревьюера.</li>
+        <li>SKILL.md содержит триггеры, процедуру, вход, выход, границы, ошибки и QA.</li>
+        <li>Есть воспроизводимый пример и проверка; скрипты запускаются.</li>
+        <li>HTML открывается без сети, консоль без ошибок, внешних запросов нет.</li>
+        <li>Нет проектных имён и данных в общих примерах.</li>
+        <li>Обновлены <code>docs/skills-map.html</code>, <code>README.md</code> и счётчики.</li>
+        <li>Навык не дублирует существующий по триггерам.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="panel" id="metrics">
+    <div class="panel-head">
+      <h2>Метрики плана и риски</h2>
+      <p>Как понять, что система скиллов работает, а не просто растёт</p>
+    </div>
+    <div class="panel-body">
+      <div class="grid2">
+        <div class="box">
+          <h3>Метрики</h3>
+          <ul>
+            <li><b>Source coverage</b> — доля навыков с полным research ledger.</li>
+            <li><b>Review lead time</b> — от готового ledger до approved HTML.</li>
+            <li><b>Rework rate</b> — доля навыков, вернувшихся с revise.</li>
+            <li><b>Trigger accuracy</b> — сколько задач находит нужный навык с первого раза.</li>
+            <li><b>Reproduction rate</b> — доля примеров, воспроизводимых по инструкции.</li>
+            <li><b>Adoption</b> — сколько навыков реально используется в работе.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Риски</h3>
+          <ul>
+            <li><b>Research theater</b> — формальные ссылки без вывода. Мера: обязательный синтез и решение.</li>
+            <li><b>Раздувание библиотеки</b> — навыки ради количества. Мера: аудит и карта.</li>
+            <li><b>Дубли триггеров</b> — два навыка на одну задачу. Мера: проверка при ревью.</li>
+            <li><b>Устаревание команд</b> — примеры расходятся с кодом. Мера: verification gate.</li>
+            <li><b>Перенос проектных частностей</b> — общий навык знает один репозиторий. Мера: запрет в AGENTS.md.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="next">
+    <div class="panel-head">
+      <h2>Первый спринт</h2>
+      <p>Что делать сразу после утверждения плана</p>
+    </div>
+    <div class="panel-body">
+      <ol style="margin:0;padding-left:20px">
+        <li>Утвердить этот план и <code>AGENTS.md</code>.</li>
+        <li>Собрать <code>docs/research/harness-skill-template.md</code> по шаблону.</li>
+        <li>Собрать <code>docs/reviews/harness-skill-template.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>harness/harness-skill-template/</code> с шаблоном и двумя эталонными навыками.</li>
+        <li>Повторить цикл для <code>harness-rule-to-mechanism</code> и <code>harness-skill-audit</code>.</li>
+      </ol>
+      <div class="decision">
+        <div class="ok">approved</div>
+        <div>revise</div>
+        <div>rejected</div>
+        <div>draft</div>
+      </div>
+      <p class="small" style="margin-top:10px">
+        Решение по плану: <b>draft</b>. Комментарий:
+        <b>ожидает ревью разработчика</b>. После правок обновите дату и версию.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel" id="links">
+    <div class="panel-head">
+      <h2>Связанные документы</h2>
+    </div>
+    <div class="panel-body">
+      <ul style="margin:0;padding-left:18px">
+        <li><a href="../AGENTS.md">AGENTS.md</a> — обязательный регламент.</li>
+        <li><a href="skills-map.html">skills-map.html</a> — карта навыков и блоков.</li>
+        <li><a href="templates/skill-research.md">templates/skill-research.md</a> — research ledger.</li>
+        <li><a href="templates/skill-review.html">templates/skill-review.html</a> — HTML-ревью.</li>
+        <li><a href="../README.md">README.md</a> — установка и структура.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>opencode-skills · план разработки · v1</span>
+      <span>2026-10-31 · harness → dev → science → reports</span>
+    </div>
+  </footer>
+</main>
+</body>
+</html>

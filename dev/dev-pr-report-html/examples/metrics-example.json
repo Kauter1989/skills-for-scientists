@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "meta": {
+    "title": "public-share-link",
+    "subtitle": "Публичная ссылка на задачу без входа в систему",
+    "scope": "feature",
+    "range": "v1.4.0..HEAD",
+    "date": "2026-10-31",
+    "repo": "example-service",
+    "branch": "feature/public-share-link",
+    "agent": "opencode / deepseek-v4.1-flash",
+    "commits": 9,
+    "changed_loc": 1840,
+    "files": 37,
+    "quality": "derived",
+    "budget": { "tokens": 1500000, "amount": 3.4, "currency": "USD" },
+    "notes": "Снимок на момент сдачи фичи. Токены — из usage сессий; ADS проверен вручную."
+  },
+  "verdict": {
+    "status": "red",
+    "headline": "Архитектурное противоречие: контекст прочитан, границы слоёв нарушены.",
+    "text": "Агент прочитал контракт и релевантные модули (CWU 74 %), но добавил импорт инфраструктуры в домен и новый публичный API без ADR. Это не дефицит контекста: решение нужно зафиксировать и обсудить."
+  },
+  "metrics": {
+    "ftb": {
+      "value": 1842000,
+      "unit": "tokens",
+      "quality": "measured",
+      "status": "amber",
+      "summary": "Бюджет превышен на 23 % к плану 1,5 млн; четверть ушла на переделки после первого зелёного прогона.",
+      "drivers": [
+        "9 коммитов, 1840 изменённых LOC, 37 файлов.",
+        "Два цикла переписывания слоя доступа после отказа в правах.",
+        "Пик потребления — цикл 4: 410 тыс. tokens на разбор e2e."
+      ],
+      "evidence": [
+        { "claim": "usage по трём сессиям фичи", "source": "sessions/2026-10-28.jsonl, sessions/2026-10-30.jsonl" },
+        { "claim": "план бюджета 1,5 млн tokens", "source": "docs/features/public-share-link/alignment.md" }
+      ],
+      "verdict": "Дорого для фичи такого размера: 100 тыс. tokens на 100 LOC при медиане 71 тыс.",
+      "actions": [
+        "Разбивать исследование и реализацию на отдельные сессии с бюджетом.",
+        "Не перезапускать полный e2e на каждой правке слоя доступа."
+      ],
+      "parts": [
+        { "label": "input", "value": 1240000 },
+        { "label": "output", "value": 182000 },
+        { "label": "cache read", "value": 380000 },
+        { "label": "cache write", "value": 40000 }
+      ],
+      "normalized": [
+        { "label": "tokens / 100 LOC", "value": "100 109" },
+        { "label": "tokens / сущность", "value": "40 044" },
+        { "label": "доля переделок", "value": "27 %" }
+      ],
+      "series": [
+        { "label": "c1", "value": 310000 },
+        { "label": "c2", "value": 280000 },
+        { "label": "c3", "value": 260000 },
+        { "label": "c4", "value": 410000 },
+        { "label": "c5", "value": 320000 },
+        { "label": "c6", "value": 262000 }
+      ]
+    },
+    "ads": {
+      "value": 18.4,
+      "unit": "%",
+      "quality": "expert",
+      "status": "red",
+      "summary": "Три архитектурных решения из шестнадцати нарушили контракт; одно из них критическое.",
+      "drivers": [
+        "Домен импортирует SessionLocal ради проверки остатка токена.",
+        "Новый публичный endpoint отдаёт модель без контракта и теста границ.",
+        "Утилита хеширования скопирована из services/audit.py вместо переиспользования."
+      ],
+      "evidence": [
+        { "claim": "запрет domain → infrastructure", "source": "docs/adr/0003-layers.md#L18-L24" },
+        { "claim": "правило нового публичного API", "source": "CONVENTIONS.md#L44" }
+      ],
+      "verdict": "Изменение переопределяет границу слоя; зелёные тесты этого не показывают.",
+      "actions": [
+        "Вынести проверку остатка в сервис, домен оставить чистым.",
+        "Добавить ADR на публичный доступ к задаче либо убрать endpoint из фичи.",
+        "Заменить копию утилиты импортом."
+      ],
+      "contract": {
+        "name": "Слои приложения и направление зависимостей",
+        "source": "docs/adr/0003-layers.md",
+        "assumed": false
+      },
+      "violations": [
+        {
+          "severity": "critical",
+          "rule": "domain не импортирует infrastructure",
+          "location": "src/app/domain/share.py:14",
+          "note": "Импорт SessionLocal ради проверки остатка; решение принимается в домене.",
+          "weight": 5
+        },
+        {
+          "severity": "major",
+          "rule": "новый публичный API требует контракта и теста границ",
+          "location": "src/app/app.py:2210",
+          "note": "Callback отдаёт share-модель без проверки владельца при прямом вызове.",
+          "weight": 3
+        },
+        {
+          "severity": "minor",
+          "rule": "не дублировать capability",
+          "location": "src/app/services/share.py:41",
+          "note": "Копия хеширования из services/audit.py.",
+          "weight": 1
+        }
+      ],
+      "compliant": [
+        { "rule": "новый модуль размещён в services", "note": "слой выбран верно" },
+        { "rule": "зависимость направлена к домену", "note": "services → domain" },
+        { "rule": "маршрут зарегистрирован в app", "note": "без обхода RBAC" }
+      ]
+    },
+    "cli": {
+      "value": 1.8,
+      "unit": "×",
+      "quality": "derived",
+      "status": "amber",
+      "summary": "Изменение затрагивает 12 модулей и 9 публичных функций; blast radius — 9 импортёров.",
+      "drivers": [
+        "Сырой индекс 59,3 балла при медиане 33,0 по последним пяти фичам.",
+        "Две новые миграции и один новый слой доступа.",
+        "7 тестовых файлов и 4 документа."
+      ],
+      "evidence": [
+        { "claim": "12 модулей, 1840 LOC", "source": "git diff --numstat v1.4.0..HEAD" },
+        { "claim": "blast radius 9", "source": "граф импортёров, 2 уровня" }
+      ],
+      "verdict": "Ревью одним проходом невозможно: слой доступа и UI связаны через 9 модулей.",
+      "actions": [
+        "Разделить ревью: домен и права отдельно, UI отдельно.",
+        "Приложить карту затронутых модулей к PR."
+      ],
+      "entities": [
+        { "kind": "modules", "count": 12, "weight": 1, "total": 12 },
+        { "kind": "public functions", "count": 9, "weight": 2, "total": 18 },
+        { "kind": "classes", "count": 3, "weight": 2, "total": 6 },
+        { "kind": "routes", "count": 2, "weight": 2, "total": 4 },
+        { "kind": "models", "count": 1, "weight": 3, "total": 3 },
+        { "kind": "migrations", "count": 1, "weight": 3, "total": 3 },
+        { "kind": "dependencies", "count": 1, "weight": 2, "total": 2 },
+        { "kind": "layers", "count": 2, "weight": 3, "total": 6 },
+        { "kind": "test files", "count": 7, "weight": 0.5, "total": 3.5 },
+        { "kind": "docs", "count": 4, "weight": 0.5, "total": 2 }
+      ],
+      "blast_radius": 9,
+      "top_modules": [
+        { "name": "services/share.py", "importers": 6 },
+        { "name": "domain/share.py", "importers": 4 },
+        { "name": "pages/tasks.py", "importers": 3 }
+      ]
+    },
+    "air": {
+      "value": 26.5,
+      "unit": "%",
+      "quality": "measured",
+      "status": "amber",
+      "summary": "9 из 34 проверок упали; дважды агент повторял одну и ту же команду без новой гипотезы.",
+      "drivers": [
+        "Цикл 1: три падения e2e из-за общей фикстуры.",
+        "Цикл 4: повторный запуск того же теста после правки не того модуля.",
+        "Одно ручное вмешательство: уточнение правила прав."
+      ],
+      "evidence": [
+        { "claim": "34 проверки, 9 провалов", "source": "session tool log, 2026-10-28..30" },
+        { "claim": "2 повтора одной команды", "source": "history цикла 4" }
+      ],
+      "verdict": "Средний процент приемлемый, но thrash=2 показывает слабую обратную связь.",
+      "actions": [
+        "Перед повторным прогоном формулировать новую гипотезу.",
+        "Остановиться после второго одинакового падения и разобрать лог."
+      ],
+      "attempts": 34,
+      "failed": 9,
+      "cycles": 7,
+      "loops": 1.4,
+      "thrash": 2,
+      "interventions": 1,
+      "series": [
+        { "label": "c1", "attempts": 4, "failed": 3 },
+        { "label": "c2", "attempts": 5, "failed": 2 },
+        { "label": "c3", "attempts": 3, "failed": 0 },
+        { "label": "c4", "attempts": 6, "failed": 1 },
+        { "label": "c5", "attempts": 4, "failed": 1 },
+        { "label": "c6", "attempts": 7, "failed": 1 },
+        { "label": "c7", "attempts": 5, "failed": 1 }
+      ]
+    },
+    "hr": {
+      "value": 1.63,
+      "unit": "на 1000 LOC",
+      "quality": "derived",
+      "status": "red",
+      "summary": "Один неразрешённый внутренний импорт и одна ссылка на несуществующий документ.",
+      "drivers": [
+        "Импорт app.services.share_tokens не резолвится: модуль переименован.",
+        "Ссылка на docs/features/public-share-link/alignment.md до создания файла."
+      ],
+      "evidence": [
+        { "claim": "импорт не найден в индексе", "source": "collect_metrics.py, internal imports" },
+        { "claim": "путь отсутствует", "source": "проверка file references" }
+      ],
+      "verdict": "Фантомного API нет, но 1,63 случая на 1000 LOC выше порога 1 — риск подтверждён.",
+      "actions": [
+        "Исправить импорт на services/share.py.",
+        "Создать alignment.md или убрать ссылку."
+      ],
+      "confirmed": [
+        {
+          "type": "missing_import",
+          "symbol": "app.services.share_tokens",
+          "location": "src/app/services/share.py:9",
+          "evidence": "модуль не найден в индексе репозитория"
+        },
+        {
+          "type": "stale_reference",
+          "symbol": "docs/features/public-share-link/alignment.md",
+          "location": "docs/features/public-share-link/overview.md",
+          "evidence": "ссылка на несуществующий файл"
+        }
+      ],
+      "unconfirmed": [
+        {
+          "type": "missing_import",
+          "symbol": "dash_extensions",
+          "note": "не установлен в среде проверки, объявлен в зависимостях"
+        }
+      ],
+      "checks": [
+        { "name": "internal imports", "result": "37 / 38", "note": "1 неразрешённый" },
+        { "name": "external imports", "result": "14 unverified", "note": "проверять в venv проекта" },
+        { "name": "file references", "result": "1 missing", "note": "пути из добавленных строк" }
+      ]
+    },
+    "cwu": {
+      "value": 74,
+      "unit": "%",
+      "quality": "measured",
+      "status": "green",
+      "summary": "До первой правки прочитано 25 из 34 релевантных файлов, включая контракт и ADR; окно заполнено на 41 %.",
+      "drivers": [
+        "Прочитаны docs/adr/0003-layers.md, CONVENTIONS.md и тесты затрагиваемых модулей.",
+        "Не прочитаны сервисы бюджета и аудита, от которых зависит новый слой.",
+        "Пик окна 82 тыс. из 200 тыс. tokens: вытеснения инструкций не было."
+      ],
+      "evidence": [
+        { "claim": "25 чтений до первой правки", "source": "session tool log, 2026-10-28" },
+        { "claim": "34 релевантных файла", "source": "blast radius + тесты + ADR" }
+      ],
+      "verdict": "Контекст достаточный: нарушения ADS не объясняются слепотой.",
+      "actions": [
+        "Разобрать архитектурное решение отдельно от вопроса контекста.",
+        "Дочитать services/budget.py перед изменением прав."
+      ],
+      "coverage": 74,
+      "window": 41,
+      "relevant": 34,
+      "read": 25,
+      "read_list": [
+        "docs/adr/0003-layers.md",
+        "CONVENTIONS.md",
+        "src/app/domain/share.py",
+        "src/app/services/share.py",
+        "tests/test_share_link.py"
+      ],
+      "missed_list": [
+        "src/app/services/budget.py",
+        "src/app/services/audit.py"
+      ]
+    }
+  },
+  "matrix": {
+    "cw": "high",
+    "ads": "high",
+    "title": "Архитектурное противоречие",
+    "text": "Агент прочитал контракт и релевантные модули, но добавил импорт инфраструктуры в домен и публичный API без ADR. Это конфликт решения с архитектурой, а не дефицит контекста."
+  },
+  "evidence": [
+    { "claim": "9 коммитов, 1840 LOC, 37 файлов", "source": "git diff --numstat v1.4.0..HEAD", "date": "2026-10-31" },
+    { "claim": "1 842 000 tokens по трём сессиям", "source": "usage export, sessions/*.jsonl", "date": "2026-10-31" },
+    { "claim": "ADS 18,4 % против docs/adr/0003-layers.md", "source": "ручная проверка, файл и строка", "date": "2026-10-31" },
+    { "claim": "34 проверки, 9 провалов", "source": "session tool log", "date": "2026-10-31" },
+    { "claim": "1 неразрешённый внутренний импорт", "source": "collect_metrics.py", "date": "2026-10-31" },
+    { "claim": "CWU 74 %: 25 из 34 файлов", "source": "лог чтения сессии", "date": "2026-10-31" }
+  ],
+  "actions": [
+    { "priority": "now", "text": "Убрать импорт SessionLocal из domain/share.py и вынести проверку остатка в сервис.", "owner": "автор изменения" },
+    { "priority": "now", "text": "Зафиксировать ADR на публичный доступ к задаче или убрать endpoint из фичи.", "owner": "архитектурный ревьюер" },
+    { "priority": "next", "text": "Разбить ревью на домен/права и UI; приложить карту blast radius.", "owner": "ревьюер" },
+    { "priority": "accept", "text": "Бюджет 1,84 млн tokens и CWU 74 % принять как стоимость фичи; учредить бюджет 1,5 млн для следующей.", "owner": "руководитель" }
+  ],
+  "method": {
+    "commands": [
+      "python scripts/collect_metrics.py --repo example-service --from v1.4.0 --to HEAD --telemetry telemetry.json",
+      "python scripts/build_report.py metrics.json -o public-share-link.html --strict"
+    ],
+    "notes": [
+      "ADS проверен вручную по docs/adr/0003-layers.md; каждое нарушение подтверждено файлом и строкой.",
+      "Токены — сумма input, output, cache read и cache write по трём сессиям.",
+      "CWU coverage = прочитанные релевантные файлы / все релевантные; окно — пик к лимиту модели."
+    ],
+    "limitations": [
+      "Внешние импорты не проверялись в venv проекта: 14 помечены unverified.",
+      "CLI нормирован по медиане пяти предыдущих фич; выборка мала.",
+      "Стоимость в деньгах — по тарифу провайдера на дату снимка, без скидок."
+    ]
+  }
+}
