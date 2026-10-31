@@ -1,0 +1,73 @@
+{
+  "status": "approved",
+  "created": "2026-10-31",
+  "answers": {
+    "project": "example-service",
+    "domain": "dev",
+    "stack": "python",
+    "default_branch": "main",
+    "workflow": "minimal",
+    "ci": "github",
+    "commands": {
+      "test": "pytest -q",
+      "lint": "ruff check .",
+      "build": ""
+    },
+    "roles": [
+      "developer",
+      "reviewer"
+    ],
+    "tasks": [
+      "feature",
+      "bugfix",
+      "report"
+    ],
+    "constraints": [
+      "private"
+    ],
+    "skills": []
+  },
+  "skills": [
+    "harness-skill-template",
+    "harness-skill-audit",
+    "harness-rule-to-mechanism",
+    "dev-pr-report-html"
+  ],
+  "stages": [
+    {
+      "stage": "Старт",
+      "what": "Открыть репозиторий и выбрать первый шаг",
+      "skills": "harness-skill-template"
+    },
+    {
+      "stage": "Правила",
+      "what": "Проверить, что правила имеют механизм",
+      "skills": "harness-rule-to-mechanism"
+    },
+    {
+      "stage": "Работа",
+      "what": "Выполнить стартовую задачу",
+      "skills": "dev-pr-report-html"
+    },
+    {
+      "stage": "Проверка",
+      "what": "Проверить структуру и дубли",
+      "skills": "harness-skill-audit"
+    },
+    {
+      "stage": "Отчёт",
+      "what": "Собрать результат для ревью",
+      "skills": "dev-pr-report-html"
+    }
+  ],
+  "files": [
+    "profile.yml",
+    "AGENTS.md",
+    "docs/research/",
+    "docs/reviews/",
+    "docs/audits/",
+    "docs/rules/registry.yml",
+    ".pre-commit-config.yaml",
+    ".github/workflows/ci.yml"
+  ]
+}

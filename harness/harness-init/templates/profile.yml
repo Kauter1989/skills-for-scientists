@@ -1,0 +1,11 @@
+project: {{PROJECT}}
+domain: {{DOMAIN}}
+stack: {{STACK}}
+workflow: {{WORKFLOW}}
+ci: {{CI}}
+commands:
+  test: "{{TEST_COMMAND}}"
+  lint: "{{LINT_COMMAND}}"
+  build: "{{BUILD_COMMAND}}"
+skills:
+{{SKILLS_YAML}}

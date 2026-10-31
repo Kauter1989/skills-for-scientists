@@ -263,8 +263,8 @@
       означает, что без скилла процесс теряет проверяемое звено.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">5</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">37</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-existing">6</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">36</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -396,7 +396,8 @@
 └── harness/                    <span class="c">← харнесс, префикс harness-</span>
     ├── harness-skill-template/
     ├── harness-rule-to-mechanism/
-    └── harness-skill-audit/</pre>
+    ├── harness-skill-audit/
+    └── harness-init/</pre>
           <p class="count-line" style="margin-top:10px">
             Внутри доменных папок каталоги плоские: один каталог — один навык.
             При установке копируется <code>dev/dev-pr-report-html</code> в
@@ -437,7 +438,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-10-31 · 5 реализовано · 37 предложено</span>
+      <span>снимок 2026-10-31 · 6 реализовано · 36 предложено</span>
     </div>
   </footer>
 </main>
@@ -725,11 +726,11 @@
 
     // --- харнесс ---
     {
-      id: "harness-init", name: "/harness-init", domain: "harness", status: "proposed", priority: "P0",
+      id: "harness-init", name: "/harness-init", domain: "harness", status: "existing", priority: "core",
       blocks: ["intake", "meta"],
-      sum: "Развернуть воркфлоу в новом репозитории: профиль проекта, конституция, хуки, CI, шаблоны документов.",
-      io: "репозиторий → рабочий harness",
-      links: ""
+      sum: "Bootstrap с опросом: подбор стартовых навыков, profile.yml, AGENTS.md, hooks, CI и HTML-утверждение workflow.",
+      io: "опрос → bootstrap-plan.html → scaffold",
+      links: "../harness/harness-init/SKILL.md"
     },
     {
       id: "harness-skill-template", name: "/harness-skill-template", domain: "harness", status: "existing", priority: "core",
@@ -873,7 +874,7 @@
     {
       label: "Харнесс",
       steps: [
-        { t: "/harness-init", c: "new" }, { t: "/harness-skill-template", c: "implemented" },
+        { t: "/harness-init", c: "implemented" }, { t: "/harness-skill-template", c: "implemented" },
         { t: "/harness-rule-to-mechanism", c: "implemented" }, { t: "/harness-skill-eval", c: "new" },
         { t: "/harness-skill-audit", c: "implemented" }
       ]

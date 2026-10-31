@@ -172,8 +172,8 @@
       Отчётные навыки остаются в поддержке; новые — после science.
     </p>
     <div class="stats">
-      <div class="stat"><b>5</b><span>навыка в репозитории</span></div>
-      <div class="stat"><b>37</b><span>в очереди</span></div>
+      <div class="stat"><b>6</b><span>навыка в репозитории</span></div>
+      <div class="stat"><b>36</b><span>в очереди</span></div>
       <div class="stat"><b>5</b><span>обязательных гейтов</span></div>
       <div class="stat"><b>7 / 17 / 9</b><span>harness / dev / science</span></div>
       <div class="stat"><b>3 + 2</b><span>минимум GitHub + научных источников</span></div>
@@ -284,7 +284,7 @@
     <div class="panel-head">
       <h2>Phase 1 · Harness</h2>
       <p>Первый приоритет: сначала то, что определяет форму и проверку остальных навыков</p>
-      <span class="count">7 навыков · 3 готово · 1 отложен · 3 × P0</span>
+      <span class="count">7 навыков · 4 готово · 1 отложен · 3 × P0</span>
     </div>
     <div class="panel-body">
       <div class="cards">
@@ -352,9 +352,9 @@
           <div class="card-head">
             <span class="ord">H5</span>
             <h3><code>harness-init</code></h3>
-            <span class="pri p1">P1</span><span class="eff">M</span>
+            <span class="pri p1">P1</span><span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span><span class="eff">M</span>
           </div>
-          <p>Разворачивает процесс в новом репозитории: опрос пользователя, подбор стартовых навыков, профиль, AGENTS.md, хуки, CI и HTML-утверждение workflow.</p>
+          <p>Реализован: опрос, подбор стартовых навыков, HTML-план, `init_repo.py` и `check_bootstrap.py`.</p>
           <dl>
             <dt>GitHub</dt><dd>repo templates, copier/cookiecutter, AGENTS.md, spec-kit, pre-commit.</dd>
             <dt>Наука</dt><dd>онбординг, интервью и опросники, когнитивная нагрузка.</dd>
@@ -703,7 +703,7 @@
   <section class="panel" id="next">
     <div class="panel-head">
       <h2>Текущий шаг</h2>
-      <p>H4 отложен; следующий — H5</p>
+      <p>H5 готов; следующий — H6</p>
     </div>
     <div class="panel-body">
       <ol style="margin:0;padding-left:20px">
@@ -711,10 +711,11 @@
         <li>Foundation и структура библиотеки: PR #1 merged.</li>
         <li><code>harness-rule-to-mechanism</code> реализован, review <code>approved</code>, PR #3 merged.</li>
         <li><code>harness-skill-audit</code> реализован, review <code>approved</code>, PR #4 merged.</li>
-        <li><code>harness-skill-eval</code> отложен: research/review сохранены, статус <code>deferred</code>, не реализуется.</li>
-        <li>Собрать <code>docs/research/harness-init.md</code>.</li>
-        <li>Собрать <code>docs/reviews/harness-init.html</code> и получить <code>approved</code>.</li>
-        <li>Реализовать <code>harness/harness-init/</code>.</li>
+        <li><code>harness-skill-eval</code> отложен: research/review сохранены, статус <code>deferred</code>.</li>
+        <li><code>harness-init</code> реализован, review <code>approved</code>, PR #6.</li>
+        <li>Собрать <code>docs/research/harness-analyze-codebase.md</code>.</li>
+        <li>Собрать <code>docs/reviews/harness-analyze-codebase.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>harness/harness-analyze-codebase/</code>.</li>
       </ol>
       <div class="decision">
         <div class="ok">approved</div>
@@ -724,7 +725,7 @@
       </div>
       <p class="small" style="margin-top:10px">
         Решение по плану: <b>approved</b>. Комментарий:
-        <b>утверждено 2026-10-31; H1–H3 реализованы</b>. После правок обновите дату и версию.
+        <b>утверждено 2026-10-31; H1–H3 и H5 реализованы, H4 отложен</b>. После правок обновите дату и версию.
       </p>
     </div>
   </section>

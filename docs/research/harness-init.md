@@ -8,7 +8,7 @@
 | Автор | OpenCode agent |
 | Дата начала | `2026-10-31` |
 | Дата снимка источников | `2026-10-31` |
-| Статус | `ready-for-review` |
+| Статус | `approved` |
 
 ## 1. Задача
 
@@ -110,12 +110,12 @@
 ## 8. Что дальше
 
 - [x] Research Gate: 5 GitHub-аналогов, 5 научных источников, 4 спецификации
-- [ ] Собран `docs/reviews/harness-init.html`
-- [ ] Ревью проведено, статус `approved`
-- [ ] Создан каталог `harness/harness-init/`
-- [ ] Опрос и `bootstrap-plan.html` воспроизводятся
-- [ ] Bootstrap воспроизводится на пустом репозитории
-- [ ] Обновлены `docs/skills-map.html` и `README.md`
+- [x] Собран `docs/reviews/harness-init.html`
+- [x] Ревью проведено, статус `approved`
+- [x] Создан каталог `harness/harness-init/`
+- [x] Опрос и `bootstrap-plan.html` воспроизводятся
+- [x] Bootstrap воспроизводится на пустом репозитории
+- [x] Обновлены `docs/skills-map.html` и `README.md`
 
 ## 9. Источники
 
