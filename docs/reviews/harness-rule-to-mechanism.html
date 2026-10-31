@@ -220,7 +220,7 @@
         </div>
         <div class="box">
           <h3>Выход</h3>
-          <p>Карточка правила, механизм, negative fixture, лог проверки и строка registry.</p>
+          <p>Карточка правила, механизм, negative fixture, лог проверки и строка в <code>docs/rules/registry.yml</code>.</p>
         </div>
       </div>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
@@ -229,7 +229,27 @@
         <li><code>references/</code> — матрица «тип правила → механизм», формат карточки</li>
         <li><code>scripts/</code> — проверка карточки правила и наличия evidence</li>
         <li><code>examples/</code> — правило + падающий пример + проходящий baseline</li>
+        <li><code>docs/rules/registry.yml</code> — единый источник правды по правилам</li>
       </ul>
+
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Registry</h3>
+      <p>Одна запись — одно правило. Механизм и evidence — ссылки, а не копии конфигов. Файл версионируется вместе с кодом.</p>
+      <pre style="background:#12161c;color:#d9e1e8;padding:12px 14px;border-radius:8px;font:11.5px/1.55 var(--mono);overflow:auto;margin:0 0 10px">version: 1
+rules:
+  - id: ARCH-001
+    rule: "domain не импортирует infrastructure"
+    trigger: "import из infrastructure в domain/"
+    mechanism:
+      type: import-linter
+      config: .importlinter
+      contract: domain-independent
+    level: CI
+    owner: architecture
+    cost: "8 секунд в CI"
+    bypass: "только через ADR"
+    evidence: tests/architecture/test_layers.py
+    status: active</pre>
+      <p class="mono" style="font-size:11.5px;color:var(--muted)">python scripts/validate_rule.py --registry docs/rules/registry.yml</p>
     </div>
   </section>
 
@@ -283,7 +303,7 @@
       </table>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
       <ol>
-        <li>Где хранить registry: docs/rules/ или rules/ в корне?</li>
+        <li>Достаточно ли YAML-схемы registry или нужна отдельная карточка правила?</li>
         <li>Что считать минимальным доказательством: падающий тест, лог хука или CI-run?</li>
       </ol>
     </div>
