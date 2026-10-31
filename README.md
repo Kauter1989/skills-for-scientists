@@ -18,6 +18,7 @@
 |---|---|---|---|
 | [`harness-skill-template`](harness/harness-skill-template/SKILL.md) | `harness/` | Контракт и каркас навыка: frontmatter, обязательные разделы, шаблон, генератор и валидатор | `SKILL.md`, отчёт валидатора |
 | [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Переводит правило в исполняемую проверку: хук, lint, тест, policy или CI, с registry и тестом-доказательством | проверка, `docs/rules/registry.yml` |
+| [`harness-skill-audit`](harness/harness-skill-audit/SKILL.md) | `harness/` | Аудит библиотеки: структура, дубли триггеров, артефакты, ссылки и покрытие доменов | `docs/audits/<date>.html` и `.json` |
 | [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML-отчёт об изменениях фичи или майлстоуна: шесть метрик агентской разработки, доказательства и решения | автономный `report.html` |
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Строгие презентации и аналитические отчёты PPTX: научные доклады, отчёты о НИР, аналитика для руководства | `deck.pptx`, PNG для проверки |
 
@@ -83,6 +84,7 @@ skills/
 │   ├── skills-development-plan.html  план и очередь
 │   ├── research/              research ledger по навыкам
 │   ├── reviews/               HTML-ревью по навыкам
+│   ├── audits/                HTML/JSON отчёты аудита
 │   ├── rules/                 registry.yml — реестр правил
 │   └── templates/
 │       ├── skill-research.md  research ledger
@@ -102,7 +104,13 @@ skills/
 │   │   ├── scripts/
 │   │   ├── templates/
 │   │   └── examples/
-│   └── harness-rule-to-mechanism/
+│   ├── harness-rule-to-mechanism/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   ├── templates/
+│   │   └── examples/
+│   └── harness-skill-audit/
 │       ├── SKILL.md
 │       ├── references/
 │       ├── scripts/

@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-31",
+  "scope": "harness",
+  "root": ".",
+  "skills": 3,
+  "summary": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "duplicates": [],
+  "coverage": {
+    "dev": 0,
+    "sci": 0,
+    "harness": 3,
+    "reports": 0
+  },
+  "findings": []
+}
