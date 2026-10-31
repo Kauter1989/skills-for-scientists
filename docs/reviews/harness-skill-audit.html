@@ -226,7 +226,7 @@
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
       <ul>
         <li><code>SKILL.md</code> — триггеры, процедура, границы</li>
-        <li><code>references/</code> — чек-лист, severity, порог дублей</li>
+        <li><code>references/</code> — чек-лист, severity, политика дублей</li>
         <li><code>scripts/</code> — инвентаризация, проверки, JSON-снимок</li>
         <li><code>examples/</code> — отчёт с blocker/major/minor и трендом</li>
       </ul>
@@ -278,13 +278,15 @@
         <thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead>
         <tbody>
           <tr><td>Аудит превращается в формальность</td><td>средняя</td><td>высокое</td><td>обязательные проверки, тренд, владелец</td></tr>
-          <tr><td>Слишком много ложных находок</td><td>средняя</td><td>среднее</td><td>порог дублей, второй проход, калибровка severity</td></tr>
+          <tr><td>Слишком много ложных находок</td><td>средняя</td><td>среднее</td><td>политика дублей, второй проход, калибровка severity</td></tr>
         </tbody>
       </table>
-      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Решения ревью</h3>
       <ol>
-        <li>Где хранить отчёты: docs/audits/&lt;date&gt;.html или рядом с навыком?</li>
-        <li>Какой порог дублей считать блокирующим?</li>
+        <li>Отчёты: <code>docs/audits/&lt;date&gt;.html</code>; JSON-снимок рядом — <code>docs/audits/&lt;date&gt;.json</code>.</li>
+        <li>Дубли: по умолчанию дублей быть не должно. Любая пара похожих триггеров — находка; блокирующий статус и исключения утверждает пользователь.</li>
+        <li>JSON нужен для тренда: покрытие, дубли, ложные срабатывания.</li>
+        <li>Severity спорной находки утверждает владелец домена или пользователь; blocker требует второго прохода.</li>
       </ol>
     </div>
   </section>

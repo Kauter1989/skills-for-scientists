@@ -83,6 +83,7 @@ skills/
 │   ├── skills-development-plan.html  план и очередь
 │   ├── research/              research ledger по навыкам
 │   ├── reviews/               HTML-ревью по навыкам
+│   ├── audits/                HTML/JSON отчёты аудита
 │   ├── rules/                 registry.yml — реестр правил
 │   └── templates/
 │       ├── skill-research.md  research ledger
