@@ -118,19 +118,19 @@
   <header>
     <div class="kicker">План навыка · на ревью</div>
     <h1><code>dev-feature-start</code></h1>
-    <p class="sub">Открывает фичу: ветка от свежей основной, feature brief, привязка к плану и передача в спецификацию.</p>
+    <p class="sub">Открывает фичу: ветка от свежей основной, feature brief, user stories, поведенческие и функциональные тесты, красный/зелёный гейты.</p>
     <div class="chips">
       <span class="chip">Домен: <b>dev</b></span>
       <span class="chip">Приоритет: <b>P0</b></span>
       <span class="chip">Автор: <b>OpenCode agent</b></span>
       <span class="chip">Дата: <b>2026-10-31</b></span>
-      <span class="chip">Источники: <b>11</b></span>
+      <span class="chip">Источники: <b>12</b></span>
       <span class="status draft">draft</span>
     </div>
 
     <div class="callout">
       <b>Запрос решения</b>
-      <p>Утвердить формат feature brief, политику ветки, обязательную привязку к плану и границы scaffold. После approved — реализация.</p>
+      <p>Утвердить формат feature brief, режим утверждения stories, порядок «stories → behavioral tests → functional tests → red → implementation → green», политику ветки и границы scaffold. После approved — реализация.</p>
     </div>
   </header>
 
@@ -140,11 +140,11 @@
       <h2>Проблема и границы</h2>
     </div>
     <div class="body">
-      <p>Фича начинается с кода: нет цели, границ и критериев приёмки, ветка создаётся от устаревшей основной, а связь с планом теряется. В результате ревью обсуждает не то, что обещали, а то, что получилось.</p>
+      <p>Фича начинается с кода: нет цели, границ и критериев приёмки, ветка создаётся от устаревшей основной, а связь с планом теряется. Тесты пишутся после реализации и подгоняются под неё, поэтому не доказывают поведение. В результате ревью обсуждает не то, что обещали, а то, что получилось.</p>
       <div class="grid2">
         <div class="box">
           <h3>Входит в задачу</h3>
-          <ul><li>чистое дерево, свежая основная ветка, feature brief, привязка к плану, критерии приёмки и передача в spec-chain.</li></ul>
+          <ul><li>чистое дерево, свежая основная ветка, feature brief, привязка к плану, user stories, поведенческие и функциональные тесты, красный и зелёный гейты.</li></ul>
         </div>
         <div class="box">
           <h3>Не входит</h3>
@@ -189,6 +189,7 @@
 <tr><td class="mono"><a href="https://doi.org/10.1109/2.59">Boehm, 1988</a></td><td>рецензируемая</td><td>Риск-ориентированный старт: цели и ограничения</td><td>модель разработки</td><td>старт фиксирует цель и риски</td></tr>
 <tr><td class="mono"><a href="https://doi.org/10.1109/2.962984">Boehm &amp; Basili, 2001</a></td><td>рецензируемая</td><td>Раннее обнаружение дефектов дешевле</td><td>обзор практик</td><td>критерии приёмки задаются на старте</td></tr>
 <tr><td class="mono"><a href="https://doi.org/10.1037/0003-066X.54.7.493">Gollwitzer, 1999</a></td><td>рецензируемая</td><td>If-then планы повышают следование намерению</td><td>психология поведения</td><td>триггер и действие вместо общего описания</td></tr>
+<tr><td class="mono"><a href="https://doi.org/10.1109/TSE.2012.28">Rafique &amp; Misic, 2013</a></td><td>рецензируемая</td><td>TDD-метаанализ: эффект на качество и продуктивность</td><td>зависит от контекста</td><td>тесты до кода и красный гейт</td></tr>
 <tr><td class="mono"><a href="https://docs.github.com/get-started/using-github/github-flow">GitHub flow, Git, spec-kit, Conventional Commits</a></td><td>спецификации</td><td>Правила веток, коммитов и спецификаций</td><td>не научный источник</td><td>нормативная база старта</td></tr>
 </tbody>
       </table>
@@ -205,30 +206,46 @@
       <h2>Синтез и предлагаемый дизайн</h2>
     </div>
     <div class="body">
-      <p>Аналоги дают ветку и шаблон, но не связывают старт с планом и критериями. Исследования добавляют: риск-ориентированный старт фиксирует цели и ограничения, раннее обнаружение дешевле, if-then формулировка повышает следование плану. Поэтому brief обязателен до спецификации.</p>
+      <p>Аналоги дают ветку и шаблон, но не связывают старт с планом и критериями. Исследования добавляют: риск-ориентированный старт фиксирует цели, раннее обнаружение дешевле, if-then формулировка повышает следование плану, TDD требует тестов до кода. Поэтому brief фиксирует stories и тесты, а реализация начинается только после красного гейта.</p>
       <div class="flow">
-        <span class="step hot">Проверить дерево</span><span class="arrow">→</span>
-        <span class="step">Создать ветку</span><span class="arrow">→</span>
-        <span class="step">Заполнить brief</span><span class="arrow">→</span>
-        <span class="step">Привязать к плану</span>
+        <span class="step hot">Дерево и ветка</span><span class="arrow">→</span>
+        <span class="step">User stories</span><span class="arrow">→</span>
+        <span class="step">Behavioral tests</span><span class="arrow">→</span>
+        <span class="step">Functional tests</span><span class="arrow">→</span>
+        <span class="step">Red</span><span class="arrow">→</span>
+        <span class="step">Implementation</span><span class="arrow">→</span>
+        <span class="step">Green</span>
       </div>
       <div class="grid2">
         <div class="box">
           <h3>Вход</h3>
-          <p>Slug, цель, пункт плана или обоснование, владелец, основная ветка.</p>
+          <p>Slug, цель, пункт плана или обоснование, владелец, основная ветка и режим утверждения: <code>user</code> или <code>autonomous</code>.</p>
         </div>
         <div class="box">
           <h3>Выход</h3>
-          <p>Ветка feature/&lt;slug&gt;, docs/features/&lt;slug&gt;/overview.md, ссылка на план.</p>
+          <p>Ветка feature/&lt;slug&gt;, <code>overview.md</code> с US/B/F и статусами, evidence красного и зелёного гейтов.</p>
         </div>
       </div>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
       <ul>
         <li><code>SKILL.md</code> — триггеры, процедура, границы</li>
-        <li><code>references/</code> — шаблон brief и чек-лист старта</li>
+        <li><code>references/</code> — шаблон brief, чек-лист старта и правила гейтов</li>
         <li><code>scripts/</code> — start_feature.py с dry-run и проверкой дерева</li>
-        <li><code>examples/</code> — фича с планом и фича вне плана</li>
+        <li><code>examples/</code> — фича с планом, фича вне плана и red/green evidence</li>
       </ul>
+
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Гейты в overview.md</h3>
+      <table>
+        <thead><tr><th>Гейт</th><th>Артефакт</th><th>Кто утверждает</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>User stories</td><td>US-* с критериями приёмки</td><td>пользователь или autonomous</td><td>статус, дата, режим</td></tr>
+          <tr><td>Behavioral tests</td><td>B-* привязаны к US-*</td><td>пользователь или autonomous</td><td>traceability US → B</td></tr>
+          <tr><td>Functional tests</td><td>F-* и граничные случаи</td><td>пользователь или autonomous</td><td>traceability US → F</td></tr>
+          <tr><td>Red gate</td><td>тесты реализованы, прогон падает</td><td>—</td><td>команда и список падений</td></tr>
+          <tr><td>Implementation</td><td>задачи T-*</td><td>—</td><td>код после red</td></tr>
+          <tr><td>Green gate</td><td>полный прогон проходит</td><td>—</td><td>команда и результат</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -243,6 +260,8 @@
         <tbody>
           <tr><td>Ручные git-команды</td><td>Полный контроль</td><td>Забытые шаги и разный порядок</td><td>Нет brief и привязки к плану</td></tr>
           <tr><td>Полный Git Flow</td><td>Строгая модель веток</td><td>Develop/release/hotfix дороги для малой команды</td><td>Избыточно для feature-ветки</td></tr>
+          <tr><td>Код до тестов</td><td>Быстрый видимый результат</td><td>Тесты подгоняются под реализацию</td><td>Нет красного гейта</td></tr>
+          <tr><td>Автономное утверждение без записи</td><td>Не требует пользователя</td><td>Нет evidence решения</td><td>Нельзя проверить, кто утвердил stories</td></tr>
         </tbody>
       </table>
     </div>
@@ -258,11 +277,15 @@
         <span><b>Время до готового brief</b> — ≤ 10 минут</span>
         <span><b>Фичи с привязкой к плану</b> — 100 %</span>
         <span><b>Ветки от устаревшей основы</b> — 0</span>
+        <span><b>Stories и тесты утверждены до кода</b> — 100 %</span>
+        <span><b>Red gate до реализации</b> — 100 %</span>
       </div>
       <ol>
         <li>На чистом репозитории создаётся ветка и overview.md.</li>
         <li>Грязное дерево и отсутствие плана дают отказ или требуют обоснования.</li>
         <li>Повторный запуск не перезаписывает brief без --force.</li>
+        <li>Overview содержит US/B/F, режим утверждения и evidence красного гейта.</li>
+        <li>После реализации полный прогон зелёный; регрессии не сломаны.</li>
       </ol>
     </div>
   </section>
@@ -278,12 +301,18 @@
         <tbody>
           <tr><td>Ветка от устаревшей основной</td><td>средняя</td><td>высокое</td><td>fetch и проверка HEAD</td></tr>
           <tr><td>Brief превращается в формальность</td><td>средняя</td><td>среднее</td><td>обязательные поля и критерии приёмки</td></tr>
+          <tr><td>Тесты написаны под реализацию</td><td>средняя</td><td>высокое</td><td>тесты до кода и красный гейт</td></tr>
+          <tr><td>Автономное утверждение без evidence</td><td>средняя</td><td>среднее</td><td>критерии, дата и ссылка на решение</td></tr>
+          <tr><td>Stories изменились после red</td><td>средняя</td><td>высокое</td><td>повторное утверждение и новый red</td></tr>
         </tbody>
       </table>
-      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Обязательные требования</h3>
       <ol>
-        <li>Где хранить brief: docs/features/&lt;slug&gt;/overview.md?</li>
-        <li>Разрешать ли --force для грязного дерева?</li>
+        <li>Brief хранится в <code>docs/features/&lt;slug&gt;/overview.md</code>.</li>
+        <li>Режим утверждения <code>user</code> или <code>autonomous</code> фиксируется в brief.</li>
+        <li>Stories, behavioral и functional tests утверждаются до реализации тестов.</li>
+        <li>Красный гейт подтверждается командой и списком падений.</li>
+        <li>Зелёный гейт — полный прогон, а не только новые тесты.</li>
       </ol>
     </div>
   </section>
@@ -303,6 +332,7 @@
 <li><a href="https://doi.org/10.1109/2.59">Boehm, 1988</a> — доступно 2026-10-31.</li>
 <li><a href="https://doi.org/10.1109/2.962984">Boehm &amp; Basili, 2001</a> — доступно 2026-10-31.</li>
 <li><a href="https://doi.org/10.1037/0003-066X.54.7.493">Gollwitzer, 1999</a> — доступно 2026-10-31.</li>
+<li><a href="https://doi.org/10.1109/TSE.2012.28">Rafique &amp; Misic, 2013</a> — доступно 2026-10-31.</li>
 <li><a href="https://docs.github.com/get-started/using-github/github-flow">GitHub flow</a> — доступно 2026-10-31.</li>
 <li><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Git branching</a> — доступно 2026-10-31.</li>
 <li><a href="https://github.com/github/spec-kit">spec-kit docs</a> — доступно 2026-10-31.</li>
