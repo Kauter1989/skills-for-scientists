@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugins": [
+    "C:/Users/<user>/.config/opencode/plugins/opencode-md-panel",
+    "@slkiser/opencode-quota",
+    "C:/Users/<user>/.config/opencode/plugins/opencode-wgsl-viz"
+  ],
+  "skills": [
+    "C:/Users/<user>/.config/opencode/skills"
+  ],
+  "mcp": {
+    "servers": {
+      "ferrum": {
+        "type": "local",
+        "command": [
+          "C:/path/to/ferrum-cli.exe",
+          "mcp"
+        ],
+        "timeout": {
+          "startup": 20000
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "opencode-md-panel",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Markdown viewer and editor panel for OpenCode Desktop",
+  "exports": {
+    ".": "./src/index.ts",
+    "./rpc": "./src/rpc.ts",
+    "./gui-experimental": "./dist/gui-experimental.cjs"
+  },
+  "dependencies": {
+    "@opencode/plugin": "2.2.1"
+  },
+  "scripts": {
+    "build": "bun node_modules/vite/bin/vite.js build",
+    "typecheck": "bun node_modules/typescript/bin/tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "solid-js": "^1.9.0",
+    "typescript": "^7.0.2",
+    "vite": "^7.0.0",
+    "vite-plugin-solid": "^2.11.0"
+  },
+  "peerDependencies": {
+    "solid-js": ">=1.9.0"
+  }
+}
