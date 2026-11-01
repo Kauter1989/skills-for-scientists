@@ -1,92 +1,69 @@
 # opencode-plugins
 
-Вендорная папка плагинов и навыков, которые нужны для воспроизведения
-сессий OpenCode Desktop с 3D-визуализацией, Markdown-панелью и квотой.
-
-Здесь лежат **исходники и собранные артефакты**, а не глобальная
-конфигурация. Секреты, токены и `auth.json` в репозиторий не входят.
+Плагины OpenCode, вынесенные из локального профиля, и инструкции по их
+установке на другой машине. Сейчас здесь один плагин — Markdown-панель.
 
 ## Состав
 
 | Путь | Компонент | Назначение |
 |---|---|---|
-| `md-viewer/` | `opencode-md-panel` | панель Markdown: список файлов, просмотр, редактирование, сохранение |
-| `wgsl-viz/plugin/` | `opencode-wgsl-viz` | инструменты `wgslviz.push` / `wgslviz.status` и нативная 3D-панель |
-| `wgsl-viz/server/` | viz-server | хранит сцену, отдаёт `/api/scene`, `/api/state` и `index.html` |
-| `quota/` | `@slkiser/opencode-quota` | сторонний плагин квот; инструкция по установке |
-| `skills/visualize/` | навык `visualize` | workflow «запрос → WGSL + геометрия → push в панель» |
-| `commands/visualize.md` | команда OpenCode | `/visualize <запрос>` |
+| `md-viewer/` | `opencode-md-panel` | панель Markdown: список `.md` файлов сессии, просмотр, редактирование, сохранение |
 | `config/` | пример конфигурации | `opencode.json` без секретов |
+| `INSTALL.md` | инструкция | сборка, установка, проверка, troubleshooting |
+| `NOTICE.md` | происхождение | источники и статус лицензий |
 
 ## Быстрый старт
 
 ```bash
 git clone https://github.com/Kauter1989/opencode-skills.git
-cd opencode-skills/skills/opencode-plugins
+cd opencode-skills/skills/opencode-plugins/md-viewer
 
-# 1. Собрать Markdown-панель
-cd md-viewer
 bun install
 bun run build
-
-# 2. Собрать WGSL-панель
-cd ../wgsl-viz/plugin
-npm ci
-npm run build
-
-# 3. Установить навык и команду (пример для Windows PowerShell)
-cd ../../..
-Copy-Item -Recurse .\opencode-plugins\skills\visualize "$env:USERPROFILE\.config\opencode\skills\visualize"
-Copy-Item .\opencode-plugins\commands\visualize.md "$env:USERPROFILE\.config\opencode\commands\visualize.md"
 ```
 
-Полная последовательность с конфигурацией и проверкой —
+Затем добавьте плагин в `~/.config/opencode/opencode.json`:
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugins": [
+    "C:/Users/<user>/.config/opencode/plugins/opencode-md-panel"
+  ]
+}
+```
+
+Полная последовательность с копированием и проверкой —
 [`INSTALL.md`](INSTALL.md).
 
-## Как это работает
+## Что делает Markdown-панель
 
-```text
-запрос пользователя
-    → навык visualize выбирает WGSL и геометрию
-    → инструмент wgslviz.push
-    → POST http://127.0.0.1:8787/api/scene
-    → панель «WGSL Viz» или index.html рендерит сцену
-```
-
-Markdown-панель работает независимо: она читает и пишет `.md` только внутри
-каталога текущей сессии.
+- показывает все Markdown-файлы текущей папки сессии;
+- ищет по имени файла;
+- рендерит Markdown так же, как лента сообщений OpenCode;
+- позволяет редактировать и сохранять файл;
+- поддерживает `Preview`, `Revert`, `Reload`;
+- читает и пишет только `.md`, `.markdown`, `.mdx`, `.mdown`, `.mkd` внутри
+  каталога сессии; лимит — 4 МБ на файл.
 
 ## Проверка
 
-```bash
-# сервер
-python wgsl-viz/server/server.py
-curl -s http://127.0.0.1:8787/api/state?meta=1
-
-# плагины
-# OpenCode → Settings → Extensions → Plugins → Reload
-```
-
-В сессии должны быть доступны:
-
-- `wgslviz.push` и `wgslviz.status`;
-- панель **Markdown**;
-- индикатор квоты и `quota_status`;
-- команда `/visualize`.
+1. Перезапустите OpenCode или откройте
+   **Settings → Extensions → Plugins → Reload**.
+2. Палитра команд → **Open Markdown panel**.
+3. В боковой панели появится список `.md` файлов текущей сессии.
+4. Откройте файл, нажмите **Edit**, измените текст и **Save**.
 
 ## Безопасность
 
-- Не коммитить `service.json`, `auth.json`, токены и ключи.
-- Markdown-панель ограничена расширениями `.md`, `.markdown`, `.mdx`,
-  `.mdown`, `.mkd` и каталогом сессии; лимит 4 МБ.
-- Viz-сервер слушает только `127.0.0.1`.
-- Плагины выполняют локальный код; ставьте только те, которые понимаете.
-- Перед публикацией репозитория проверьте лицензии компонентов:
+- `service.json`, `auth.json`, токены и ключи не входят в папку.
+- Плагин ограничен каталогом сессии и расширениями Markdown.
+- Плагин выполняет локальный код; устанавливайте только проверенные версии.
+- Перед публичным распространением проверьте лицензию:
   [`NOTICE.md`](NOTICE.md).
 
 ## Лицензии
 
-`quota/` — сторонний пакет MIT. Исходники `md-viewer`, `wgsl-viz` и
-`skills/visualize` перенесены из личных проектов; в них не было файла
-лицензии. Перед публичным распространением добавьте лицензию или получите
-разрешение автора. Подробности — в [`NOTICE.md`](NOTICE.md).
+Исходники `md-viewer` перенесены из локального проекта, в котором не было
+файла лицензии. Перед публичным распространением добавьте лицензию или
+получите разрешение автора. Подробности — в [`NOTICE.md`](NOTICE.md).
