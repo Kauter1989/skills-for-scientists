@@ -8,7 +8,7 @@
 | Автор | OpenCode agent |
 | Дата начала | `2026-10-31` |
 | Дата снимка источников | `2026-10-31` |
-| Статус | `ready-for-review` |
+| Статус | `approved` |
 
 ## 1. Задача
 
@@ -111,11 +111,11 @@ spec-chain), реализовывать код, делать commit, push или
 ## 9. Что дальше
 
 - [x] Research Gate: 4 GitHub-аналога, 4 научных источника, 4 спецификации
-- [ ] Собран `docs/reviews/dev-feature-start.html`
-- [ ] Ревью проведено, статус `approved`
-- [ ] Создан каталог `dev/dev-feature-start/`
-- [ ] Ветка, brief и красный/зелёный гейты воспроизводятся
-- [ ] Обновлены `docs/skills-map.html` и `README.md`
+- [x] Собран `docs/reviews/dev-feature-start.html`
+- [x] Ревью проведено, статус `approved`
+- [x] Создан каталог `dev/dev-feature-start/`
+- [x] Ветка, brief и красный/зелёный гейты воспроизводятся
+- [x] Обновлены `docs/skills-map.html` и `README.md`
 
 ## 10. Источники
 

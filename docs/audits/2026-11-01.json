@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-01",
+  "scope": "all",
+  "root": ".",
+  "skills": 7,
+  "summary": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 2
+  },
+  "duplicates": [],
+  "coverage": {
+    "dev": 2,
+    "sci": 0,
+    "harness": 4,
+    "reports": 1
+  },
+  "findings": [
+    {
+      "severity": "minor",
+      "skill": "dev/dev-pr-report-html",
+      "rule": "legacy: нет metadata.contract",
+      "evidence": "frontmatter",
+      "recommendation": "перевести навык на контракт harness-skill-template"
+    },
+    {
+      "severity": "minor",
+      "skill": "reports/pptx-report",
+      "rule": "legacy: нет metadata.contract",
+      "evidence": "frontmatter",
+      "recommendation": "перевести навык на контракт harness-skill-template"
+    }
+  ]
+}
