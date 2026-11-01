@@ -100,6 +100,19 @@ cp -r reports/pptx-report ~/.config/opencode/skill/
 После установки проверьте, что `skill` tool находит навык. До установки
 можно читать `SKILL.md` и `references/` прямо из этого репозитория.
 
+## Плагины OpenCode
+
+`opencode-plugins/` — исходники и собранные артефакты плагинов, которые
+использовались в локальных сессиях: Markdown-панель, WGSL Viz, квота и
+навык `visualize`.
+
+- обзор: [`opencode-plugins/README.md`](opencode-plugins/README.md);
+- установка на другую машину: [`opencode-plugins/INSTALL.md`](opencode-plugins/INSTALL.md);
+- конфигурация без секретов: [`opencode-plugins/config/`](opencode-plugins/config/);
+- лицензии и происхождение: [`opencode-plugins/NOTICE.md`](opencode-plugins/NOTICE.md).
+
+Секреты, `auth.json` и локальный `service.json` в репозиторий не входят.
+
 ## Структура
 
 ```
@@ -166,6 +179,15 @@ skills/
 │       ├── scripts/
 │       ├── templates/
 │       └── examples/
+├── opencode-plugins/          плагины и инструкции для OpenCode
+│   ├── README.md
+│   ├── INSTALL.md
+│   ├── NOTICE.md
+│   ├── md-viewer/
+│   ├── wgsl-viz/
+│   ├── quota/
+│   ├── skills/visualize/
+│   └── commands/visualize.md
 ├── reports/                   отчётность, без префикса
 │   └── pptx-report/
 │       ├── SKILL.md

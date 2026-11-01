@@ -1,0 +1,8 @@
+node_modules/
+**/node_modules/
+*.log
+*.tsbuildinfo
+.DS_Store
+wgsl-viz/server/current.json
+wgsl-viz/server/files/
+wgsl-viz/volumes/
