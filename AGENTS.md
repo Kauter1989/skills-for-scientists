@@ -275,17 +275,12 @@ gh pr checks --watch
 
 Текущая очередь dev (D1 `dev-feature-start` реализован):
 
-1. `dev-specify`
-2. `dev-clarify`
-3. `dev-plan`
-4. `dev-tasks`
-5. `dev-analyze`
-6. `dev-spec-chain`
-7. `dev-repro-first`
-8. `dev-regression-guard`
-9. `dev-verification-live`
-10. `dev-milestone-audit`
-11. `dev-ship`
+1. `dev-spec-chain`
+2. `dev-repro-first`
+3. `dev-regression-guard`
+4. `dev-verification-live`
+5. `dev-milestone-audit`
+6. `dev-ship`
 
 Backlog (possible):
 

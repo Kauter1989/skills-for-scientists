@@ -118,7 +118,7 @@
   <header>
     <div class="kicker">План навыка · на ревью</div>
     <h1><code>dev-spec-chain</code></h1>
-    <p class="sub">Координирует стадии specify → clarify → plan → tasks → analyze: проверяет overview, порядок, артефакты и traceability.</p>
+    <p class="sub">Мета-навык: опрос → профиль репозитория → выбор подхода (spec-kit / OpenSpec / BMAD) → генерация цепочки stage-навыков с гейтами.</p>
     <div class="chips">
       <span class="chip">Домен: <b>dev</b></span>
       <span class="chip">Приоритет: <b>P0</b></span>
@@ -130,7 +130,7 @@
 
     <div class="callout">
       <b>Запрос решения</b>
-      <p>Утвердить координатор и набор stage-навыков: <code>dev-specify</code>, <code>dev-clarify</code>, <code>dev-plan</code>, <code>dev-tasks</code>, <code>dev-analyze</code>. Координатор не пишет содержание стадий. После approved — реализация стадий, затем координатора.</p>
+      <p>Утвердить мета-навык: опрос, профиль репозитория, матрицу выбора подхода и генерацию цепочки навыков в <code>.opencode/skill/</code> с манифестом <code>.opencode/spec-chain.yml</code> и HTML-планом до применения.</p>
     </div>
   </header>
 
@@ -140,15 +140,15 @@
       <h2>Проблема и границы</h2>
     </div>
     <div class="body">
-      <p>Один навык не может одновременно быть specify, plan, tasks и analyze: триггеры смешиваются, гейты размываются, а файл превращается в монолит. В spec-kit и аналогах каждая стадия — отдельный навык. Нужен тонкий координатор и отдельные stage-навыки.</p>
+      <p>Один универсальный chain не подходит всем репозиториям: greenfield и brownfield требуют разных подходов, а гейты зависят от команды и compliance. Spec-kit лучше для greenfield, OpenSpec — для изменений в существующем коде, BMAD — для ролевых процессов. Нужен мета-навык, который выбирает и генерирует цепочку под репозиторий.</p>
       <div class="grid2">
         <div class="box">
           <h3>Входит в задачу</h3>
-          <ul><li>проверка overview, порядок стадий, артефакты, traceability US/B/F/U → REQ/SC/T, отчёт координатора.</li></ul>
+          <ul><li>опрос, профиль репозитория, матрица подходов, генерация stage-навыков, манифест, HTML-утверждение и проверка chain.</li></ul>
         </div>
         <div class="box">
           <h3>Не входит</h3>
-          <ul><li>написание spec/plan/tasks, создание ветки и brief, код, commit, push и merge.</li></ul>
+          <ul><li>выполнение стадий за сгенерированные навыки, написание кода, commit, push и merge.</li></ul>
         </div>
       </div>
     </div>
@@ -205,35 +205,45 @@
       <h2>Синтез и предлагаемый дизайн</h2>
     </div>
     <div class="body">
-      <p>Аналоги дают артефакты цепочки и шаблоны, но не проверяют, что задачи привязаны к stories и что тестовые задачи идут раньше implementation. Исследования добавляют: ambiguity и requirements smells вызывают переделки, раннее обнаружение дешевле, if-then задачи проверяемы. Поэтому каждая стадия получает отдельный навык, а координатор проверяет порядок и артефакты.</p>
+      <p>Аналоги дают готовые цепочки, но заточены под разные профили: spec-kit — greenfield, OpenSpec — изменения в существующем коде, BMAD — ролевые процессы. Исследования добавляют требования к ambiguity, traceability и тестам до кода. Поэтому мета-навык выбирает подход и генерирует stage-навыки с гейтами под конкретный репозиторий.</p>
       <div class="flow">
-        <span class="step hot">Overview</span><span class="arrow">→</span>
-        <span class="step">dev-specify</span><span class="arrow">→</span>
-        <span class="step">dev-clarify</span><span class="arrow">→</span>
-        <span class="step">dev-plan</span><span class="arrow">→</span>
-        <span class="step">dev-tasks</span><span class="arrow">→</span>
-        <span class="step">dev-analyze</span><span class="arrow">→</span>
-        <span class="step">dev-implement*</span>
+        <span class="step hot">Опрос</span><span class="arrow">→</span>
+        <span class="step">Профиль</span><span class="arrow">→</span>
+        <span class="step">Подход</span><span class="arrow">→</span>
+        <span class="step">Генерация chain</span><span class="arrow">→</span>
+        <span class="step">HTML-план</span><span class="arrow">→</span>
+        <span class="step">Apply</span><span class="arrow">→</span>
+        <span class="step">Проверка</span>
       </div>
       <div class="grid2">
         <div class="box">
           <h3>Вход</h3>
-          <p>Утверждённый overview.md с US/B/F/U, пункт плана и конституция/ограничения.</p>
+          <p>Репозиторий, существующие спеки и тесты, greenfield/brownfield, роли, compliance, стек и желаемая строгость гейтов.</p>
         </div>
         <div class="box">
           <h3>Выход</h3>
-          <p>Отчёт координатора о порядке и артефактах. Артефакты стадий создают <code>dev-specify</code>, <code>dev-clarify</code>, <code>dev-plan</code>, <code>dev-tasks</code> и <code>dev-analyze</code>.</p>
+          <p><code>.opencode/spec-chain.yml</code>, сгенерированные <code>.opencode/skill/&lt;stage&gt;/SKILL.md</code> и <code>spec-chain-plan.html</code> со статусом <code>approved</code>.</p>
         </div>
       </div>
-      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты координатора</h3>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Выбор подхода</h3>
+      <table>
+        <thead><tr><th>Профиль</th><th>Подход</th><th>Почему</th></tr></thead>
+        <tbody>
+          <tr><td>Greenfield, стабильные требования</td><td>spec-kit</td><td>полный spec-first с нуля</td></tr>
+          <tr><td>Brownfield, изменения в коде</td><td>OpenSpec</td><td>spec deltas и инкрементальные изменения</td></tr>
+          <tr><td>Много ролей, enterprise</td><td>BMAD</td><td>story-файлы и разделение ролей</td></tr>
+          <tr><td>Малая команда, лёгкий процесс</td><td>superpowers / minimal</td><td>дизайн без тяжёлой церемонии</td></tr>
+        </tbody>
+      </table>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты мета-навыка</h3>
       <ul>
-        <li><code>SKILL.md</code> — триггеры, порядок, границы</li>
-        <li><code>references/</code> — контракт stage-навыков и гейтов</li>
-        <li><code>scripts/</code> — check_spec_chain.py</li>
-        <li><code>examples/</code> — фича с полной цепочкой</li>
-        <li>отчёт <code>check_spec_chain.py</code> — достаточно вместо отдельного <code>analysis.md</code></li>
+        <li><code>SKILL.md</code> — опрос, матрица подходов, генерация, границы</li>
+        <li><code>references/approach-selection.md</code> — сравнение spec-kit, OpenSpec, BMAD, superpowers</li>
+        <li><code>templates/</code> — манифест chain и шаблон stage-навыка</li>
+        <li><code>scripts/</code> — generate_chain.py, check_spec_chain.py</li>
+        <li><code>examples/</code> — greenfield и brownfield профили</li>
       </ul>
-      <p class="small" style="margin-top:8px;color:var(--muted);font-size:11.5px">* <code>dev-implement</code> — отдельное решение: пересекается с red/green гейтами <code>dev-feature-start</code>.</p>
+      <p class="small" style="margin-top:8px;color:var(--muted);font-size:11.5px">Сгенерированные навыки живут в целевом репозитории, а не в библиотеке. Мета-навык не выполняет их стадии.</p>
     </div>
   </section>
 
@@ -247,9 +257,10 @@
         <thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead>
         <tbody>
           <tr><td>Свободные документы без ID</td><td>Быстро писать</td><td>Нет traceability и проверки</td><td>Задачи теряют stories</td></tr>
-          <tr><td>Spec-kit как есть</td><td>Готовая цепочка</td><td>Нет проверки тестовых задач и overview</td><td>Не связан с feature brief</td></tr>
-          <tr><td>Один монолитный навык</td><td>Одна команда на всё</td><td>Смешанные триггеры и слабые гейты</td><td>Не соответствует spec-kit</td></tr>
-          <tr><td>Только stage-навыки без координатора</td><td>Модульность</td><td>Порядок и пропуски не проверяются</td><td>Нет единого gate</td></tr>
+          <tr><td>Один универсальный chain</td><td>Одна цепочка на всё</td><td>Не подходит greenfield и brownfield одновременно</td><td>Разные гейты и профили</td></tr>
+          <tr><td>Spec-kit для всех</td><td>Полный spec-first</td><td>Тяжёл для brownfield и мелких изменений</td><td>Нет spec deltas</td></tr>
+          <tr><td>OpenSpec для всех</td><td>Удобен для изменений</td><td>Слаб для greenfield с нуля</td><td>Нет полной стартовой спецификации</td></tr>
+          <tr><td>BMAD для всех</td><td>Ролевая полнота</td><td>Избыточная церемония</td><td>Несоразмерно малым командам</td></tr>
         </tbody>
       </table>
     </div>
@@ -262,16 +273,16 @@
     </div>
     <div class="body">
       <div class="metric">
+        <span><b>Профиль определён до генерации</b> — 100 %</span>
+        <span><b>Подход соответствует профилю</b> — 100 %</span>
+        <span><b>Сгенерированные stage-навыки</b> — по профилю</span>
         <span><b>Traceability US → REQ → T</b> — 100 %</span>
-        <span><b>Открытые NEEDS CLARIFICATION</b> — 0</span>
-        <span><b>Тестовые задачи до implementation</b> — 100 %</span>
-        <span><b>Стадии пройдены по порядку</b> — 100 %</span>
       </div>
       <ol>
-        <li>Chain строится из утверждённого overview.md.</li>
-        <li>Каждая задача ссылается на story или требование.</li>
+        <li>Greenfield и brownfield получают разные chain и разные гейты.</li>
+        <li>HTML-план утверждён до генерации навыков.</li>
+        <li>Сгенерированные навыки проходят контракт <code>harness-skill-template</code>.</li>
         <li>Тестовые задачи идут раньше implementation; analyze проходит.</li>
-        <li>Координатор отказывается пропускать стадию или запускать implement без analyze.</li>
       </ol>
     </div>
   </section>
@@ -285,20 +296,21 @@
       <table>
         <thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead>
         <tbody>
-          <tr><td>Церемония ради церемонии</td><td>средняя</td><td>среднее</td><td>минимальные шаблоны и один анализ</td></tr>
-          <tr><td>Spec устаревает после изменений</td><td>средняя</td><td>высокое</td><td>повторный analyze и статус chain</td></tr>
-          <tr><td>Координатор дублирует stage-навыки</td><td>средняя</td><td>среднее</td><td>координатор только проверяет, не пишет</td></tr>
-          <tr><td>Stage-навыки расходятся по контракту</td><td>средняя</td><td>высокое</td><td>общий контракт и check_spec_chain.py</td></tr>
+          <tr><td>Неверный профиль репозитория</td><td>средняя</td><td>высокое</td><td>вопросы и подтверждение профиля в HTML-плане</td></tr>
+          <tr><td>Сгенерированные навыки расходятся с библиотекой</td><td>средняя</td><td>высокое</td><td>общий контракт и check_spec_chain.py</td></tr>
+          <tr><td>Избыточная генерация для малой команды</td><td>средняя</td><td>среднее</td><td>выбор lightweight и минимальный набор стадий</td></tr>
+          <tr><td>Церемония ради церемонии</td><td>средняя</td><td>среднее</td><td>профиль и гейты под репозиторий</td></tr>
         </tbody>
       </table>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Решения ревью</h3>
       <ol>
-        <li>Стадии: <code>dev-specify</code>, <code>dev-clarify</code>, <code>dev-plan</code>, <code>dev-tasks</code>, <code>dev-analyze</code>; <code>dev-implement</code> — отдельное решение.</li>
-        <li>Координатор <code>dev-spec-chain</code> проверяет порядок и артефакты, но не пишет содержание стадий.</li>
-        <li>Chain хранится в <code>docs/features/&lt;slug&gt;/</code> рядом с <code>overview.md</code>.</li>
-        <li>Отдельный <code>analysis.md</code> не нужен: достаточно отчёта <code>check_spec_chain.py</code>.</li>
-        <li>Открытые <code>[NEEDS CLARIFICATION]</code> в plan и tasks запрещены.</li>
-        <li>Тестовые задачи идут раньше implementation; иначе chain не проходит.</li>
+        <li>Профиль: greenfield / brownfield, размер изменений, роли, compliance, стек.</li>
+        <li>Подход: greenfield → spec-kit; brownfield → OpenSpec; enterprise → BMAD; малая команда → lightweight.</li>
+        <li>Генерация: <code>.opencode/skill/&lt;stage&gt;/SKILL.md</code> и манифест <code>.opencode/spec-chain.yml</code>.</li>
+        <li>HTML-план <code>spec-chain-plan.html</code> утверждается до генерации.</li>
+        <li>Артефакты стадий — в <code>docs/features/&lt;slug&gt;/</code>; отдельный <code>analysis.md</code> не нужен.</li>
+        <li>Тестовые задачи <code>T-TEST-*</code> раньше <code>T-IMPL-*</code>.</li>
+        <li>Мета-навык не выполняет стадии — это делают сгенерированные навыки.</li>
       </ol>
     </div>
   </section>

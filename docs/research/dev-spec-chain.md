@@ -12,24 +12,35 @@
 
 ## 1. Задача
 
-Координировать цепочку спецификаций: проверить `overview.md`, запустить
-стадии `specify → clarify → plan → tasks → analyze → implement` в нужном
-порядке и проверить артефакты. Координатор не пишет содержание стадий: это
-делают отдельные навыки.
+Мета-навык для конкретного репозитория: провести опрос, определить профиль
+(greenfield / brownfield, размер изменений, роли, compliance, стек), выбрать
+подход из аналогов и **сгенерировать цепочку stage-навыков** с гейтами под
+этот репозиторий.
 
-Стадии:
+Ключевые принципы, которые наследует сгенерированная цепочка:
 
-| Стадия | Навык | Артефакт |
+- одна стадия — один навык;
+- artifact-driven gates: `spec.md → plan.md → tasks.md → report`;
+- traceability `US → REQ → T`;
+- тестовые задачи раньше implementation;
+- approval mode `user` / `autonomous`;
+- артефакты в `docs/features/<slug>/`.
+
+Выбор подхода (предварительно):
+
+| Профиль | Ближе к | Почему |
 |---|---|---|
-| Specify | `dev-specify` | `spec.md` |
-| Clarify | `dev-clarify` | обновлённый `spec.md` |
-| Plan | `dev-plan` | `plan.md` |
-| Tasks | `dev-tasks` | `tasks.md` |
-| Analyze | `dev-analyze` | отчёт проверки |
-| Implement | `dev-implement` | код и зелёный прогон |
+| Greenfield, стабильные требования | spec-kit | полный spec-first с нуля |
+| Brownfield, изменения в существующем коде | OpenSpec | spec deltas и изменения |
+| Много ролей и enterprise-процесс | BMAD | story-файлы и роли |
+| Малая команда, лёгкий процесс | superpowers / minimal | дизайн без тяжёлой церемонии |
 
-**Не входит в задачу:** писать spec/plan/tasks, создавать ветку и brief (это
-`dev-feature-start`), писать код, делать commit, push или merge.
+**Не входит в задачу:** выполнять стадии за сгенерированные навыки, писать
+код, делать commit, push или merge.
+
+Сгенерированные навыки живут в **целевом репозитории**, а не в этой
+библиотеке: `.opencode/skill/<stage>/SKILL.md` и манифест
+`.opencode/spec-chain.yml`.
 
 ## 2. Поисковые запросы
 
@@ -78,30 +89,31 @@
 
 | Решение | Основание | Альтернатива | Почему не она |
 |---|---|---|---|
-| Читать `overview.md` как источник stories/tests | dev-feature-start | заново придумывать stories | расхождение с brief |
-| ID `REQ-*`, `SC-*`, `T-*` и ссылки на `US-*` | Boehm; практика | свободный текст | нет traceability |
-| Clarify до plan | Femmer | сразу plan | ambiguity переносится в код |
-| Plan с Constitution Check | spec-kit | план без ограничений | нарушения всплывают поздно |
-| Tasks: тестовые задачи раньше implementation | Rafique; dev-feature-start | код, потом тесты | тесты подгоняются под код |
-| Analyze перед implement | Boehm; Femmer | пропустить анализ | пропуски и дубли |
-| Одна стадия — один навык | spec-kit; OpenSpec | один монолитный навык | смешиваются триггеры и гейты |
-| Координатор не пишет содержание стадий | spec-kit | всё в одном | дублирование и дрейф |
-| Не писать код в координаторе | практика | всё в одном | смешиваются план и реализация |
+| Классифицировать репозиторий до выбора подхода | OpenSpec; spec-kit | одна цепочка для всех | greenfield и brownfield различаются |
+| Greenfield → spec-kit, brownfield → OpenSpec | spec-kit; OpenSpec | всегда spec-kit | spec deltas лучше для существующего кода |
+| Генерировать stage-навыки под репозиторий | spec-kit; harness-skill-template | держать один универсальный | разные гейты и профили |
+| Артефакты в `docs/features/<slug>/` | dev-feature-start | общий `specs/` | привязка к фиче |
+| Approval mode наследуется из overview | dev-feature-start | всегда user | автономный режим уже согласован |
+| Тестовые задачи раньше implementation | Rafique; dev-feature-start | код, потом тесты | тесты подгоняются под код |
+| Мета-навык не выполняет стадии | практика | всё в одном | смешиваются генерация и работа |
 
 ## 7. Решения ревью
 
-1. **Хранение:** `docs/features/<slug>/` рядом с `overview.md`.
-2. **Analysis:** отдельный `analysis.md` не нужен; достаточно отчёта
-   `check_spec_chain.py`.
-3. **Clarification:** открытые `[NEEDS CLARIFICATION]` в plan и tasks
-   запрещены.
-4. **Тестовые задачи:** префикс `T-TEST-*`, идут раньше `T-IMPL-*`.
-5. **Утверждение:** chain утверждается в том же режиме, что и stories:
-   `user` или `autonomous`, с записью в overview.
-6. **Стадии:** `dev-specify`, `dev-clarify`, `dev-plan`, `dev-tasks`,
-   `dev-analyze`; `dev-implement` — отдельное решение.
-7. **Координатор:** `dev-spec-chain` проверяет порядок и артефакты, но не
-   пишет spec/plan/tasks.
+1. **Профиль репозитория:** greenfield / brownfield, размер изменений,
+   роли, compliance, стек — определяются опросом.
+2. **Подход:** greenfield → spec-kit; brownfield → OpenSpec; роли и
+   enterprise → BMAD; малая команда → lightweight.
+3. **Генерация:** stage-навыки создаются в целевом репозитории:
+   `.opencode/skill/<stage>/SKILL.md`.
+4. **Манифест:** `.opencode/spec-chain.yml` с профилем, подходом,
+   стадиями и гейтами.
+5. **Утверждение:** HTML-план `spec-chain-plan.html` до генерации; статус
+   `approved`.
+6. **Артефакты:** `docs/features/<slug>/`; `analysis.md` не нужен —
+   достаточно отчёта `check_spec_chain.py`.
+7. **Тестовые задачи:** `T-TEST-*` раньше `T-IMPL-*`.
+8. **Мета-навык не выполняет стадии** — это делают сгенерированные
+   навыки.
 
 ## 8. Что дальше
 
@@ -109,8 +121,8 @@
 - [ ] Собран `docs/reviews/dev-spec-chain.html`
 - [ ] Ревью проведено, статус `approved`
 - [ ] Создан каталог `dev/dev-spec-chain/`
-- [ ] Стадии `dev-specify`, `dev-clarify`, `dev-plan`, `dev-tasks`, `dev-analyze` реализованы
-- [ ] Chain проверяется на тестовой фиче
+- [ ] Опрос и выбор подхода воспроизводятся
+- [ ] Генерация chain и `check_spec_chain.py` проверены
 - [ ] Обновлены `docs/skills-map.html` и `README.md`
 
 ## 9. Источники
