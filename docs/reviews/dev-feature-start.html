@@ -212,6 +212,7 @@
         <span class="step">User stories</span><span class="arrow">→</span>
         <span class="step">Behavioral tests</span><span class="arrow">→</span>
         <span class="step">Functional tests</span><span class="arrow">→</span>
+        <span class="step">Unit tests*</span><span class="arrow">→</span>
         <span class="step">Red</span><span class="arrow">→</span>
         <span class="step">Implementation</span><span class="arrow">→</span>
         <span class="step">Green</span>
@@ -219,11 +220,11 @@
       <div class="grid2">
         <div class="box">
           <h3>Вход</h3>
-          <p>Slug, цель, пункт плана или обоснование, владелец, основная ветка и режим утверждения: <code>user</code> или <code>autonomous</code>.</p>
+          <p>Slug, цель, пункт плана или обоснование, владелец, основная ветка, режим утверждения <code>user</code> / <code>autonomous</code> и правило покрытия, если оно есть.</p>
         </div>
         <div class="box">
           <h3>Выход</h3>
-          <p>Ветка feature/&lt;slug&gt;, <code>overview.md</code> с US/B/F и статусами, evidence красного и зелёного гейтов.</p>
+          <p>Ветка feature/&lt;slug&gt;, <code>overview.md</code> с US/B/F/U и статусами, evidence красного и зелёного гейтов.</p>
         </div>
       </div>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
@@ -241,11 +242,13 @@
           <tr><td>User stories</td><td>US-* с критериями приёмки</td><td>пользователь или autonomous</td><td>статус, дата, режим</td></tr>
           <tr><td>Behavioral tests</td><td>B-* привязаны к US-*</td><td>пользователь или autonomous</td><td>traceability US → B</td></tr>
           <tr><td>Functional tests</td><td>F-* и граничные случаи</td><td>пользователь или autonomous</td><td>traceability US → F</td></tr>
+          <tr><td>Unit tests*</td><td>U-* при наличии правила покрытия</td><td>пользователь или autonomous</td><td>traceability US → U</td></tr>
           <tr><td>Red gate</td><td>тесты реализованы, прогон падает</td><td>—</td><td>команда и список падений</td></tr>
           <tr><td>Implementation</td><td>задачи T-*</td><td>—</td><td>код после red</td></tr>
           <tr><td>Green gate</td><td>полный прогон проходит</td><td>—</td><td>команда и результат</td></tr>
         </tbody>
       </table>
+      <p class="small" style="margin-top:8px;color:var(--muted);font-size:11.5px">* Юнит-тесты обязательны, если в репозитории есть правило покрытия: <code>fail_under</code>, <code>coverageThreshold</code> или аналог. Иначе в brief фиксируется <code>not required</code>.</p>
     </div>
   </section>
 
@@ -278,13 +281,14 @@
         <span><b>Фичи с привязкой к плану</b> — 100 %</span>
         <span><b>Ветки от устаревшей основы</b> — 0</span>
         <span><b>Stories и тесты утверждены до кода</b> — 100 %</span>
+        <span><b>Unit tests при правиле покрытия</b> — 100 %</span>
         <span><b>Red gate до реализации</b> — 100 %</span>
       </div>
       <ol>
         <li>На чистом репозитории создаётся ветка и overview.md.</li>
         <li>Грязное дерево и отсутствие плана дают отказ или требуют обоснования.</li>
         <li>Повторный запуск не перезаписывает brief без --force.</li>
-        <li>Overview содержит US/B/F, режим утверждения и evidence красного гейта.</li>
+        <li>Overview содержит US/B/F/U при правиле покрытия, режим утверждения и evidence красного гейта.</li>
         <li>После реализации полный прогон зелёный; регрессии не сломаны.</li>
       </ol>
     </div>
@@ -304,13 +308,14 @@
           <tr><td>Тесты написаны под реализацию</td><td>средняя</td><td>высокое</td><td>тесты до кода и красный гейт</td></tr>
           <tr><td>Автономное утверждение без evidence</td><td>средняя</td><td>среднее</td><td>критерии, дата и ссылка на решение</td></tr>
           <tr><td>Stories изменились после red</td><td>средняя</td><td>высокое</td><td>повторное утверждение и новый red</td></tr>
+          <tr><td>Юнит-тесты пишутся только ради процента</td><td>средняя</td><td>среднее</td><td>U-* привязаны к US-* или модулю</td></tr>
         </tbody>
       </table>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Обязательные требования</h3>
       <ol>
         <li>Brief хранится в <code>docs/features/&lt;slug&gt;/overview.md</code>.</li>
         <li>Режим утверждения <code>user</code> или <code>autonomous</code> фиксируется в brief.</li>
-        <li>Stories, behavioral и functional tests утверждаются до реализации тестов.</li>
+        <li>Stories, behavioral, functional и unit-тесты (при правиле покрытия) утверждаются до реализации тестов.</li>
         <li>Красный гейт подтверждается командой и списком падений.</li>
         <li>Зелёный гейт — полный прогон, а не только новые тесты.</li>
       </ol>

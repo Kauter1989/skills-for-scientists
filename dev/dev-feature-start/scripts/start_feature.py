@@ -45,6 +45,28 @@ def human_title(slug: str) -> str:
     return slug.replace("-", " ").strip().capitalize()
 
 
+def detect_coverage(root: Path) -> str | None:
+    """Найти правило покрытия в типовых конфигах."""
+    checks = {
+        "pyproject.toml": ("fail_under", "[tool.coverage"),
+        "setup.cfg": ("fail_under", "[coverage:report]"),
+        ".coveragerc": ("fail_under",),
+        "tox.ini": ("fail_under",),
+        "package.json": ("coverageThreshold", "\"nyc\"", "\"c8\""),
+        "jest.config.js": ("coverageThreshold",),
+        "jest.config.ts": ("coverageThreshold",),
+        "vitest.config.ts": ("coverage", "thresholds"),
+    }
+    for name, needles in checks.items():
+        path = root / name
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if any(needle in text for needle in needles):
+            return name
+    return None
+
+
 def render(template: str, values: dict[str, str]) -> str:
     for key, value in values.items():
         template = template.replace("{{" + key + "}}", value)
@@ -60,6 +82,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--plan-item", help="пункт плана или цели")
     parser.add_argument("--justification", help="обоснование, если фичи нет в плане")
     parser.add_argument("--approval-mode", choices=("user", "autonomous"), default="user")
+    parser.add_argument("--unit-tests", choices=("auto", "required", "not-required"), default="auto")
     parser.add_argument("--no-fetch", action="store_true")
     parser.add_argument("--allow-dirty", action="store_true")
     parser.add_argument("--force", action="store_true", help="перезаписать overview.md")
@@ -102,9 +125,21 @@ def main(argv: list[str] | None = None) -> int:
         fail(f"база не найдена: {base_ref}")
 
     plan_item = args.plan_item or f"вне плана: {args.justification}"
+    coverage_rule = detect_coverage(root)
+    if args.unit_tests == "required":
+        unit_tests = "required"
+        coverage_note = coverage_rule or "задано пользователем"
+    elif args.unit_tests == "not-required":
+        unit_tests = "not required"
+        coverage_note = coverage_rule or "правило покрытия не найдено"
+    else:
+        unit_tests = "required" if coverage_rule else "not required"
+        coverage_note = coverage_rule or "правило покрытия не найдено"
+
     print(f"branch: {branch}")
     print(f"base: {base_ref}")
     print(f"brief: {overview}")
+    print(f"unit tests: {unit_tests} ({coverage_note})")
     if args.dry_run:
         print("dry-run: изменения не внесены")
         return 0
@@ -118,6 +153,9 @@ def main(argv: list[str] | None = None) -> int:
         "PLAN_ITEM": plan_item,
         "APPROVAL_MODE": args.approval_mode,
         "DATE": dt.date.today().isoformat(),
+        "UNIT_TESTS": unit_tests,
+        "COVERAGE_RULE": coverage_note,
+        "UNIT_TESTS_STATUS": "draft" if unit_tests == "required" else "not required",
     }
     overview.parent.mkdir(parents=True, exist_ok=True)
     overview.write_text(render(TEMPLATE.read_text(encoding="utf-8"), values), encoding="utf-8")

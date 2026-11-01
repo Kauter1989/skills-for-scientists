@@ -55,6 +55,7 @@ class StartFeatureTest(unittest.TestCase):
             self.assertIn("US-1", text)
             self.assertIn("Красный гейт", text)
             self.assertIn("user", text)
+            self.assertIn("not required", text)
 
     def test_refuses_duplicate_and_dirty_tree(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -79,6 +80,25 @@ class StartFeatureTest(unittest.TestCase):
                 "--plan-item", "P1", "--no-fetch", cwd=root,
             )
             self.assertNotEqual(dirty.returncode, 0)
+
+    def test_detects_coverage_rule(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            make_repo(root)
+            (root / "pyproject.toml").write_text(
+                "[tool.coverage.report]\nfail_under = 80\n", encoding="utf-8"
+            )
+            git(root, "add", "pyproject.toml")
+            git(root, "commit", "-m", "coverage rule")
+            result = run(
+                str(SCRIPT), "covered-feature", "--root", str(root),
+                "--plan-item", "P1", "--no-fetch", cwd=root,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            brief = root / "docs" / "features" / "covered-feature" / "overview.md"
+            text = brief.read_text(encoding="utf-8")
+            self.assertIn("Требуются: `required`", text)
+            self.assertIn("pyproject.toml", text)
 
     def test_dry_run_does_not_change_repo(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
