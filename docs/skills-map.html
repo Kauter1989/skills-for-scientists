@@ -21,6 +21,12 @@
     --green: #1f7a4d;
     --amber: #a96500;
     --red: #b42318;
+    --cat-meta: #1f7a4d;
+    --cat-meta-soft: #e7f4ec;
+    --cat-proposed: #6b7280;
+    --cat-proposed-soft: #eef0f3;
+    --cat-aux: #a96500;
+    --cat-aux-soft: #fbf0dc;
     --radius: 14px;
     --shadow: 0 1px 2px rgba(20,24,31,.04), 0 10px 28px rgba(20,24,31,.05);
     --mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
@@ -118,6 +124,9 @@
   }
   .fstep.implemented { background: #e6efee; border-color: #b8d0cd; color: #174a47; font-weight: 600; }
   .fstep.new { background: #fbf0dc; border-color: #ead3a8; color: #8a5300; font-weight: 600; }
+  .fstep.meta-existing { background: var(--cat-meta-soft); border-color: #b8d0cd; color: #174a47; font-weight: 600; }
+  .fstep.meta-proposed { background: var(--cat-proposed-soft); border-color: #c4cad2; color: #4b5563; font-weight: 600; border-style: dashed; }
+  .fstep.auxiliary { background: var(--cat-aux-soft); border-color: #ead3a8; color: #8a5300; font-weight: 600; }
   .farrow { color: var(--line-strong); font-size: 12px; }
 
   .matrix-wrap { overflow-x: auto; }
@@ -134,7 +143,16 @@
   .lvl { display: inline-block; font-size: 8.5px; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; border-radius: 3px; padding: 2px 5px; white-space: nowrap; }
   .lvl.meta { background: #e6efee; color: var(--accent); }
   .lvl.candidate { background: #fbf0dc; color: var(--amber); }
+  .lvl.proposed { background: var(--cat-proposed-soft); color: var(--cat-proposed); }
+  .lvl.auxiliary { background: var(--cat-aux-soft); color: var(--cat-aux); }
   .lvl.watch { background: #eef0f3; color: var(--muted); }
+  .meta-summary { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin: 4px 0 16px; }
+  .meta-summary div { border: 1px solid var(--line); border-radius: 9px; padding: 11px 13px; background: #fff; }
+  .meta-summary b { display: block; font-size: 24px; line-height: 1.1; }
+  .meta-summary span { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .meta-summary .m-meta { border-left: 4px solid var(--cat-meta); }
+  .meta-summary .m-proposed { border-left: 4px solid var(--cat-proposed); }
+  .meta-summary .m-aux { border-left: 4px solid var(--cat-aux); }
   table.matrix { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 880px; }
   table.matrix th, table.matrix td { border-bottom: 1px solid var(--line); }
   table.matrix thead th {
@@ -167,6 +185,9 @@
   .badge-mini.harness { background: #eef0f3; color: var(--harness); }
   .badge-mini.meta { background: #e6efee; color: var(--accent); border: 1px solid #b8d0cd; }
   .badge-mini.meta-candidate { background: #fff8ea; color: var(--amber); border: 1px dashed #ead3a8; }
+  .badge-mini.cat-meta { background: var(--cat-meta-soft); color: var(--cat-meta); border: 1px solid #b8d0cd; }
+  .badge-mini.cat-proposed { background: var(--cat-proposed-soft); color: var(--cat-proposed); border: 1px dashed #c4cad2; }
+  .badge-mini.cat-aux { background: var(--cat-aux-soft); color: var(--cat-aux); border: 1px solid #ead3a8; }
 
   .cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
   .card {
@@ -192,8 +213,12 @@
   .tag.p2 { background: #eef0f3; color: var(--muted); }
   .tag.meta { background: #e6efee; color: var(--accent); border: 1px solid #b8d0cd; }
   .tag.meta-candidate { background: #fff8ea; color: var(--amber); border: 1px dashed #ead3a8; }
-  .card[data-meta="meta"] { background: #fbfdfc; }
-  .card[data-meta="candidate"] { background: #fffdf8; }
+  .tag.cat-meta { background: var(--cat-meta-soft); color: var(--cat-meta); border: 1px solid #b8d0cd; }
+  .tag.cat-proposed { background: var(--cat-proposed-soft); color: var(--cat-proposed); border: 1px dashed #c4cad2; }
+  .tag.cat-aux { background: var(--cat-aux-soft); color: var(--cat-aux); border: 1px solid #ead3a8; }
+  .card[data-category="meta-existing"] { border-left-color: var(--cat-meta); background: #fbfdfc; }
+  .card[data-category="meta-proposed"] { border-left-color: var(--cat-proposed); border-left-style: dashed; background: #fbfbfc; }
+  .card[data-category="auxiliary"] { border-left-color: var(--cat-aux); background: #fffdf8; }
   .meta-why { font-size: 10.5px; color: #1f5f5b; background: #f2f7f6; border-radius: 6px; padding: 5px 7px; line-height: 1.4; }
   .card h3 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
   .card h3 code { font-family: var(--mono); font-size: 13px; }
@@ -277,28 +302,27 @@
 <main class="wrap">
   <header class="hero">
     <div class="kicker">Библиотека навыков · карта применения</div>
-    <h1>От задачи до отчёта:<br>что делает каждый скилл</h1>
+    <h1>Мета-навыки:<br>опрос → подход → генерация</h1>
     <p class="lead">
-      Скиллы сгруппированы по блокам разработки, науки и отчётности.
-      Префикс имени показывает домен: <code>dev-</code>, <code>sci-</code>,
-      <code>harness-</code>; отчётные навыки лежат в <code>reports/</code>.
-      Сплошная рамка — уже в репозитории, пунктир — предложено. Приоритет P0
-      означает, что без скилла процесс теряет проверяемое звено. Мета-навыки
-      отмечены значком <b>мета</b>: они опрашивают контекст и генерируют
-      процесс, а не фиксируют его.
+      Карта разделена на три категории. <b>Зелёные</b> — мета-навыки уже в
+      репозитории, <b>серые</b> — мета-навыки proposed, <b>жёлтые</b> —
+      вспомогательные переносимые навыки. Мета-навык опрашивает контекст,
+      выбирает подход и генерирует процесс под репозиторий или поле.
+      Вспомогательный решает одну переносимую задачу. Сплошная рамка — навык
+      уже в репозитории, пунктир — proposed.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">9</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">33</b><span>предложено</span></div>
-      <div class="hstat"><b id="stat-meta">3</b><span>мета-навыка</span></div>
-      <div class="hstat"><b id="stat-candidates">11</b><span>кандидатов в мета</span></div>
+      <div class="hstat"><b id="stat-meta-existing" style="color:var(--cat-meta)">3</b><span>мета в репозитории</span></div>
+      <div class="hstat"><b id="stat-meta-proposed" style="color:var(--cat-proposed)">11</b><span>мета proposed</span></div>
+      <div class="hstat"><b id="stat-auxiliary" style="color:var(--cat-aux)">28</b><span>вспомогательные</span></div>
+      <div class="hstat"><b id="stat-total">42</b><span>всего навыков</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
     </div>
     <div class="legend">
-      <span><i class="lg-swatch solid"></i> реализовано</span>
-      <span><i class="lg-swatch dashed"></i> предложено</span>
+      <span><i class="lg-swatch" style="background:var(--cat-meta);border-color:var(--cat-meta)"></i> мета в репозитории</span>
+      <span><i class="lg-swatch dashed" style="border-color:var(--cat-proposed)"></i> мета proposed</span>
+      <span><i class="lg-swatch" style="background:var(--cat-aux);border-color:var(--cat-aux)"></i> вспомогательные</span>
       <span><i class="dot"></i> применяется в блоке</span>
-      <span><i class="dot" style="background:#a96500"></i> кандидат в мета-навыки</span>
       <span>P0 — фундамент, P1 — следующий шаг, P2 — по мере надобности</span>
     </div>
   </header>
@@ -315,15 +339,16 @@
       <button class="chip-btn" data-domain="report" aria-pressed="false"><i class="c-dot" style="background:#a8622a"></i>Отчёты</button>
       <button class="chip-btn" data-domain="harness" aria-pressed="false"><i class="c-dot" style="background:#59636e"></i>Харнесс</button>
     </div>
+    <div class="chips" id="category-chips" aria-label="Фильтр по категории">
+      <button class="chip-btn" data-category="all" aria-pressed="true">Все категории</button>
+      <button class="chip-btn" data-category="meta-existing" aria-pressed="false"><i class="c-dot" style="background:#1f7a4d"></i>Мета в репозитории</button>
+      <button class="chip-btn" data-category="meta-proposed" aria-pressed="false"><i class="c-dot" style="background:#6b7280"></i>Мета proposed</button>
+      <button class="chip-btn" data-category="auxiliary" aria-pressed="false"><i class="c-dot" style="background:#a96500"></i>Вспомогательные</button>
+    </div>
     <div class="chips" id="status-chips" aria-label="Фильтр по статусу">
       <button class="chip-btn" data-status="all" aria-pressed="true">Все</button>
       <button class="chip-btn" data-status="existing" aria-pressed="false">В репозитории</button>
       <button class="chip-btn" data-status="proposed" aria-pressed="false">Предложено</button>
-    </div>
-    <div class="chips" id="meta-chips" aria-label="Фильтр по мета-навыкам">
-      <button class="chip-btn" data-meta="all" aria-pressed="true">Все типы</button>
-      <button class="chip-btn" data-meta="meta" aria-pressed="false">Мета</button>
-      <button class="chip-btn" data-meta="candidate" aria-pressed="false">Кандидаты</button>
     </div>
     <button class="reset" id="reset" type="button">Сбросить</button>
   </div>
@@ -342,7 +367,7 @@
   <section class="panel" id="flows">
     <div class="panel-head">
       <h2>Потоки</h2>
-      <p>Типовые последовательности; зелёным — уже есть, охра — предложено</p>
+      <p>Категории: зелёный — мета в репозитории, серый — мета proposed, жёлтый — вспомогательные</p>
     </div>
     <div class="panel-body">
       <div class="flows" id="flows-body"></div>
@@ -357,36 +382,45 @@
     </div>
     <div class="panel-body">
       <p class="count-line" style="margin-bottom:12px">
-        Мета-навык проходит четыре шага: опрос контекста, выбор подхода из альтернатив,
-        генерация артефактов или навыка в целевом репозитории и проверка инвариантов.
-        Кандидат отличается от готового мета-навыка тем, что его вариативность ещё
-        не подтверждена отдельным research/review.
+        Мета-навык проходит четыре шага: опрос контекста, выбор подхода из
+        альтернатив, генерация артефактов или навыка в целевом репозитории и
+        проверка инвариантов. Мета proposed — это гипотезы: их вариативность
+        ещё не подтверждена отдельным research/review.
       </p>
+      <div class="meta-summary">
+        <div class="m-meta"><b>3</b><span>мета в репозитории</span></div>
+        <div class="m-proposed"><b>11</b><span>мета proposed</span></div>
+        <div class="m-aux"><b>28</b><span>вспомогательные</span></div>
+      </div>
       <div class="meta-wrap">
         <table class="meta-table">
-          <thead><tr><th>Навык</th><th>Статус</th><th>Что опрашивает</th><th>Что генерирует</th><th>Уровень</th></tr></thead>
+          <thead><tr><th>Навык</th><th>Статус</th><th>Что опрашивает</th><th>Что генерирует</th><th>Категория</th></tr></thead>
           <tbody>
             <tr><td><code>/harness-init</code></td><td>в репозитории</td><td>репозиторий, стек, команда</td><td>scaffold, AGENTS.md, hooks, CI, workflow</td><td><span class="lvl meta">мета</span></td></tr>
             <tr><td><code>/dev-spec-chain</code></td><td>в репозитории</td><td>greenfield/brownfield, роли, стек</td><td>цепочка stage-навыков и manifest</td><td><span class="lvl meta">мета</span></td></tr>
             <tr><td><code>/dev-bug-processing</code></td><td>в репозитории</td><td>стек, тесты, трекер, окружение</td><td><code>dev-bug-process</code> + manifest</td><td><span class="lvl meta">мета</span></td></tr>
-            <tr><td><code>/dev-regression-guard</code></td><td>предложено</td><td>классы дефектов, тесты, CI</td><td>механизм защиты и запись в registry</td><td><span class="lvl candidate">кандидат</span></td></tr>
-            <tr><td><code>/dev-verification-live</code></td><td>предложено</td><td>поверхности приложения, окружение</td><td>harness живой проверки</td><td><span class="lvl candidate">кандидат</span></td></tr>
-            <tr><td><code>/dev-milestone-audit</code></td><td>предложено</td><td>риск, compliance, фаза</td><td>протокол аудита и чек-лист</td><td><span class="lvl candidate">кандидат</span></td></tr>
-            <tr><td><code>/dev-ship</code></td><td>предложено</td><td>ветвление, CI, merge policy</td><td>ship workflow под репозиторий</td><td><span class="lvl candidate">кандидат</span></td></tr>
-            <tr><td><code>/sci-experiment-plan</code></td><td>предложено</td><td>поле, ограничения, гипотеза</td><td>дизайн исследования и протокол</td><td><span class="lvl candidate">кандидат</span></td></tr>
-            <tr><td><code>/sci-stats-plan</code></td><td>предложено</td><td>дизайн, данные, предпосылки</td><td>план статистического анализа</td><td><span class="lvl candidate">кандидат</span></td></tr>
-            <tr><td><code>/dev-postmortem</code></td><td>предложено</td><td>инцидент, роли, процесс</td><td>формат разбора и действий</td><td><span class="lvl watch">возможный</span></td></tr>
-            <tr><td><code>/sci-stats-report</code></td><td>предложено</td><td>тип исследования, журнал</td><td>стандарт отчёта (CONSORT/STROBE/APA)</td><td><span class="lvl watch">возможный</span></td></tr>
-            <tr><td><code>/sci-literature-review</code></td><td>предложено</td><td>вопрос, базы, сроки</td><td>протокол обзора и таблица</td><td><span class="lvl watch">возможный</span></td></tr>
-            <tr><td><code>/sci-repro-run</code></td><td>предложено</td><td>стек, окружение, данные</td><td>рецепт воспроизведения и манифест</td><td><span class="lvl watch">возможный</span></td></tr>
-            <tr><td><code>/harness-analyze-codebase</code></td><td>предложено</td><td>репозиторий, язык, структура</td><td>стратегия карты и контекста</td><td><span class="lvl watch">возможный</span></td></tr>
+            <tr><td><code>/dev-regression-guard</code></td><td>предложено</td><td>классы дефектов, тесты, CI</td><td>механизм защиты и запись в registry</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/dev-verification-live</code></td><td>предложено</td><td>поверхности приложения, окружение</td><td>harness живой проверки</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/dev-milestone-audit</code></td><td>предложено</td><td>риск, compliance, фаза</td><td>протокол аудита и чек-лист</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/dev-ship</code></td><td>предложено</td><td>ветвление, CI, merge policy</td><td>ship workflow под репозиторий</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/sci-experiment-plan</code></td><td>предложено</td><td>поле, ограничения, гипотеза</td><td>дизайн исследования и протокол</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/sci-stats-plan</code></td><td>предложено</td><td>дизайн, данные, предпосылки</td><td>план статистического анализа</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/dev-postmortem</code></td><td>предложено</td><td>инцидент, роли, процесс</td><td>формат разбора и действий</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/sci-stats-report</code></td><td>предложено</td><td>тип исследования, журнал</td><td>стандарт отчёта (CONSORT/STROBE/APA)</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/sci-literature-review</code></td><td>предложено</td><td>вопрос, базы, сроки</td><td>протокол обзора и таблица</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/sci-repro-run</code></td><td>предложено</td><td>стек, окружение, данные</td><td>рецепт воспроизведения и манифест</td><td><span class="lvl proposed">proposed</span></td></tr>
+            <tr><td><code>/harness-analyze-codebase</code></td><td>предложено</td><td>репозиторий, язык, структура</td><td>стратегия карты и контекста</td><td><span class="lvl proposed">proposed</span></td></tr>
           </tbody>
         </table>
       </div>
       <p class="count-line" style="margin-top:12px">
-        Не мета: <code>dev-feature-start</code> — фиксированный intake; <code>harness-skill-template</code> —
-        контракт и валидатор; <code>harness-rule-to-mechanism</code> — трансляция правила;
-        <code>dev-scope-check</code> — gate; <code>pptx-report</code> — фиксированный формат.
+        Остальные 28 — вспомогательные переносимые навыки: фиксированные
+        проверки, отчёты, артефакты и операции. Примеры:
+        <code>dev-feature-start</code>, <code>dev-scope-check</code>,
+        <code>dev-adr</code>, <code>dev-release</code>,
+        <code>harness-skill-template</code>, <code>evidence-ledger</code>,
+        <code>technical-writing</code>, <code>pptx-report</code>.
+        Фильтр «Вспомогательные» показывает весь список.
       </p>
     </div>
   </section>
@@ -891,10 +925,23 @@
   ];
 
   var DOMAIN_LABEL = { dev: "разработка", science: "наука", report: "отчёты", harness: "харнесс" };
+  var CATEGORY_LABEL = {
+    "meta-existing": "мета в репозитории",
+    "meta-proposed": "мета proposed",
+    "auxiliary": "вспомогательные"
+  };
+  var CATEGORY_BADGE = { "meta-existing": "cat-meta", "meta-proposed": "cat-proposed", "auxiliary": "cat-aux" };
+  var CATEGORY_ORDER = ["meta-existing", "meta-proposed", "auxiliary"];
+
+  function categoryOf(s) {
+    if (s.metaSkill === "meta" && s.status === "existing") return "meta-existing";
+    if (s.metaSkill === "candidate") return "meta-proposed";
+    return "auxiliary";
+  }
   var BLOCK_LABEL = {};
   BLOCKS.forEach(function (b) { BLOCK_LABEL[b.id] = b.title; });
 
-  var state = { domain: "all", status: "all", meta: "all", block: null, q: "" };
+  var state = { domain: "all", status: "all", category: "all", block: null, q: "" };
 
   function $(sel) { return document.querySelector(sel); }
   function el(tag, attrs) {
@@ -919,8 +966,7 @@
   function matches(s) {
     if (state.domain !== "all" && s.domain !== state.domain) return false;
     if (state.status !== "all" && s.status !== state.status) return false;
-    if (state.meta === "meta" && s.metaSkill !== "meta") return false;
-    if (state.meta === "candidate" && s.metaSkill !== "candidate") return false;
+    if (state.category !== "all" && categoryOf(s) !== state.category) return false;
     if (state.block && s.blocks.indexOf(state.block) === -1) return false;
     if (state.q) {
       var hay = (s.name + " " + s.id + " " + s.sum + " " + s.blocks.map(function (b) { return BLOCK_LABEL[b]; }).join(" ")).toLowerCase();
@@ -1001,9 +1047,14 @@
     FLOWS.forEach(function (flow) {
       var line = el("div", { className: "flow-line" });
       flow.steps.forEach(function (step, i) {
+        var skill = null;
+        for (var k = 0; k < SKILLS.length; k++) {
+          if (SKILLS[k].name === step.t) { skill = SKILLS[k]; break; }
+        }
+        var category = skill ? categoryOf(skill) : "auxiliary";
         line.appendChild(el("span", { className: "fitem" },
           i ? el("span", { className: "farrow", text: "→" }) : null,
-          el("span", { className: "fstep " + step.c, text: step.t })
+          el("span", { className: "fstep " + category, text: step.t })
         ));
       });
       body.appendChild(el("div", { className: "flow" },
@@ -1029,23 +1080,24 @@
     });
     thead.appendChild(headRow);
 
-    var domains = ["dev", "science", "report", "harness"];
-    domains.forEach(function (d) {
-      var groupSkills = list.filter(function (s) { return s.domain === d; });
+    var categories = CATEGORY_ORDER;
+    categories.forEach(function (cat) {
+      var groupSkills = list.filter(function (s) { return categoryOf(s) === cat; });
       if (!groupSkills.length) return;
       var groupRow = el("tr", { className: "group" });
-      groupRow.appendChild(el("th", { text: DOMAIN_LABEL[d] + " · " + groupSkills.length }));
+      groupRow.appendChild(el("th", { text: CATEGORY_LABEL[cat] + " · " + groupSkills.length }));
       BLOCKS.forEach(function () { groupRow.appendChild(el("td")); });
       tbody.appendChild(groupRow);
 
       groupSkills.forEach(function (s) {
+        var cat = categoryOf(s);
         var row = el("tr", { className: s.status === "existing" ? "existing" : "" });
         var nameCell = el("th", {});
         nameCell.appendChild(el("div", { className: "s-name", title: "Показать карточку" },
-          el("span", { className: "m-dot " + s.status, style: "width:6px;height:6px;background:" + (s.status === "existing" ? "var(--accent)" : "transparent"), border: s.status === "proposed" ? "1px solid var(--line-strong)" : "0" }),
+          el("span", { className: "m-dot " + s.status, style: "width:6px;height:6px;background:" + (s.status === "existing" ? "var(--cat-meta)" : "transparent"), border: s.status === "proposed" ? "1px solid var(--line-strong)" : "0" }),
           el("code", { text: s.name }),
           el("span", { className: "badge-mini " + s.domain, text: DOMAIN_LABEL[s.domain] }),
-          s.metaSkill ? el("span", { className: "badge-mini " + (s.metaSkill === "candidate" ? "meta-candidate" : "meta"), text: s.metaSkill === "candidate" ? "meta?" : "meta" }) : null
+          el("span", { className: "badge-mini " + CATEGORY_BADGE[cat], text: cat === "meta-existing" ? "meta" : cat === "meta-proposed" ? "meta?" : "aux" })
         ));
         nameCell.querySelector(".s-name").addEventListener("click", function () {
           var card = document.querySelector('.card[data-id="' + s.id + '"]');
@@ -1077,13 +1129,16 @@
     var list = visible();
     wrap.replaceChildren();
     list.forEach(function (s) {
+      var cat = categoryOf(s);
+      var catClass = cat === "meta-existing" ? "cat-meta" : cat === "meta-proposed" ? "cat-proposed" : "cat-aux";
+      var catText = cat === "meta-existing" ? "мета" : cat === "meta-proposed" ? "мета proposed" : "вспомогательный";
       var top = el("div", { className: "card-top" },
         el("span", { className: "tag " + s.status, text: s.status === "existing" ? "в репозитории" : "предложено" }),
         s.priority !== "core" ? el("span", { className: "tag " + s.priority.toLowerCase(), text: s.priority }) : null,
-        s.metaSkill ? el("span", { className: "tag " + (s.metaSkill === "candidate" ? "meta-candidate" : "meta"), text: s.metaSkill === "candidate" ? "мета-кандидат" : "мета" }) : null,
+        el("span", { className: "tag " + catClass, text: catText }),
         el("span", { className: "tag " + s.domain, style: "background:#f3f4f5;color:var(--muted)", text: DOMAIN_LABEL[s.domain] })
       );
-      var card = el("article", { className: "card", "data-id": s.id, "data-status": s.status, "data-domain": s.domain, "data-meta": s.metaSkill || "none" },
+      var card = el("article", { className: "card", "data-id": s.id, "data-status": s.status, "data-domain": s.domain, "data-category": cat },
         top,
         el("h3", {}, el("code", { text: s.name })),
         el("p", { className: "sum", text: s.sum }),
@@ -1109,15 +1164,14 @@
   }
 
   function renderStats() {
-    var existing = SKILLS.filter(function (s) { return s.status === "existing"; }).length;
-    var proposed = SKILLS.length - existing;
-    var meta = SKILLS.filter(function (s) { return s.metaSkill === "meta"; }).length;
-    var candidates = SKILLS.filter(function (s) { return s.metaSkill === "candidate"; }).length;
-    $("#stat-existing").textContent = existing;
-    $("#stat-proposed").textContent = proposed;
-    $("#stat-meta").textContent = meta;
-    $("#stat-candidates").textContent = candidates;
-    $("#meta-count").textContent = meta + " мета · " + candidates + " кандидатов";
+    var metaExisting = SKILLS.filter(function (s) { return categoryOf(s) === "meta-existing"; }).length;
+    var metaProposed = SKILLS.filter(function (s) { return categoryOf(s) === "meta-proposed"; }).length;
+    var auxiliary = SKILLS.filter(function (s) { return categoryOf(s) === "auxiliary"; }).length;
+    $("#stat-meta-existing").textContent = metaExisting;
+    $("#stat-meta-proposed").textContent = metaProposed;
+    $("#stat-auxiliary").textContent = auxiliary;
+    $("#stat-total").textContent = SKILLS.length;
+    $("#meta-count").textContent = metaExisting + " в репозитории · " + metaProposed + " proposed";
   }
 
   function renderAll() {
@@ -1130,8 +1184,8 @@
     document.querySelectorAll("#status-chips .chip-btn").forEach(function (b) {
       b.setAttribute("aria-pressed", b.dataset.status === state.status ? "true" : "false");
     });
-    document.querySelectorAll("#meta-chips .chip-btn").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.dataset.meta === state.meta ? "true" : "false");
+    document.querySelectorAll("#category-chips .chip-btn").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.category === state.category ? "true" : "false");
     });
   }
 
@@ -1141,12 +1195,12 @@
   document.querySelectorAll("#status-chips .chip-btn").forEach(function (b) {
     b.addEventListener("click", function () { state.status = b.dataset.status; renderAll(); });
   });
-  document.querySelectorAll("#meta-chips .chip-btn").forEach(function (b) {
-    b.addEventListener("click", function () { state.meta = b.dataset.meta; renderAll(); });
+  document.querySelectorAll("#category-chips .chip-btn").forEach(function (b) {
+    b.addEventListener("click", function () { state.category = b.dataset.category; renderAll(); });
   });
   $("#q").addEventListener("input", function (e) { state.q = e.target.value.trim(); renderAll(); });
   $("#reset").addEventListener("click", function () {
-    state = { domain: "all", status: "all", meta: "all", block: null, q: "" };
+    state = { domain: "all", status: "all", category: "all", block: null, q: "" };
     $("#q").value = "";
     renderAll();
   });

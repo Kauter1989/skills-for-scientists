@@ -1,92 +1,92 @@
 # opencode-skills
 
-Личная библиотека навыков для OpenCode: разработка ПО, научная работа и
-подготовка отчётности. Каждый навык — отдельный каталог с `SKILL.md` и, если
-нужно, нормативами, скриптами и шаблонами. Результат работы навыка — артефакт,
-который можно проверить, а не только текст в чате.
+A personal skill library for OpenCode: software development, research and
+reporting. Each skill is a separate directory with `SKILL.md` and, when
+needed, references, scripts and templates. A skill produces a verifiable
+artifact, not just text in a chat.
 
-Карта библиотеки по блокам процесса: [`docs/skills-map.html`](docs/skills-map.html).
-План разработки и очередь: [`docs/skills-development-plan.html`](docs/skills-development-plan.html).
-Обязательный регламент для агентов: [`AGENTS.md`](AGENTS.md).
+Library map by process block: [`docs/skills-map.html`](docs/skills-map.html).
+Development plan and queue: [`docs/skills-development-plan.html`](docs/skills-development-plan.html).
+Mandatory rules for agents: [`AGENTS.md`](AGENTS.md).
 
-Новый навык не пишется без исследования аналогов и научных источников.
-Порядок приоритетов: **harness → dev → science → reports**.
+No new skill is written without research into analogs and scientific sources.
+Priority order: **harness → dev → science → reports**.
 
-## Что внутри
+## What is inside
 
-| Навык | Папка | Назначение | Артефакт |
+| Skill | Folder | Purpose | Artifact |
 |---|---|---|---|
-| [`harness-skill-template`](harness/harness-skill-template/SKILL.md) | `harness/` | Контракт и каркас навыка: frontmatter, обязательные разделы, шаблон, генератор и валидатор | `SKILL.md`, отчёт валидатора |
-| [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Переводит правило в исполняемую проверку: хук, lint, тест, policy или CI, с registry и тестом-доказательством | проверка, `docs/rules/registry.yml` |
-| [`harness-skill-audit`](harness/harness-skill-audit/SKILL.md) | `harness/` | Аудит библиотеки: структура, дубли триггеров, артефакты, ссылки и покрытие доменов | `docs/audits/<date>.html` и `.json` |
-| [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Мета-навык bootstrap: опрос, стартовые навыки, профиль, AGENTS.md, hooks, CI и HTML-утверждение workflow | `bootstrap-plan.html`, `profile.yml` |
-| [`dev-feature-start`](dev/dev-feature-start/SKILL.md) | `dev/` | Старт фичи: ветка, brief с user stories, поведенческими, функциональными и unit-тестами при покрытии, red/green gates | `overview.md`, ветка |
-| [`dev-spec-chain`](dev/dev-spec-chain/SKILL.md) | `dev/` | Мета-навык: опрос, выбор spec-kit/OpenSpec/BMAD/lightweight и генерация цепочки stage-навыков под репозиторий | `.opencode/spec-chain.yml`, stage-навыки |
-| [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Мета-навык: опрос, выбор подхода к отладке и генерация `dev-bug-process` с инвариантами воспроизводимости | `.opencode/bug-processing.yml`, `dev-bug-process` |
-| [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML-отчёт об изменениях фичи или майлстоуна: шесть метрик агентской разработки, доказательства и решения | автономный `report.html` |
-| [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Строгие презентации и аналитические отчёты PPTX: научные доклады, отчёты о НИР, аналитика для руководства | `deck.pptx`, PNG для проверки |
+| [`harness-skill-template`](harness/harness-skill-template/SKILL.md) | `harness/` | Skill contract and scaffold: frontmatter, required sections, template, generator and validator | `SKILL.md`, validator report |
+| [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Turns a rule into an executable check: hook, lint, test, policy or CI, with a registry and test evidence | check, `docs/rules/registry.yml` |
+| [`harness-skill-audit`](harness/harness-skill-audit/SKILL.md) | `harness/` | Library audit: structure, duplicate triggers, artifacts, links and domain coverage | `docs/audits/<date>.html` and `.json` |
+| [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Meta-skill bootstrap: survey, starter skills, profile, AGENTS.md, hooks, CI and HTML workflow approval | `bootstrap-plan.html`, `profile.yml` |
+| [`dev-feature-start`](dev/dev-feature-start/SKILL.md) | `dev/` | Feature start: branch, brief with user stories, behavioral, functional and unit tests when coverage rules apply, red/green gates | `overview.md`, branch |
+| [`dev-spec-chain`](dev/dev-spec-chain/SKILL.md) | `dev/` | Meta-skill: survey, choose spec-kit/OpenSpec/BMAD/lightweight and generate a repository-specific stage-skill chain | `.opencode/spec-chain.yml`, stage skills |
+| [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Meta-skill: survey, choose a debugging approach and generate `dev-bug-process` with reproducibility invariants | `.opencode/bug-processing.yml`, `dev-bug-process` |
+| [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML report for feature or milestone changes: six agent-development metrics, evidence and decisions | standalone `report.html` |
+| [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Rigorous PPTX presentations and analytical reports: research talks, project reports and management analytics | `deck.pptx`, PNG previews |
 
-### Мета-навыки
+### Meta-skills
 
-Мета-навык не фиксирует процесс, а опрашивает контекст, выбирает подход и
-генерирует артефакты под конкретный репозиторий или поле.
+A meta-skill does not hard-code a process. It surveys the context, selects an
+approach and generates artifacts for a specific repository or field.
 
-| Навык | Что опрашивает | Что генерирует |
+| Skill | What it surveys | What it generates |
 |---|---|---|
-| `harness-init` | репозиторий, стек, команда | scaffold, AGENTS.md, hooks, CI, workflow |
-| `dev-spec-chain` | greenfield/brownfield, роли, стек | цепочка stage-навыков и manifest |
-| `dev-bug-processing` | стек, тесты, трекер, окружение | `dev-bug-process` и manifest |
+| `harness-init` | repository, stack, team | scaffold, AGENTS.md, hooks, CI, workflow |
+| `dev-spec-chain` | greenfield/brownfield, roles, stack | stage-skill chain and manifest |
+| `dev-bug-processing` | stack, tests, tracker, environment | `dev-bug-process` and manifest |
 
-Кандидаты на мета-дизайн: `dev-regression-guard`, `dev-verification-live`,
+Meta-skill candidates: `dev-regression-guard`, `dev-verification-live`,
 `dev-milestone-audit`, `dev-ship`, `sci-experiment-plan`, `sci-stats-plan`,
 `sci-stats-report`, `sci-literature-review`, `sci-repro-run`,
-`dev-postmortem`, `harness-analyze-codebase`. Полный разбор и фильтр — в
-[`docs/skills-map.html`](docs/skills-map.html#meta).
+`dev-postmortem`, `harness-analyze-codebase`. Full breakdown and filters are
+in [`docs/skills-map.html`](docs/skills-map.html#meta).
 
-Возможные навыки, не реализованные в текущем цикле:
+Deferred skills not implemented in this cycle:
 
-- `harness-skill-eval` — `deferred`: оценка навыка на реальных задачах.
-  Research и review сохранены в `docs/research/` и `docs/reviews/`.
+- `harness-skill-eval` — `deferred`: evaluating a skill on real tasks.
+  Research and review are kept in `docs/research/` and `docs/reviews/`.
 
-`dev-pr-report-html` считает: Feature Token Budget, Architecture Drift Score,
-Cognitive Load Index, Agent Iteration Rate, Hallucination Risk и Context
-Window Utilization. Страница не требует сети и открывается с диска.
-Пример: [`dev/dev-pr-report-html/examples/example-report.html`](dev/dev-pr-report-html/examples/example-report.html).
+`dev-pr-report-html` calculates Feature Token Budget, Architecture Drift
+Score, Cognitive Load Index, Agent Iteration Rate, Hallucination Risk and
+Context Window Utilization. The page needs no network and opens from disk.
+Example: [`dev/dev-pr-report-html/examples/example-report.html`](dev/dev-pr-report-html/examples/example-report.html).
 
-## Домены и префиксы
+## Domains and prefixes
 
-Имя навыка начинается с префикса домена, а каталог задаёт область:
+A skill name starts with its domain prefix; the folder defines the area:
 
-| Папка | Префикс имени | Домен |
+| Folder | Name prefix | Domain |
 |---|---|---|
-| `dev/` | `dev-` | разработка: фичи, дефекты, проверки, аудит, релиз |
-| `sci/` | `sci-` | научная работа: гипотезы, эксперименты, статистика, данные |
-| `harness/` | `harness-` | общее для харнесса: инициализация, правила, сами навыки |
-| `reports/` | без префикса | отчётность и презентации; сейчас только `pptx-report` |
+| `dev/` | `dev-` | development: features, defects, checks, audit, release |
+| `sci/` | `sci-` | research: hypotheses, experiments, statistics, data |
+| `harness/` | `harness-` | harness-wide: initialization, rules, the skills themselves |
+| `reports/` | no prefix | reporting and presentations; currently only `pptx-report` |
 
-Префикс нужен, чтобы после установки в плоский каталог навыков
-(`~/.config/opencode/skill/`) было видно, к какому домену он относится.
-Папка-домен — только организация репозитория; при установке копируется
-конкретный навык, а имя его каталога совпадает с именем навыка.
+The prefix makes the domain visible after installation into a flat skill
+directory (`~/.config/opencode/skill/`). The domain folder is only repository
+organization; installation copies the specific skill, and its directory name
+must match the skill name.
 
-## Установка
+## Installation
 
-OpenCode видит навыки в двух местах:
+OpenCode discovers skills in two locations:
 
-- личные: `~/.config/opencode/skill/<name>/SKILL.md`;
-- проектные: `<repo>/.opencode/skill/<name>/SKILL.md`.
+- personal: `~/.config/opencode/skill/<name>/SKILL.md`;
+- project: `<repo>/.opencode/skill/<name>/SKILL.md`.
 
-Скопируйте нужный каталог целиком — `SKILL.md`, `references/`, `scripts/`,
+Copy the whole skill directory — `SKILL.md`, `references/`, `scripts/`,
 `templates/`, `examples/`:
 
 ```powershell
-# Windows: навык харнесса
+# Windows: harness skill
 Copy-Item -Recurse .\harness\harness-skill-template "$env:USERPROFILE\.config\opencode\skill\harness-skill-template"
 
-# Windows: навык разработки
+# Windows: development skill
 Copy-Item -Recurse .\dev\dev-pr-report-html "$env:USERPROFILE\.config\opencode\skill\dev-pr-report-html"
 
-# Windows: отчётный навык
+# Windows: reporting skill
 Copy-Item -Recurse .\reports\pptx-report "$env:USERPROFILE\.config\opencode\skill\pptx-report"
 ```
 
@@ -97,37 +97,38 @@ cp -r dev/dev-pr-report-html ~/.config/opencode/skill/
 cp -r reports/pptx-report ~/.config/opencode/skill/
 ```
 
-После установки проверьте, что `skill` tool находит навык. До установки
-можно читать `SKILL.md` и `references/` прямо из этого репозитория.
+After installation, verify that the `skill` tool finds the skill. Before
+installation, `SKILL.md` and `references/` can be read directly from this
+repository.
 
-## Плагины OpenCode
+## OpenCode plugins
 
-`opencode-plugins/` — исходники и собранный артефакт Markdown-панели
-OpenCode, а также инструкция по установке на другую машину.
+`opencode-plugins/` contains the source and built artifact of the OpenCode
+Markdown panel, plus installation instructions for another machine.
 
-- обзор: [`opencode-plugins/README.md`](opencode-plugins/README.md);
-- установка: [`opencode-plugins/INSTALL.md`](opencode-plugins/INSTALL.md);
-- конфигурация без секретов: [`opencode-plugins/config/`](opencode-plugins/config/);
-- лицензии и происхождение: [`opencode-plugins/NOTICE.md`](opencode-plugins/NOTICE.md).
+- overview: [`opencode-plugins/README.md`](opencode-plugins/README.md);
+- installation: [`opencode-plugins/INSTALL.md`](opencode-plugins/INSTALL.md);
+- configuration without secrets: [`opencode-plugins/config/`](opencode-plugins/config/);
+- licenses and provenance: [`opencode-plugins/NOTICE.md`](opencode-plugins/NOTICE.md).
 
-Секреты, `auth.json` и локальный `service.json` в репозиторий не входят.
+Secrets, `auth.json` and a local `service.json` are not part of the repository.
 
-## Структура
+## Structure
 
 ```
 skills/
-├── AGENTS.md                  обязательный регламент разработки
+├── AGENTS.md                  mandatory development rules
 ├── docs/
-│   ├── skills-map.html        карта навыков и блоков процесса
-│   ├── skills-development-plan.html  план и очередь
-│   ├── research/              research ledger по навыкам
-│   ├── reviews/               HTML-ревью по навыкам
-│   ├── audits/                HTML/JSON отчёты аудита
-│   ├── rules/                 registry.yml — реестр правил
+│   ├── skills-map.html        skill and process-block map
+│   ├── skills-development-plan.html  plan and queue
+│   ├── research/              research ledgers by skill
+│   ├── reviews/               HTML reviews by skill
+│   ├── audits/                HTML/JSON audit reports
+│   ├── rules/                 registry.yml — rule registry
 │   └── templates/
 │       ├── skill-research.md  research ledger
-│       └── skill-review.html  HTML-ревью навыка
-├── dev/                       разработка, префикс dev-
+│       └── skill-review.html  skill HTML review
+├── dev/                       development, prefix dev-
 │   ├── dev-feature-start/
 │   │   ├── SKILL.md
 │   │   ├── references/
@@ -152,8 +153,8 @@ skills/
 │       ├── scripts/
 │       ├── templates/
 │       └── examples/
-├── sci/                       наука, префикс sci- (пока пусто)
-├── harness/                   харнесс, префикс harness-
+├── sci/                       research, prefix sci- (currently empty)
+├── harness/                   harness, prefix harness-
 │   ├── harness-skill-template/
 │   │   ├── SKILL.md
 │   │   ├── references/
@@ -178,13 +179,13 @@ skills/
 │       ├── scripts/
 │       ├── templates/
 │       └── examples/
-├── opencode-plugins/          плагины и инструкции для OpenCode
+├── opencode-plugins/          OpenCode plugins and instructions
 │   ├── README.md
 │   ├── INSTALL.md
 │   ├── NOTICE.md
 │   ├── md-viewer/
 │   └── config/
-├── reports/                   отчётность, без префикса
+├── reports/                   reporting, no prefix
 │   └── pptx-report/
 │       ├── SKILL.md
 │       ├── examples/
@@ -194,52 +195,54 @@ skills/
 └── LICENSE
 ```
 
-## Как разрабатывается навык
+## How a skill is developed
 
-Каждый навык проходит пять гейтов, описанные в `AGENTS.md`:
+Every skill goes through five gates defined in `AGENTS.md`:
 
 ```
 Research → Review → Implementation → Verification → PR
 ```
 
-1. **Research.** Не менее трёх GitHub-аналогов и двух научных или
-   официальных источников. Результат — `docs/research/<skill>.md`.
-2. **Review.** План в виде автономного HTML по шаблону
-   `docs/templates/skill-review.html`. Без статуса `approved` код не
-   пишется.
+1. **Research.** At least three GitHub analogs and two scientific or official
+   sources. Output: `docs/research/<skill>.md`.
+2. **Review.** A standalone HTML plan based on
+   `docs/templates/skill-review.html`. No code is written without `approved`
+   status.
 3. **Implementation.** `SKILL.md`, `references/`, `scripts/`,
    `templates/`, `examples/`.
-4. **Verification.** Пример воспроизводится, скрипты работают, HTML
-   открывается без сети, карта и README обновлены.
-5. **PR.** Ветка запушена, PR открыт, в описании — research ledger,
-   review HTML и вывод валидатора. Мерж без PR запрещён.
+4. **Verification.** The example reproduces, scripts run, HTML opens without
+   network access, the map and README are updated.
+5. **PR.** The branch is pushed, the PR is open, and the description links the
+   research ledger, review HTML and validator output. Merging without a PR is
+   forbidden.
 
-Правила библиотеки:
+Library rules:
 
-1. Домен задаётся папкой и префиксом имени: `dev/` + `dev-`, `sci/` + `sci-`,
-   `harness/` + `harness-`. Отчётные навыки лежат в `reports/`.
-2. Каталоги навыков плоские внутри домена: один каталог — один навык.
-3. `description` в frontmatter содержит русские и английские триггеры:
-   навык должен находиться по формулировке задачи, а не по имени файла.
-4. Если навык обещает число, у числа есть формула, источник и уровень
-   качества данных.
-5. Если навык меняет репозиторий, у него есть проверка и уборка.
-6. Новый навык не дублирует существующий: сначала проверяются карта и
-   триггеры соседей.
+1. The domain is defined by the folder and name prefix: `dev/` + `dev-`,
+   `sci/` + `sci-`, `harness/` + `harness-`. Reporting skills live in
+   `reports/`.
+2. Skill directories are flat inside a domain: one directory, one skill.
+3. The frontmatter `description` contains Russian and English triggers: a
+   skill must be found by a task description, not by its file name.
+4. If a skill promises a number, that number has a formula, a source and a
+   data-quality level.
+5. If a skill changes a repository, it has a check and a cleanup path.
+6. A new skill does not duplicate an existing one: first check the map and
+   neighboring triggers.
 
-## Проверка
+## Verification
 
 ```bash
-# собрать демонстрационный HTML-отчёт
+# build the demo HTML report
 cd dev/dev-pr-report-html
 python scripts/build_report.py --example -o examples/example-report.html --strict
 
-# собрать метрики из Git
+# collect metrics from Git
 python scripts/collect_metrics.py --repo . --from HEAD~1 --to HEAD --out metrics.json
 ```
 
-Скрипты используют только стандартную библиотеку Python 3.9+.
+Scripts use only the Python 3.9+ standard library.
 
-## Лицензия
+## License
 
-Apache License 2.0 — см. [`LICENSE`](LICENSE).
+Apache License 2.0 — see [`LICENSE`](LICENSE).
