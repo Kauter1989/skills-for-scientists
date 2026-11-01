@@ -281,6 +281,13 @@ gh pr checks --watch
 3. `dev-milestone-audit`
 4. `dev-ship`
 
+Мета-кандидаты в dev: `dev-regression-guard`, `dev-verification-live`,
+`dev-milestone-audit`, `dev-ship` — перед реализацией проверить, не нужно ли
+сгенерировать процесс под репозиторий вместо фиксированного навыка.
+Мета-кандидаты в science: `sci-experiment-plan`, `sci-stats-plan`,
+`sci-stats-report`, `sci-literature-review`. Полный список — в
+`docs/skills-map.html#meta`.
+
 Backlog (possible):
 
 - `harness-skill-eval` — `deferred`: research и review сохранены, реализация
