@@ -19,17 +19,34 @@
 | [`harness-skill-template`](harness/harness-skill-template/SKILL.md) | `harness/` | Контракт и каркас навыка: frontmatter, обязательные разделы, шаблон, генератор и валидатор | `SKILL.md`, отчёт валидатора |
 | [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Переводит правило в исполняемую проверку: хук, lint, тест, policy или CI, с registry и тестом-доказательством | проверка, `docs/rules/registry.yml` |
 | [`harness-skill-audit`](harness/harness-skill-audit/SKILL.md) | `harness/` | Аудит библиотеки: структура, дубли триггеров, артефакты, ссылки и покрытие доменов | `docs/audits/<date>.html` и `.json` |
-| [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Bootstrap с опросом: стартовые навыки, профиль, AGENTS.md, hooks, CI и HTML-утверждение workflow | `bootstrap-plan.html`, `profile.yml` |
+| [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Мета-навык bootstrap: опрос, стартовые навыки, профиль, AGENTS.md, hooks, CI и HTML-утверждение workflow | `bootstrap-plan.html`, `profile.yml` |
 | [`dev-feature-start`](dev/dev-feature-start/SKILL.md) | `dev/` | Старт фичи: ветка, brief с user stories, поведенческими, функциональными и unit-тестами при покрытии, red/green gates | `overview.md`, ветка |
 | [`dev-spec-chain`](dev/dev-spec-chain/SKILL.md) | `dev/` | Мета-навык: опрос, выбор spec-kit/OpenSpec/BMAD/lightweight и генерация цепочки stage-навыков под репозиторий | `.opencode/spec-chain.yml`, stage-навыки |
 | [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Мета-навык: опрос, выбор подхода к отладке и генерация `dev-bug-process` с инвариантами воспроизводимости | `.opencode/bug-processing.yml`, `dev-bug-process` |
+| [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML-отчёт об изменениях фичи или майлстоуна: шесть метрик агентской разработки, доказательства и решения | автономный `report.html` |
+| [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Строгие презентации и аналитические отчёты PPTX: научные доклады, отчёты о НИР, аналитика для руководства | `deck.pptx`, PNG для проверки |
+
+### Мета-навыки
+
+Мета-навык не фиксирует процесс, а опрашивает контекст, выбирает подход и
+генерирует артефакты под конкретный репозиторий или поле.
+
+| Навык | Что опрашивает | Что генерирует |
+|---|---|---|
+| `harness-init` | репозиторий, стек, команда | scaffold, AGENTS.md, hooks, CI, workflow |
+| `dev-spec-chain` | greenfield/brownfield, роли, стек | цепочка stage-навыков и manifest |
+| `dev-bug-processing` | стек, тесты, трекер, окружение | `dev-bug-process` и manifest |
+
+Кандидаты на мета-дизайн: `dev-regression-guard`, `dev-verification-live`,
+`dev-milestone-audit`, `dev-ship`, `sci-experiment-plan`, `sci-stats-plan`,
+`sci-stats-report`, `sci-literature-review`, `sci-repro-run`,
+`dev-postmortem`, `harness-analyze-codebase`. Полный разбор и фильтр — в
+[`docs/skills-map.html`](docs/skills-map.html#meta).
 
 Возможные навыки, не реализованные в текущем цикле:
 
 - `harness-skill-eval` — `deferred`: оценка навыка на реальных задачах.
   Research и review сохранены в `docs/research/` и `docs/reviews/`.
-| [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML-отчёт об изменениях фичи или майлстоуна: шесть метрик агентской разработки, доказательства и решения | автономный `report.html` |
-| [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Строгие презентации и аналитические отчёты PPTX: научные доклады, отчёты о НИР, аналитика для руководства | `deck.pptx`, PNG для проверки |
 
 `dev-pr-report-html` считает: Feature Token Budget, Architecture Drift Score,
 Cognitive Load Index, Agent Iteration Rate, Hallucination Risk и Context

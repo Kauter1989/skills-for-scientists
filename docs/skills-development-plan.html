@@ -474,6 +474,13 @@
       <span class="count">17 навыков · 3 готово · 7 × P0</span>
     </div>
     <div class="panel-body">
+      <p class="small" style="margin:0 0 12px;color:#1f5f5b">
+        <b>Мета-дизайн:</b> D4–D7 проверить как генераторы под репозиторий:
+        <code>dev-regression-guard</code> выбирает механизм защиты, <code>dev-verification-live</code> —
+        harness проверки, <code>dev-milestone-audit</code> — протокол аудита, <code>dev-ship</code> —
+        ship workflow. В science тот же потенциал у <code>sci-experiment-plan</code>,
+        <code>sci-stats-plan</code>, <code>sci-stats-report</code> и <code>sci-literature-review</code>.
+      </p>
       <table>
         <caption>Очередь разработки: сверху вниз, внутри приоритета — по зависимости</caption>
         <thead>
@@ -484,10 +491,10 @@
           <tr><td>D1</td><td class="mono">dev-feature-start</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>S</td><td>spec-driven development, branch conventions, requirements engineering, TDD.</td><td>ветка + overview.md + red/green + unit*</td><td>H1, H2</td></tr>
           <tr><td>D2</td><td class="mono">dev-spec-chain</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>L</td><td>spec-kit (greenfield), OpenSpec (brownfield), BMAD, survey, chain generation.</td><td>profile → approach → generated chain</td><td>D1, H1</td></tr>
           <tr><td>D3</td><td class="mono">dev-bug-processing</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>L</td><td>bug reproduction, fault localization, TDD, survey, generation of a repo-specific bug process.</td><td>profile → approach → generated dev-bug-process</td><td>D2, H1</td></tr>
-          <tr><td>D4</td><td class="mono">dev-regression-guard</td><td><span class="tag">P0</span></td><td>M</td><td>regression tests, mutation testing, defect classes, architecture tests.</td><td>защита класса ошибок</td><td>D3</td></tr>
-          <tr><td>D5</td><td class="mono">dev-verification-live</td><td><span class="tag">P0</span></td><td>L</td><td>Playwright/Cypress, browser automation, E2E oracles, sandboxing.</td><td>доказательство вживую</td><td>H1, H3</td></tr>
-          <tr><td>D6</td><td class="mono">dev-milestone-audit</td><td><span class="tag">P0</span></td><td>L</td><td>software audit, inspection, release readiness, coverage limitations, multi-agent review.</td><td>отчёт расхождений</td><td>D5, H3</td></tr>
-          <tr><td>D7</td><td class="mono">dev-ship</td><td><span class="tag">P0</span></td><td>M</td><td>PR flow, merge queues, CI gates, self-review, trunk-based development.</td><td>ветка → main + PR</td><td>D5, D6</td></tr>
+          <tr><td>D4</td><td class="mono">dev-regression-guard</td><td><span class="tag">P0</span> <span class="tag" style="background:#fff8ea;color:#a96500;border:1px dashed #ead3a8">мета?</span></td><td>M</td><td>regression tests, mutation testing, defect classes, architecture tests.</td><td>защита класса ошибок</td><td>D3</td></tr>
+          <tr><td>D5</td><td class="mono">dev-verification-live</td><td><span class="tag">P0</span> <span class="tag" style="background:#fff8ea;color:#a96500;border:1px dashed #ead3a8">мета?</span></td><td>L</td><td>Playwright/Cypress, browser automation, E2E oracles, sandboxing.</td><td>доказательство вживую</td><td>H1, H3</td></tr>
+          <tr><td>D6</td><td class="mono">dev-milestone-audit</td><td><span class="tag">P0</span> <span class="tag" style="background:#fff8ea;color:#a96500;border:1px dashed #ead3a8">мета?</span></td><td>L</td><td>software audit, inspection, release readiness, coverage limitations, multi-agent review.</td><td>отчёт расхождений</td><td>D5, H3</td></tr>
+          <tr><td>D7</td><td class="mono">dev-ship</td><td><span class="tag">P0</span> <span class="tag" style="background:#fff8ea;color:#a96500;border:1px dashed #ead3a8">мета?</span></td><td>M</td><td>PR flow, merge queues, CI gates, self-review, trunk-based development.</td><td>ветка → main + PR</td><td>D5, D6</td></tr>
           <tr><td>D8</td><td class="mono">dev-scope-check</td><td><span class="tag">P1</span></td><td>S</td><td>scope creep, alignment gates, project governance, portfolio management.</td><td>вердикт + запись</td><td>H1</td></tr>
           <tr><td>D9</td><td class="mono">dev-adr</td><td><span class="tag">P1</span></td><td>S</td><td>ADR, architecture knowledge management, decision records, trade-off analysis.</td><td>docs/adr/NNN</td><td>H1</td></tr>
           <tr><td>D10</td><td class="mono">dev-contract-migration</td><td><span class="tag">P1</span></td><td>M</td><td>expand-contract, zero-downtime migration, schema evolution, backward compatibility.</td><td>миграция + rollback</td><td>D2</td></tr>
