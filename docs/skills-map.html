@@ -263,8 +263,8 @@
       означает, что без скилла процесс теряет проверяемое звено.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">6</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">36</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-existing">7</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">35</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -371,6 +371,7 @@
 │       ├── skill-research.md   <span class="c">← research ledger</span>
 │       └── skill-review.html   <span class="c">← HTML-ревью</span>
 ├── dev/                        <span class="c">← разработка, префикс dev-</span>
+│   ├── dev-feature-start/
 │   └── dev-pr-report-html/     <span class="new">← добавлено: HTML-отчёт об изменениях</span>
 │       ├── SKILL.md
 │       ├── references/
@@ -438,7 +439,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-10-31 · 6 реализовано · 36 предложено</span>
+      <span>снимок 2026-11-01 · 7 реализовано · 35 предложено</span>
     </div>
   </footer>
 </main>
@@ -479,12 +480,12 @@
 
     // --- разработка ---
     {
-      id: "dev-feature-start", name: "/dev-feature-start", domain: "dev", status: "proposed", priority: "P0",
+      id: "dev-feature-start", name: "/dev-feature-start", domain: "dev", status: "existing", priority: "core",
       blocks: ["intake", "spec"],
-      sum: "Открыть фичу: ветка от свежего main, привязка к пункту плана, передача в цепочку спецификации.",
-      io: "slug → ветка + запись в план",
+      sum: "Открыть фичу: ветка, overview.md с user stories, поведенческими, функциональными и unit-тестами при покрытии, red/green gates.",
+      io: "slug → ветка + brief + red/green",
       from: "практика открытия фичи",
-      links: ""
+      links: "../dev/dev-feature-start/SKILL.md"
     },
     {
       id: "dev-spec-chain", name: "/dev-spec-chain", domain: "dev", status: "proposed", priority: "P0",
@@ -848,7 +849,7 @@
     {
       label: "Разработка",
       steps: [
-        { t: "/dev-feature-start", c: "new" }, { t: "/dev-spec-chain", c: "new" }, { t: "/dev-adr", c: "new" },
+        { t: "/dev-feature-start", c: "implemented" }, { t: "/dev-spec-chain", c: "new" }, { t: "/dev-adr", c: "new" },
         { t: "/dev-repro-first", c: "new" }, { t: "/dev-verification-live", c: "new" },
         { t: "/dev-milestone-audit", c: "new" }, { t: "/dev-ship", c: "new" }, { t: "/dev-release", c: "new" },
         { t: "/dev-pr-report-html", c: "implemented" }, { t: "/dev-postmortem", c: "new" }

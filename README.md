@@ -20,6 +20,7 @@
 | [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Переводит правило в исполняемую проверку: хук, lint, тест, policy или CI, с registry и тестом-доказательством | проверка, `docs/rules/registry.yml` |
 | [`harness-skill-audit`](harness/harness-skill-audit/SKILL.md) | `harness/` | Аудит библиотеки: структура, дубли триггеров, артефакты, ссылки и покрытие доменов | `docs/audits/<date>.html` и `.json` |
 | [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Bootstrap с опросом: стартовые навыки, профиль, AGENTS.md, hooks, CI и HTML-утверждение workflow | `bootstrap-plan.html`, `profile.yml` |
+| [`dev-feature-start`](dev/dev-feature-start/SKILL.md) | `dev/` | Старт фичи: ветка, brief с user stories, поведенческими, функциональными и unit-тестами при покрытии, red/green gates | `overview.md`, ветка |
 
 Возможные навыки, не реализованные в текущем цикле:
 
@@ -96,6 +97,12 @@ skills/
 │       ├── skill-research.md  research ledger
 │       └── skill-review.html  HTML-ревью навыка
 ├── dev/                       разработка, префикс dev-
+│   ├── dev-feature-start/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   ├── templates/
+│   │   └── examples/
 │   └── dev-pr-report-html/
 │       ├── SKILL.md
 │       ├── references/
