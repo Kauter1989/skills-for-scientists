@@ -12,13 +12,24 @@
 
 ## 1. Задача
 
-Провести фичу по цепочке спецификаций: `specify → clarify → plan → tasks →
-analyze → implement`, сохранив traceability от user stories и тестов до
-задач. Навык нужен, чтобы план не расходился с постановкой, а реализация
-начиналась с тестовых задач.
+Координировать цепочку спецификаций: проверить `overview.md`, запустить
+стадии `specify → clarify → plan → tasks → analyze → implement` в нужном
+порядке и проверить артефакты. Координатор не пишет содержание стадий: это
+делают отдельные навыки.
 
-**Не входит в задачу:** создавать ветку и brief (это `dev-feature-start`),
-писать код, делать commit, push или merge.
+Стадии:
+
+| Стадия | Навык | Артефакт |
+|---|---|---|
+| Specify | `dev-specify` | `spec.md` |
+| Clarify | `dev-clarify` | обновлённый `spec.md` |
+| Plan | `dev-plan` | `plan.md` |
+| Tasks | `dev-tasks` | `tasks.md` |
+| Analyze | `dev-analyze` | отчёт проверки |
+| Implement | `dev-implement` | код и зелёный прогон |
+
+**Не входит в задачу:** писать spec/plan/tasks, создавать ветку и brief (это
+`dev-feature-start`), писать код, делать commit, push или merge.
 
 ## 2. Поисковые запросы
 
@@ -73,7 +84,9 @@ analyze → implement`, сохранив traceability от user stories и те�
 | Plan с Constitution Check | spec-kit | план без ограничений | нарушения всплывают поздно |
 | Tasks: тестовые задачи раньше implementation | Rafique; dev-feature-start | код, потом тесты | тесты подгоняются под код |
 | Analyze перед implement | Boehm; Femmer | пропустить анализ | пропуски и дубли |
-| Не писать код в этом навыке | практика | всё в одном | смешиваются план и реализация |
+| Одна стадия — один навык | spec-kit; OpenSpec | один монолитный навык | смешиваются триггеры и гейты |
+| Координатор не пишет содержание стадий | spec-kit | всё в одном | дублирование и дрейф |
+| Не писать код в координаторе | практика | всё в одном | смешиваются план и реализация |
 
 ## 7. Решения ревью
 
@@ -85,6 +98,10 @@ analyze → implement`, сохранив traceability от user stories и те�
 4. **Тестовые задачи:** префикс `T-TEST-*`, идут раньше `T-IMPL-*`.
 5. **Утверждение:** chain утверждается в том же режиме, что и stories:
    `user` или `autonomous`, с записью в overview.
+6. **Стадии:** `dev-specify`, `dev-clarify`, `dev-plan`, `dev-tasks`,
+   `dev-analyze`; `dev-implement` — отдельное решение.
+7. **Координатор:** `dev-spec-chain` проверяет порядок и артефакты, но не
+   пишет spec/plan/tasks.
 
 ## 8. Что дальше
 
@@ -92,6 +109,7 @@ analyze → implement`, сохранив traceability от user stories и те�
 - [ ] Собран `docs/reviews/dev-spec-chain.html`
 - [ ] Ревью проведено, статус `approved`
 - [ ] Создан каталог `dev/dev-spec-chain/`
+- [ ] Стадии `dev-specify`, `dev-clarify`, `dev-plan`, `dev-tasks`, `dev-analyze` реализованы
 - [ ] Chain проверяется на тестовой фиче
 - [ ] Обновлены `docs/skills-map.html` и `README.md`
 

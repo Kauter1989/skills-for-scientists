@@ -264,7 +264,7 @@
     </p>
     <div class="hero-stats">
       <div class="hstat"><b id="stat-existing">7</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">35</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-proposed">40</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -439,7 +439,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-11-01 · 7 реализовано · 35 предложено</span>
+      <span>снимок 2026-11-01 · 7 реализовано · 40 предложено</span>
     </div>
   </footer>
 </main>
@@ -488,11 +488,51 @@
       links: "../dev/dev-feature-start/SKILL.md"
     },
     {
+      id: "dev-specify", name: "/dev-specify", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["spec"],
+      sum: "Превращает overview в spec.md: сценарии, REQ/SC, границы и критерии приёмки.",
+      io: "overview → spec.md",
+      from: "стадия spec-kit specify",
+      links: ""
+    },
+    {
+      id: "dev-clarify", name: "/dev-clarify", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["spec"],
+      sum: "Убирает [NEEDS CLARIFICATION], проверяет requirements smells и неоднозначность.",
+      io: "spec.md → clarified spec.md",
+      from: "стадия spec-kit clarify",
+      links: ""
+    },
+    {
+      id: "dev-plan", name: "/dev-plan", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["spec"],
+      sum: "Технический план и Constitution Check: стек, архитектура, риски, ограничения.",
+      io: "spec.md → plan.md",
+      from: "стадия spec-kit plan",
+      links: ""
+    },
+    {
+      id: "dev-tasks", name: "/dev-tasks", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["spec", "build"],
+      sum: "Задачи по stories: T-TEST-* раньше T-IMPL-*, traceability US → T.",
+      io: "plan.md → tasks.md",
+      from: "стадия spec-kit tasks",
+      links: ""
+    },
+    {
+      id: "dev-analyze", name: "/dev-analyze", domain: "dev", status: "proposed", priority: "P0",
+      blocks: ["spec", "verify"],
+      sum: "Сверяет spec ↔ plan ↔ tasks: traceability, пропуски, порядок тестовых задач.",
+      io: "артефакты → отчёт анализа",
+      from: "стадия spec-kit analyze",
+      links: ""
+    },
+    {
       id: "dev-spec-chain", name: "/dev-spec-chain", domain: "dev", status: "proposed", priority: "P0",
       blocks: ["spec"],
-      sum: "Адаптер spec-kit: specify → clarify → plan → tasks → analyze → implement; плюс checklist, constitution, converge и taskstoissues — 10 команд с шаблонами и конституцией под проект.",
-      io: "идея → spec.md, plan.md, tasks.md",
-      from: "пакет spec-kit",
+      sum: "Координатор цепочки: проверяет overview, порядок стадий и артефакты, но не пишет содержание.",
+      io: "overview → coordinator report",
+      from: "координатор spec-kit",
       links: ""
     },
     {
@@ -849,7 +889,10 @@
     {
       label: "Разработка",
       steps: [
-        { t: "/dev-feature-start", c: "implemented" }, { t: "/dev-spec-chain", c: "new" }, { t: "/dev-adr", c: "new" },
+        { t: "/dev-feature-start", c: "implemented" }, { t: "/dev-specify", c: "new" },
+        { t: "/dev-clarify", c: "new" }, { t: "/dev-plan", c: "new" },
+        { t: "/dev-tasks", c: "new" }, { t: "/dev-analyze", c: "new" },
+        { t: "/dev-spec-chain", c: "new" }, { t: "/dev-adr", c: "new" },
         { t: "/dev-repro-first", c: "new" }, { t: "/dev-verification-live", c: "new" },
         { t: "/dev-milestone-audit", c: "new" }, { t: "/dev-ship", c: "new" }, { t: "/dev-release", c: "new" },
         { t: "/dev-pr-report-html", c: "implemented" }, { t: "/dev-postmortem", c: "new" }
