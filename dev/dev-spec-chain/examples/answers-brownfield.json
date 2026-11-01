@@ -1,0 +1,11 @@
+{
+  "repo": "legacy-service",
+  "mode": "brownfield",
+  "change_size": "small",
+  "roles": "small",
+  "compliance": "none",
+  "stack": "python",
+  "approval": "user",
+  "strict": "standard",
+  "approach": "auto"
+}

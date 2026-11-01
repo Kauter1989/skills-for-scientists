@@ -2,7 +2,7 @@
   "date": "2026-11-01",
   "scope": "all",
   "root": ".",
-  "skills": 7,
+  "skills": 8,
   "summary": {
     "blocker": 0,
     "major": 0,
@@ -10,7 +10,7 @@
   },
   "duplicates": [],
   "coverage": {
-    "dev": 2,
+    "dev": 3,
     "sci": 0,
     "harness": 4,
     "reports": 1

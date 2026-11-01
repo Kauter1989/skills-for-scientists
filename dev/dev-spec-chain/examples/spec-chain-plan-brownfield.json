@@ -1,0 +1,72 @@
+{
+  "status": "draft",
+  "created": "2026-11-01",
+  "repo": "legacy-service",
+  "approach": "openspec",
+  "profile": {
+    "repo": "legacy-service",
+    "mode": "brownfield",
+    "change_size": "small",
+    "roles": "small",
+    "compliance": "none",
+    "stack": "python",
+    "approval": "user",
+    "strict": "standard",
+    "approach": "auto"
+  },
+  "stages": [
+    {
+      "id": "specify",
+      "skill": "dev-specify",
+      "title": "Specify",
+      "trigger": "specify, requirements, spec.md",
+      "input": "docs/features/<slug>/overview.md",
+      "output": "docs/features/<slug>/spec.md",
+      "gate": "spec approved"
+    },
+    {
+      "id": "clarify",
+      "skill": "dev-clarify",
+      "title": "Clarify",
+      "trigger": "clarify, ambiguity, clarification",
+      "input": "docs/features/<slug>/spec.md",
+      "output": "docs/features/<slug>/spec.md (clarified)",
+      "gate": "clarification closed"
+    },
+    {
+      "id": "plan",
+      "skill": "dev-plan",
+      "title": "Plan",
+      "trigger": "plan, architecture, constitution check",
+      "input": "docs/features/<slug>/spec.md",
+      "output": "docs/features/<slug>/plan.md",
+      "gate": "plan approved"
+    },
+    {
+      "id": "tasks",
+      "skill": "dev-tasks",
+      "title": "Tasks",
+      "trigger": "tasks, decomposition, T-TEST, T-IMPL",
+      "input": "docs/features/<slug>/plan.md",
+      "output": "docs/features/<slug>/tasks.md",
+      "gate": "traceability complete"
+    },
+    {
+      "id": "analyze",
+      "skill": "dev-analyze",
+      "title": "Analyze",
+      "trigger": "analyze, consistency, traceability",
+      "input": "spec, plan and tasks",
+      "output": "docs/features/<slug>/analysis-report.json",
+      "gate": "analysis clean"
+    }
+  ],
+  "files": [
+    ".opencode/spec-chain.yml",
+    ".opencode/skill/dev-specify/SKILL.md",
+    ".opencode/skill/dev-clarify/SKILL.md",
+    ".opencode/skill/dev-plan/SKILL.md",
+    ".opencode/skill/dev-tasks/SKILL.md",
+    ".opencode/skill/dev-analyze/SKILL.md"
+  ]
+}

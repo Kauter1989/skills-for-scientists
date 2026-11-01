@@ -273,14 +273,13 @@ gh pr checks --watch
 1. `harness-analyze-codebase`
 2. `harness-session-retrospective`
 
-Текущая очередь dev (D1 `dev-feature-start` реализован):
+Текущая очередь dev (D1 `dev-feature-start` и D2 `dev-spec-chain` реализованы):
 
-1. `dev-spec-chain`
-2. `dev-repro-first`
-3. `dev-regression-guard`
-4. `dev-verification-live`
-5. `dev-milestone-audit`
-6. `dev-ship`
+1. `dev-repro-first`
+2. `dev-regression-guard`
+3. `dev-verification-live`
+4. `dev-milestone-audit`
+5. `dev-ship`
 
 Backlog (possible):
 

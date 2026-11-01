@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Spec chain plan — example-service</title>
+<style>
+  :root { --paper:#f6f5f2; --card:#fff; --ink:#14181f; --muted:#5f6875; --line:#dfe2e7; --accent:#1f5f5b; --green:#1f7a4d; --amber:#a96500; --mono:ui-monospace,"Cascadia Code",Consolas,monospace; --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.55 var(--sans); }
+  .wrap { max-width:1080px; margin:0 auto; padding:36px 24px 44px; }
+  .kicker { font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); }
+  h1 { font-size:clamp(28px,4vw,42px); line-height:1.1; letter-spacing:-.02em; margin:8px 0 10px; }
+  .meta { color:var(--muted); font-size:12.5px; margin-bottom:18px; }
+  .status { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:4px 8px; border-radius:6px; background:#fbf0dc; color:var(--amber); }
+  .status.approved { background:#e7f4ec; color:var(--green); }
+  section { background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:14px; overflow:hidden; }
+  .head { padding:14px 18px 11px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .head h2 { margin:0; font-size:18px; }
+  .head p { margin:0; color:var(--muted); font-size:11.5px; }
+  .body { padding:14px 18px 18px; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { text-align:left; font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); border-bottom:1px solid var(--line); padding:6px 7px; }
+  td { border-bottom:1px solid var(--line); padding:7px; vertical-align:top; }
+  tr:last-child td { border-bottom:0; }
+  td.mono, code { font-family:var(--mono); font-size:11.5px; }
+  .callout { border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:9px; padding:12px 14px; background:#fcfdfd; margin-bottom:14px; }
+  .callout b { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:5px; }
+  .callout p { margin:0; }
+  .approval { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  .approval div { border:1px solid var(--line); border-radius:7px; padding:9px; text-align:center; font-size:12px; color:var(--muted); }
+  .approval div.ok { border-color:#bfe0cb; background:#e7f4ec; color:var(--green); font-weight:700; }
+  footer { color:var(--muted); font-size:11px; margin-top:16px; }
+  @media (max-width:700px) { .wrap { padding:20px 14px; } .approval { grid-template-columns:1fr; } }
+  @media print { @page { size:A4; margin:12mm; } body { background:#fff; font-size:9.5pt; } .wrap { max-width:none; padding:0; } section { break-inside:avoid; } }
+</style>
+</head>
+<body data-status="approved">
+<main class="wrap">
+  <div class="kicker">Spec chain plan · на утверждение</div>
+  <h1>example-service</h1>
+  <div class="meta">
+    Профиль: <b>greenfield</b> · Подход: <b>spec-kit</b> · Дата: <b>2026-11-01</b>
+    · <span id="approval" class="status approved">approved</span>
+  </div>
+
+  <div class="callout">
+    <b>Что утверждается</b>
+    <p>Профиль репозитория, подход, набор stage-навыков, гейты и файлы. До <code>approved</code> генерация не выполняется.</p>
+  </div>
+
+  <section>
+    <div class="head"><h2>Профиль</h2><p>основание для выбора подхода</p></div>
+    <div class="body">
+      <table><thead><tr><th>Поле</th><th>Значение</th></tr></thead><tbody>
+<tr><td>Репозиторий</td><td class="mono">example-service</td></tr>
+<tr><td>Профиль</td><td class="mono">greenfield</td></tr>
+<tr><td>Размер изменений</td><td class="mono">medium</td></tr>
+<tr><td>Роли</td><td class="mono">small</td></tr>
+<tr><td>Compliance</td><td class="mono">none</td></tr>
+<tr><td>Стек</td><td class="mono">python</td></tr>
+<tr><td>Approval</td><td class="mono">user</td></tr>
+<tr><td>Строгость</td><td class="mono">standard</td></tr>
+<tr><td>Подход</td><td class="mono">spec-kit</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Цепочка</h2><p>стадии и гейты</p></div>
+    <div class="body">
+      <table><thead><tr><th>#</th><th>Стадия</th><th>Вход</th><th>Выход</th><th>Гейт</th></tr></thead><tbody>
+<tr><td>1</td><td>Specify</td><td class="mono">docs/features/&lt;slug&gt;/overview.md</td><td class="mono">docs/features/&lt;slug&gt;/spec.md</td><td>spec approved</td></tr>
+<tr><td>2</td><td>Clarify</td><td class="mono">docs/features/&lt;slug&gt;/spec.md</td><td class="mono">docs/features/&lt;slug&gt;/spec.md (clarified)</td><td>clarification closed</td></tr>
+<tr><td>3</td><td>Plan</td><td class="mono">docs/features/&lt;slug&gt;/spec.md</td><td class="mono">docs/features/&lt;slug&gt;/plan.md</td><td>plan approved</td></tr>
+<tr><td>4</td><td>Tasks</td><td class="mono">docs/features/&lt;slug&gt;/plan.md</td><td class="mono">docs/features/&lt;slug&gt;/tasks.md</td><td>traceability complete</td></tr>
+<tr><td>5</td><td>Analyze</td><td class="mono">spec, plan and tasks</td><td class="mono">docs/features/&lt;slug&gt;/analysis-report.json</td><td>analysis clean</td></tr>
+<tr><td>6</td><td>Implement</td><td class="mono">docs/features/&lt;slug&gt;/tasks.md</td><td class="mono">code and green test run</td><td>tests green</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Что будет создано</h2><p>в целевом репозитории</p></div>
+    <div class="body">
+      <table><thead><tr><th>Путь</th><th>Назначение</th></tr></thead><tbody>
+<tr><td class="mono">.opencode/spec-chain.yml</td><td>манифест цепочки</td></tr>
+<tr><td class="mono">.opencode/skill/dev-specify/SKILL.md</td><td>сгенерированный stage-навык</td></tr>
+<tr><td class="mono">.opencode/skill/dev-clarify/SKILL.md</td><td>сгенерированный stage-навык</td></tr>
+<tr><td class="mono">.opencode/skill/dev-plan/SKILL.md</td><td>сгенерированный stage-навык</td></tr>
+<tr><td class="mono">.opencode/skill/dev-tasks/SKILL.md</td><td>сгенерированный stage-навык</td></tr>
+<tr><td class="mono">.opencode/skill/dev-analyze/SKILL.md</td><td>сгенерированный stage-навык</td></tr>
+<tr><td class="mono">.opencode/skill/dev-implement/SKILL.md</td><td>сгенерированный stage-навык</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Решение</h2><p>после review пользователя</p></div>
+    <div class="body">
+      <p>Утвердить: <code>generate_chain.py approve --plan spec-chain-plan.html --json spec-chain-plan.json</code>. После этого <code>apply</code> создаст навыки и манифест.</p>
+      <div class="approval">
+        <div class="ok">approved</div>
+        <div>revise</div>
+        <div>rejected</div>
+      </div>
+    </div>
+  </section>
+  <footer>Сгенерировано <code>dev-spec-chain</code> · read-only до approved</footer>
+</main>
+</body>
+</html>

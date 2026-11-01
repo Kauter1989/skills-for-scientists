@@ -263,8 +263,8 @@
       означает, что без скилла процесс теряет проверяемое звено.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">7</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">35</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-existing">8</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">34</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -372,6 +372,7 @@
 │       └── skill-review.html   <span class="c">← HTML-ревью</span>
 ├── dev/                        <span class="c">← разработка, префикс dev-</span>
 │   ├── dev-feature-start/
+│   ├── dev-spec-chain/
 │   └── dev-pr-report-html/     <span class="new">← добавлено: HTML-отчёт об изменениях</span>
 │       ├── SKILL.md
 │       ├── references/
@@ -439,7 +440,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-11-01 · 7 реализовано · 35 предложено</span>
+      <span>снимок 2026-11-01 · 8 реализовано · 34 предложено</span>
     </div>
   </footer>
 </main>
@@ -488,12 +489,12 @@
       links: "../dev/dev-feature-start/SKILL.md"
     },
     {
-      id: "dev-spec-chain", name: "/dev-spec-chain", domain: "dev", status: "proposed", priority: "P0",
+      id: "dev-spec-chain", name: "/dev-spec-chain", domain: "dev", status: "existing", priority: "core",
       blocks: ["spec"],
-      sum: "Адаптер spec-kit: specify → clarify → plan → tasks → analyze → implement; плюс checklist, constitution, converge и taskstoissues — 10 команд с шаблонами и конституцией под проект.",
-      io: "идея → spec.md, plan.md, tasks.md",
-      from: "пакет spec-kit",
-      links: ""
+      sum: "Мета-навык: опрос → профиль (greenfield/brownfield) → выбор spec-kit/OpenSpec/BMAD → генерация цепочки stage-навыков с гейтами.",
+      io: "профиль → .opencode/spec-chain.yml + skills",
+      from: "spec-kit / OpenSpec / BMAD",
+      links: "../dev/dev-spec-chain/SKILL.md"
     },
     {
       id: "dev-scope-check", name: "/dev-scope-check", domain: "dev", status: "proposed", priority: "P1",
@@ -849,7 +850,7 @@
     {
       label: "Разработка",
       steps: [
-        { t: "/dev-feature-start", c: "implemented" }, { t: "/dev-spec-chain", c: "new" }, { t: "/dev-adr", c: "new" },
+        { t: "/dev-feature-start", c: "implemented" }, { t: "/dev-spec-chain", c: "implemented" }, { t: "/dev-adr", c: "new" },
         { t: "/dev-repro-first", c: "new" }, { t: "/dev-verification-live", c: "new" },
         { t: "/dev-milestone-audit", c: "new" }, { t: "/dev-ship", c: "new" }, { t: "/dev-release", c: "new" },
         { t: "/dev-pr-report-html", c: "implemented" }, { t: "/dev-postmortem", c: "new" }
