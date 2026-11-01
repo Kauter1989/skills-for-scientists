@@ -130,7 +130,7 @@
 
     <div class="callout">
       <b>Запрос решения</b>
-      <p>Утвердить артефакты chain, формат ID, обязательный анализ и порядок тестовых задач до implementation. После approved — реализация.</p>
+      <p>Утвердить артефакты chain в <code>docs/features/&lt;slug&gt;/</code>, формат ID, обязательную проверку и порядок тестовых задач до implementation. После approved — реализация.</p>
     </div>
   </header>
 
@@ -210,7 +210,10 @@
         <span class="step hot">Overview</span><span class="arrow">→</span>
         <span class="step">Specify</span><span class="arrow">→</span>
         <span class="step">Clarify</span><span class="arrow">→</span>
-        <span class="step">Plan</span>
+        <span class="step">Plan</span><span class="arrow">→</span>
+        <span class="step">Tasks</span><span class="arrow">→</span>
+        <span class="step">Analyze</span><span class="arrow">→</span>
+        <span class="step">Implement</span>
       </div>
       <div class="grid2">
         <div class="box">
@@ -219,7 +222,7 @@
         </div>
         <div class="box">
           <h3>Выход</h3>
-          <p>specs/&lt;NNN&gt;-&lt;slug&gt;/ со spec.md, plan.md, tasks.md, analysis.md и отчётом проверки.</p>
+          <p><code>docs/features/&lt;slug&gt;/</code> рядом с <code>overview.md</code>: <code>spec.md</code>, <code>plan.md</code>, <code>tasks.md</code> и отчёт <code>check_spec_chain.py</code>.</p>
         </div>
       </div>
       <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты навыка</h3>
@@ -228,6 +231,7 @@
         <li><code>references/</code> — контракт артефактов, ID и гейты</li>
         <li><code>scripts/</code> — check_spec_chain.py и шаблоны</li>
         <li><code>examples/</code> — маленькая фича с полной цепочкой</li>
+        <li>отчёт <code>check_spec_chain.py</code> — достаточно вместо отдельного <code>analysis.md</code></li>
       </ul>
     </div>
   </section>
@@ -280,10 +284,12 @@
           <tr><td>Spec устаревает после изменений</td><td>средняя</td><td>высокое</td><td>повторный analyze и статус chain</td></tr>
         </tbody>
       </table>
-      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Решения ревью</h3>
       <ol>
-        <li>Где хранить chain: specs/&lt;NNN&gt;-&lt;slug&gt;/ ?</li>
-        <li>Нужен ли отдельный analysis.md или достаточно JSON-отчёта?</li>
+        <li>Chain хранится в <code>docs/features/&lt;slug&gt;/</code> рядом с <code>overview.md</code>.</li>
+        <li>Отдельный <code>analysis.md</code> не нужен: достаточно отчёта <code>check_spec_chain.py</code>.</li>
+        <li>Открытые <code>[NEEDS CLARIFICATION]</code> в plan и tasks запрещены.</li>
+        <li>Тестовые задачи идут раньше implementation; иначе chain не проходит.</li>
       </ol>
     </div>
   </section>

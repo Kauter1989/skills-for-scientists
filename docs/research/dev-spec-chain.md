@@ -75,13 +75,16 @@ analyze → implement`, сохранив traceability от user stories и те�
 | Analyze перед implement | Boehm; Femmer | пропустить анализ | пропуски и дубли |
 | Не писать код в этом навыке | практика | всё в одном | смешиваются план и реализация |
 
-## 7. Открытые вопросы для ревью
+## 7. Решения ревью
 
-1. Где хранить артефакты: `specs/<NNN>-<slug>/`?
-2. Нужен ли отдельный `analysis.md` или достаточно отчёта скрипта?
-3. Разрешать ли `[NEEDS CLARIFICATION]` в plan/tasks?
-4. Как кодировать тестовые задачи: `T-TEST-*` или `T-*` с полем `kind`?
-5. Кто утверждает chain перед implement?
+1. **Хранение:** `docs/features/<slug>/` рядом с `overview.md`.
+2. **Analysis:** отдельный `analysis.md` не нужен; достаточно отчёта
+   `check_spec_chain.py`.
+3. **Clarification:** открытые `[NEEDS CLARIFICATION]` в plan и tasks
+   запрещены.
+4. **Тестовые задачи:** префикс `T-TEST-*`, идут раньше `T-IMPL-*`.
+5. **Утверждение:** chain утверждается в том же режиме, что и stories:
+   `user` или `autonomous`, с записью в overview.
 
 ## 8. Что дальше
 
