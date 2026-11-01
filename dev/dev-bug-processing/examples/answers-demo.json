@@ -1,0 +1,16 @@
+{
+  "repo": "demo-project",
+  "stack": "python",
+  "test_framework": "unittest",
+  "test_command": "python -m unittest discover -s tests",
+  "test_root": "tests/",
+  "tracker": "none",
+  "environment": "local",
+  "team": "small",
+  "compliance": "none",
+  "flake_policy": "strict",
+  "repro_depth": "standard",
+  "approval": "user",
+  "approach": "auto",
+  "issue_template": "none"
+}

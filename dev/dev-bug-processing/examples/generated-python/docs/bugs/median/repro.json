@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "median",
+  "status": "reproduced",
+  "symptom": "median([1, 2, 3, 4]) возвращает 3 вместо 2.5",
+  "expected": "2.5",
+  "actual": "3",
+  "environment": "Python 3.12, Windows, demo-project, commit HEAD",
+  "command": "python -m unittest discover -s tests",
+  "runs": 3,
+  "results": {
+    "failed": 3,
+    "passed": 0
+  },
+  "minimal_case": "median([1, 2, 3, 4])",
+  "removed": [
+    "CLI-обёртка",
+    "файловый ввод",
+    "значения 5..10"
+  ],
+  "test": {
+    "path": "tests/test_median.py",
+    "name": "tests.test_median.MedianTest.test_even_length_returns_mean_of_middle_two",
+    "red_output": "AssertionError: 3 != 2.5",
+    "failure_matches_symptom": true
+  },
+  "diagnosis": {
+    "hypotheses": [
+      {
+        "claim": "median возвращает ordered[len // 2] и игнорирует второй средний элемент для чётной длины",
+        "evidence": "median.py возвращает ordered[middle]; тест падает только на чётной длине",
+        "confidence": "derived",
+        "next_probe": "Проверить median([1, 2]) и median([]) на граничные случаи"
+      }
+    ]
+  },
+  "probe_path": "docs/bugs/median/probe.json",
+  "next_steps": [],
+  "blocked_reason": ""
+}

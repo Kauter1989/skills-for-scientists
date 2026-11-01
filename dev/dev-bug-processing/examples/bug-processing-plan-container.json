@@ -1,0 +1,73 @@
+{
+  "status": "draft",
+  "created": "2026-11-01",
+  "repo": "container-service",
+  "approach": "container-first",
+  "generated_skill": "dev-bug-process",
+  "profile": {
+    "repo": "container-service",
+    "stack": "python",
+    "test_framework": "pytest",
+    "test_command": "docker compose run --rm app python -m pytest",
+    "test_root": "tests/",
+    "tracker": "jira",
+    "environment": "container",
+    "team": "enterprise",
+    "compliance": "audit",
+    "flake_policy": "strict",
+    "repro_depth": "deep",
+    "approval": "user",
+    "approach": "auto",
+    "issue_template": "jira"
+  },
+  "min_runs": 5,
+  "invariants": [
+    "I1",
+    "I2",
+    "I3",
+    "I4",
+    "I5",
+    "I6",
+    "I7",
+    "I8",
+    "I9"
+  ],
+  "files": [
+    {
+      "path": ".opencode/bug-processing.yml",
+      "purpose": "манифест профиля и гейтов"
+    },
+    {
+      "path": ".opencode/skill/dev-bug-process/SKILL.md",
+      "purpose": "операционный навык"
+    },
+    {
+      "path": ".opencode/skill/dev-bug-process/references/bug-contract.md",
+      "purpose": "контракт и инварианты"
+    },
+    {
+      "path": ".opencode/skill/dev-bug-process/templates/bug-report.md",
+      "purpose": "человекочитаемый отчёт"
+    },
+    {
+      "path": ".opencode/skill/dev-bug-process/templates/repro.json",
+      "purpose": "машиночитаемый отчёт"
+    },
+    {
+      "path": ".opencode/skill/dev-bug-process/scripts/probe_bug.py",
+      "purpose": "прогоны и классификация"
+    },
+    {
+      "path": ".opencode/skill/dev-bug-process/scripts/check_bug_report.py",
+      "purpose": "проверка отчёта"
+    },
+    {
+      "path": ".opencode/skill/dev-bug-process/examples/README.md",
+      "purpose": "пример заполнения"
+    },
+    {
+      "path": "docs/bugs/README.md",
+      "purpose": "правила каталога дефектов"
+    }
+  ]
+}

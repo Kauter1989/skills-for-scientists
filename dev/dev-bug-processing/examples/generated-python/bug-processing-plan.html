@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Bug processing plan — demo-project</title>
+<style>
+  :root { --paper:#f6f5f2; --card:#fff; --ink:#14181f; --muted:#5f6875; --line:#dfe2e7; --accent:#1f5f5b; --green:#1f7a4d; --amber:#a96500; --mono:ui-monospace,"Cascadia Code",Consolas,monospace; --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.55 var(--sans); }
+  .wrap { max-width:1080px; margin:0 auto; padding:36px 24px 44px; }
+  .kicker { font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); }
+  h1 { font-size:clamp(28px,4vw,42px); line-height:1.1; letter-spacing:-.02em; margin:8px 0 10px; }
+  .meta { color:var(--muted); font-size:12.5px; margin-bottom:18px; }
+  .status { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:4px 8px; border-radius:6px; background:#fbf0dc; color:var(--amber); }
+  .status.approved { background:#e7f4ec; color:var(--green); }
+  section { background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:14px; overflow:hidden; }
+  .head { padding:14px 18px 11px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .head h2 { margin:0; font-size:18px; }
+  .head p { margin:0; color:var(--muted); font-size:11.5px; }
+  .body { padding:14px 18px 18px; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { text-align:left; font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); border-bottom:1px solid var(--line); padding:6px 7px; }
+  td { border-bottom:1px solid var(--line); padding:7px; vertical-align:top; }
+  tr:last-child td { border-bottom:0; }
+  tr.selected td { background:#eef5f4; }
+  td.mono, code { font-family:var(--mono); font-size:11.5px; }
+  .callout { border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:9px; padding:12px 14px; background:#fcfdfd; margin-bottom:14px; }
+  .callout b { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:5px; }
+  .callout p { margin:0; }
+  .approval { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  .approval div { border:1px solid var(--line); border-radius:7px; padding:9px; text-align:center; font-size:12px; color:var(--muted); }
+  .approval div.ok { border-color:#bfe0cb; background:#e7f4ec; color:var(--green); font-weight:700; }
+  footer { color:var(--muted); font-size:11px; margin-top:16px; }
+  @media (max-width:700px) { .wrap { padding:20px 14px; } .approval { grid-template-columns:1fr; } }
+  @media print { @page { size:A4; margin:12mm; } body { background:#fff; font-size:9.5pt; } .wrap { max-width:none; padding:0; } section { break-inside:avoid; } }
+</style>
+</head>
+<body data-status="approved">
+<main class="wrap">
+  <div class="kicker">Bug processing plan · на утверждение</div>
+  <h1>demo-project</h1>
+  <div class="meta">
+    Подход: <b>test-first</b> · Дата: <b>2026-11-01</b>
+    · <span id="approval" class="status approved">approved</span>
+  </div>
+
+  <div class="callout">
+    <b>Что утверждается</b>
+    <p>Профиль репозитория, подход к отладке, 9 инвариантов, гейты и файлы сгенерированного <code>dev-bug-process</code>. До <code>approved</code> генерация не выполняется.</p>
+  </div>
+
+  <section>
+    <div class="head"><h2>Профиль</h2><p>основание для выбора подхода</p></div>
+    <div class="body">
+      <table><thead><tr><th>Поле</th><th>Значение</th></tr></thead><tbody>
+<tr><td>Репозиторий</td><td class="mono">demo-project</td></tr>
+<tr><td>Стек</td><td class="mono">python</td></tr>
+<tr><td>Тестовый фреймворк</td><td class="mono">unittest</td></tr>
+<tr><td>Команда тестов</td><td class="mono">python -m unittest discover -s tests</td></tr>
+<tr><td>Каталог тестов</td><td class="mono">tests/</td></tr>
+<tr><td>Трекер</td><td class="mono">none</td></tr>
+<tr><td>Окружение</td><td class="mono">local</td></tr>
+<tr><td>Команда</td><td class="mono">small</td></tr>
+<tr><td>Compliance</td><td class="mono">none</td></tr>
+<tr><td>Политика флейков</td><td class="mono">strict</td></tr>
+<tr><td>Глубина</td><td class="mono">standard</td></tr>
+<tr><td>Approval</td><td class="mono">user</td></tr>
+<tr><td>Подход</td><td class="mono">test-first</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Подход</h2><p>выбран по профилю</p></div>
+    <div class="body">
+      <table><thead><tr><th>Подход</th><th>Когда</th><th>Что добавляет</th></tr></thead><tbody>
+<tr class="selected"><td class="mono">test-first</td><td>локальный тестовый фреймворк и быстрые тесты</td><td>red test, минимальный вход, git bisect</td></tr>
+<tr><td class="mono">container-first</td><td>дефект зависит от окружения или сервисов</td><td>закреплённый образ, compose, детерминированные данные</td></tr>
+<tr><td class="mono">incident-first</td><td>production-инцидент или живая система</td><td>timeline, логи и трейсы, rollback, затем локальное воспроизведение</td></tr>
+<tr><td class="mono">benchmark-first</td><td>много дефектов или исследовательский стенд</td><td>пакетная обработка, метаданные, сравнение ревизий</td></tr>
+<tr><td class="mono">lightweight</td><td>малая команда и простой процесс</td><td>минимальный отчёт без тяжёлого трекера</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Инварианты</h2><p>не отключаются ни одним подходом</p></div>
+    <div class="body">
+      <table><thead><tr><th>#</th><th>Инвариант</th><th>Проверка</th></tr></thead><tbody>
+<tr><td class="mono">I1</td><td>Подробное описание: expected / actual, окружение, версия, шаги, входы, логи</td><td class="mono">поля repro.json</td></tr>
+<tr><td class="mono">I2</td><td>Воспроизводимость: не менее 3 прогонов с одинаковым результатом</td><td class="mono">probe.json</td></tr>
+<tr><td class="mono">I3</td><td>Минимальный вход, каждый остаток обоснован</td><td class="mono">minimal_case, removed</td></tr>
+<tr><td class="mono">I4</td><td>Падающий автотест до фикса</td><td class="mono">test.path, test.name, red_output</td></tr>
+<tr><td class="mono">I5</td><td>Падение соответствует заявленному symptom</td><td class="mono">failure_matches_symptom</td></tr>
+<tr><td class="mono">I6</td><td>Диагноз: гипотезы с evidence, confidence и следующим probe</td><td class="mono">diagnosis.hypotheses</td></tr>
+<tr><td class="mono">I7</td><td>Фикс не начинается до красного гейта</td><td class="mono">status и порядок шагов</td></tr>
+<tr><td class="mono">I8</td><td>Артефакты в docs/bugs/&lt;id&gt;/</td><td class="mono">манифест и файлы</td></tr>
+<tr><td class="mono">I9</td><td>Недоверенные команды не запускаются автоматически</td><td class="mono">явное решение пользователя</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Что будет создано</h2><p>в целевом репозитории</p></div>
+    <div class="body">
+      <table><thead><tr><th>Путь</th><th>Назначение</th></tr></thead><tbody>
+<tr><td class="mono">.opencode/bug-processing.yml</td><td>манифест профиля и гейтов</td></tr>
+<tr><td class="mono">.opencode/skill/dev-bug-process/SKILL.md</td><td>операционный навык</td></tr>
+<tr><td class="mono">.opencode/skill/dev-bug-process/references/bug-contract.md</td><td>контракт и инварианты</td></tr>
+<tr><td class="mono">.opencode/skill/dev-bug-process/templates/bug-report.md</td><td>человекочитаемый отчёт</td></tr>
+<tr><td class="mono">.opencode/skill/dev-bug-process/templates/repro.json</td><td>машиночитаемый отчёт</td></tr>
+<tr><td class="mono">.opencode/skill/dev-bug-process/scripts/probe_bug.py</td><td>прогоны и классификация</td></tr>
+<tr><td class="mono">.opencode/skill/dev-bug-process/scripts/check_bug_report.py</td><td>проверка отчёта</td></tr>
+<tr><td class="mono">.opencode/skill/dev-bug-process/examples/README.md</td><td>пример заполнения</td></tr>
+<tr><td class="mono">docs/bugs/README.md</td><td>правила каталога дефектов</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Решение</h2><p>после review пользователя</p></div>
+    <div class="body">
+      <p>Утвердить: <code>generate_bug_skill.py approve --plan bug-processing-plan.html --json bug-processing-plan.json</code>. После этого <code>apply</code> создаст навык и манифест.</p>
+      <div class="approval">
+        <div class="ok">approved</div>
+        <div>revise</div>
+        <div>rejected</div>
+      </div>
+    </div>
+  </section>
+  <footer>Сгенерировано <code>dev-bug-processing</code> · read-only до approved</footer>
+</main>
+</body>
+</html>

@@ -22,6 +22,7 @@
 | [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Bootstrap с опросом: стартовые навыки, профиль, AGENTS.md, hooks, CI и HTML-утверждение workflow | `bootstrap-plan.html`, `profile.yml` |
 | [`dev-feature-start`](dev/dev-feature-start/SKILL.md) | `dev/` | Старт фичи: ветка, brief с user stories, поведенческими, функциональными и unit-тестами при покрытии, red/green gates | `overview.md`, ветка |
 | [`dev-spec-chain`](dev/dev-spec-chain/SKILL.md) | `dev/` | Мета-навык: опрос, выбор spec-kit/OpenSpec/BMAD/lightweight и генерация цепочки stage-навыков под репозиторий | `.opencode/spec-chain.yml`, stage-навыки |
+| [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Мета-навык: опрос, выбор подхода к отладке и генерация `dev-bug-process` с инвариантами воспроизводимости | `.opencode/bug-processing.yml`, `dev-bug-process` |
 
 Возможные навыки, не реализованные в текущем цикле:
 
@@ -105,6 +106,12 @@ skills/
 │   │   ├── templates/
 │   │   └── examples/
 │   ├── dev-spec-chain/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   ├── templates/
+│   │   └── examples/
+│   ├── dev-bug-processing/
 │   │   ├── SKILL.md
 │   │   ├── references/
 │   │   ├── scripts/

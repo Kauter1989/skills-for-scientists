@@ -1,0 +1,16 @@
+{
+  "repo": "example-service",
+  "stack": "python",
+  "test_framework": "pytest",
+  "test_command": "python -m pytest",
+  "test_root": "tests/",
+  "tracker": "github",
+  "environment": "local",
+  "team": "small",
+  "compliance": "none",
+  "flake_policy": "strict",
+  "repro_depth": "standard",
+  "approval": "user",
+  "approach": "auto",
+  "issue_template": "github"
+}
