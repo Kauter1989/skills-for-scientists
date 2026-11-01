@@ -275,7 +275,7 @@ gh pr checks --watch
 
 Текущая очередь dev (D1 `dev-feature-start` и D2 `dev-spec-chain` реализованы):
 
-1. `dev-repro-first`
+1. `dev-bug-processing`
 2. `dev-regression-guard`
 3. `dev-verification-live`
 4. `dev-milestone-audit`

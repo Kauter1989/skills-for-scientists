@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Skill review — dev-bug-processing</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --green: #1f7a4d; --amber: #a96500; --red: #b42318; --violet: #6d5aa8;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .topbar { position: sticky; top: 0; z-index: 20; background: rgba(246,245,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; gap: 14px; min-height: 50px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  nav a { font-size: 11.5px; color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  header { padding: 40px 0 10px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 10px; }
+  h1 code { font-size: inherit; letter-spacing: -.02em; }
+  .sub { color: var(--muted); font-size: 17px; margin: 0 0 18px; max-width: 850px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 10px; font-size: 11.5px; color: var(--muted); }
+  .chip b { color: var(--ink); }
+  .status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 8px; border-radius: 6px; }
+  .status.draft { background: #eef0f3; color: var(--muted); }
+  .status.revise { background: #fbf0dc; color: var(--amber); }
+  .status.approved { background: #e7f4ec; color: var(--green); }
+  .status.rejected { background: #fbe9e7; color: var(--red); }
+
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; overflow: hidden; scroll-margin-top: 64px; }
+  .sec-head { padding: 16px 22px 13px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .sec-head h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: 12px; }
+  .body { padding: 18px 22px 22px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; background: #fcfdfd; margin-bottom: 16px; }
+  .callout b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 5px; }
+  .callout p { margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 14px; }
+  caption { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding-bottom: 6px; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 7px 8px; }
+  td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, code { font-family: var(--mono); font-size: 11.5px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; background: #fff; }
+  .box h3 { margin: 0 0 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .box ul { margin: 0; padding-left: 17px; }
+  .box li { font-size: 12.5px; }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 14px; }
+  .step { border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; font-size: 12px; background: #fff; }
+  .step.hot { border-color: #b8d0cd; background: #e6efee; }
+  .arrow { color: var(--line-strong); }
+  .metric { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .metric span { border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; font-size: 11.5px; color: var(--muted); }
+  .metric b { color: var(--ink); }
+
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .checklist li:last-child { border-bottom: 0; }
+  .checklist li::before { content: "☐"; margin-right: 8px; color: var(--muted); }
+
+  .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .decision div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+  .decision div.approved { border-color: #bfe0cb; background: #e7f4ec; color: var(--green); font-weight: 700; }
+
+  footer { padding: 8px 0 40px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 14px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10pt; }
+    .topbar { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand">Skill review</span>
+    <nav aria-label="Разделы ревью">
+      <a href="#problem">Проблема</a>
+      <a href="#github">GitHub</a>
+      <a href="#science">Наука</a>
+      <a href="#design">Дизайн</a>
+      <a href="#metrics">Метрики</a>
+      <a href="#sources">Источники</a>
+      <a href="#decision">Решение</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header>
+    <div class="kicker">План навыка · на ревью</div>
+    <h1><code>dev-bug-processing</code></h1>
+    <p class="sub">Мета-навык: опрос → профиль репозитория → выбор подхода к отладке → генерация навыка <code>dev-bug-process</code> с неизменными гейтами воспроизводимости и подробного описания.</p>
+    <div class="chips">
+      <span class="chip">Домен: <b>dev</b></span>
+      <span class="chip">Приоритет: <b>P0</b></span>
+      <span class="chip">Автор: <b>OpenCode agent</b></span>
+      <span class="chip">Дата: <b>2026-11-01</b></span>
+      <span class="chip">Источники: <b>20</b></span>
+      <span class="status draft">draft</span>
+    </div>
+
+    <div class="callout">
+      <b>Запрос решения</b>
+      <p>Утвердить мета-навык: профиль репозитория, матрицу подходов (test-first / container-first / incident-first / benchmark-first / lightweight), обязательные инварианты и генерацию <code>.opencode/skill/dev-bug-process/</code> с манифестом <code>.opencode/bug-processing.yml</code> после <code>approved</code>.</p>
+    </div>
+  </header>
+
+  <section id="problem">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>Проблема и границы</h2>
+    </div>
+    <div class="body">
+      <p>Дефекты обрабатывают по-разному: в одном репозитории есть pytest и GitHub Issues, в другом — Docker Compose, Jira и production-инциденты, в третьем — пакет исследовательских багов. Один фиксированный процесс либо слишком тяжёл, либо не покрывает окружение. При этом у всех случаев одинаковое ядро: дефект нужно описать, воспроизвести, уменьшить, превратить в падающий тест и только потом искать причину.</p>
+      <p>Навык решает это как мета-навык: опрашивает репозиторий, выбирает подход и генерирует операционный навык. Ядро не настраивается, церемония и инструменты — настраиваются.</p>
+      <div class="grid2">
+        <div class="box">
+          <h3>Входит в задачу</h3>
+          <ul>
+            <li>опрос: стек, тесты, трекер, окружение, команда;</li>
+            <li>выбор подхода по профилю;</li>
+            <li>HTML-план и <code>approved</code> до генерации;</li>
+            <li>генерация <code>dev-bug-process</code> в целевом репозитории;</li>
+            <li>манифест с командами, путями и гейтами;</li>
+            <li>проверка структуры и инвариантов.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Не входит</h3>
+          <ul>
+            <li>обрабатывать конкретный дефект за сгенерированный навык;</li>
+            <li>исправлять код и закрывать регрессии;</li>
+            <li>проверять живой стенд и деплой;</li>
+            <li>ставить новую фичу — <code>dev-feature-start</code>;</li>
+            <li>генерировать цепочку спецификаций — <code>dev-spec-chain</code>;</li>
+            <li>оценивать людей и автора отчёта.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="github">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>GitHub-аналоги</h2>
+      <p>девять репозиториев, данные API на 2026-11-01</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Мета-слой и прикладной слой</caption>
+        <thead><tr><th>Репозиторий</th><th>Лицензия</th><th>Коммит</th><th>Подход</th><th>Берём</th><th>Отвергаем</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">github/spec-kit</td><td>MIT</td><td class="mono">2026-10-30</td><td>Опрос → профиль → генерация артефактов</td><td>генерацию под репозиторий</td><td>фиксированную цепочку стадий</td></tr>
+          <tr><td class="mono">Fission-AI/OpenSpec</td><td>MIT</td><td class="mono">2026-10-30</td><td>SDD для AI-ассистентов, spec deltas</td><td>изменение как отдельный артефакт</td><td>избыточную церемонию</td></tr>
+          <tr><td class="mono">bmad-code-org/BMAD-METHOD</td><td>NOASSERTION</td><td class="mono">2026-11-01</td><td>Ролевой agile-метод</td><td>story-файлы и роли</td><td>тяжёлую ролевую модель</td></tr>
+          <tr><td class="mono">soarsmu/BugsInPy</td><td>не указана</td><td class="mono">2025-10-09</td><td>Бенчмарк дефектов Python</td><td>структуру «дефект → тест → окружение»</td><td>код и данные без лицензии</td></tr>
+          <tr><td class="mono">rjust/defects4j</td><td>MIT</td><td class="mono">2026-04-07</td><td>База дефектов Java</td><td>минимальный триггерный тест</td><td>тяжёлую Java-инфраструктуру</td></tr>
+          <tr><td class="mono">HypothesisWorks/hypothesis</td><td>MPL-2.0</td><td class="mono">2026-10-30</td><td>Property-based testing с shrinking</td><td>уменьшение контрпримера</td><td>генерацию входов для каждого дефекта</td></tr>
+          <tr><td class="mono">dubzzz/fast-check</td><td>MIT</td><td class="mono">2026-11-01</td><td>Property-based testing для JS</td><td>минимальный контрпример</td><td>JavaScript-специфику</td></tr>
+          <tr><td class="mono">GZoltar/gzoltar</td><td>LGPL-3.0</td><td class="mono">2023-06-19</td><td>Локализация дефектов Java</td><td>ранжирование гипотез</td><td>SBFL как источник истины</td></tr>
+          <tr><td class="mono">google/oss-fuzz</td><td>Apache-2.0</td><td class="mono">2026-10-29</td><td>Фаззинг и воспроизведение падений</td><td>reproducer и фиксированное окружение</td><td>фаззинг-инфраструктуру</td></tr>
+        </tbody>
+      </table>
+      <p class="mono">Поисковые запросы: bug reproduction benchmark, reproducible bugs, fault localization, delta debugging, spec-driven development, OpenSpec, BMAD, bug report template</p>
+    </div>
+  </section>
+
+  <section id="science">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>Научные источники и стандарты</h2>
+      <p>семь рецензируемых работ и четыре официальных источника</p>
+    </div>
+    <div class="body">
+      <table>
+        <caption>Что подтверждено и какие есть ограничения</caption>
+        <thead><tr><th>Источник</th><th>Тип</th><th>Вклад</th><th>Ограничение</th><th>Вывод для навыка</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Zeller &amp; Hildebrandt, 2002, DOI 10.1109/32.988498</td><td>рецензируемая</td><td>Delta debugging: уменьшение входа с сохранением падения</td><td>цена растёт с размером входа; нужен оракул</td><td>минимальный reproducer</td></tr>
+          <tr><td class="mono">Wong et al., 2016, DOI 10.1109/TSE.2016.2521368</td><td>рецензируемая</td><td>Обзор методов локализации</td><td>ранжирование не равно причине</td><td>локализация — гипотезы, не приговор</td></tr>
+          <tr><td class="mono">Parnin &amp; Orso, 2011, DOI 10.1145/2001420.2001445</td><td>рецензируемая</td><td>Автоподсказки без контекста часто не помогают</td><td>небольшая выборка</td><td>диагноз объясняет symptom</td></tr>
+          <tr><td class="mono">Bettenburg et al., 2008, DOI 10.1145/1453101.1453146</td><td>рецензируемая</td><td>Шаги воспроизведения — ключевое поле отчёта</td><td>самоотчёт разработчиков</td><td>подробное описание обязательно</td></tr>
+          <tr><td class="mono">Just et al., 2014, DOI 10.1145/2610384.2628055</td><td>рецензируемая</td><td>Реальные дефекты с падающими тестами</td><td>Java-only</td><td>red test — основной артефакт</td></tr>
+          <tr><td class="mono">Rafique &amp; Misic, 2013, DOI 10.1109/TSE.2012.28</td><td>рецензируемая</td><td>Метаанализ TDD</td><td>неоднородные исследования</td><td>тест до фикса</td></tr>
+          <tr><td class="mono">Wang et al., 2025, DOI 10.1109/MSR66628.2025.00019</td><td>рецензируемая</td><td>Автоматическое воспроизведение по отчётам</td><td>узкий класс веб-приложений</td><td>сохранять все входы</td></tr>
+          <tr><td class="mono">git bisect, OSS-Fuzz, Hypothesis, pytest</td><td>официальные</td><td>Replay, сужение диапазона, кэш падений</td><td>не научный источник</td><td>нормативные команды и evidence</td></tr>
+        </tbody>
+      </table>
+      <div class="box">
+        <h3>Waiver научной части</h3>
+        <p>Не требуется: семь рецензируемых источников относятся к воспроизведению, локализации и TDD.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="design">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>Синтез и предлагаемый дизайн</h2>
+    </div>
+    <div class="body">
+      <p>Мета-слой даёт опрос и генерацию артефактов, прикладной слой — проверяемое воспроизведение. Навык соединяет их: профиль репозитория выбирает команды, пути и инструменты, но не отключает гейты. Это закрывает пробел между генераторами спецификаций и инструментами отладки.</p>
+      <div class="flow">
+        <span class="step hot">1. Survey</span><span class="arrow">→</span>
+        <span class="step">2. Profile</span><span class="arrow">→</span>
+        <span class="step">3. Approach</span><span class="arrow">→</span>
+        <span class="step">4. HTML plan</span><span class="arrow">→</span>
+        <span class="step">5. approved</span><span class="arrow">→</span>
+        <span class="step">6. Generate</span><span class="arrow">→</span>
+        <span class="step">7. Check</span>
+      </div>
+
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Матрица подходов</h3>
+      <table>
+        <thead><tr><th>Профиль</th><th>Подход</th><th>Что добавляет</th></tr></thead>
+        <tbody>
+          <tr><td>Локальный тестовый фреймворк, обычные дефекты</td><td class="mono">test-first</td><td>red test, минимальный вход, bisect</td></tr>
+          <tr><td>Зависимость от окружения или сервисов</td><td class="mono">container-first</td><td>закреплённый образ, compose, детерминированные данные</td></tr>
+          <tr><td>Production-инцидент</td><td class="mono">incident-first</td><td>timeline, логи и трейсы, rollback, затем локальное воспроизведение</td></tr>
+          <tr><td>Много дефектов или исследовательский стенд</td><td class="mono">benchmark-first</td><td>пакетная обработка, метаданные, сравнение ревизий</td></tr>
+          <tr><td>Малая команда, простой процесс</td><td class="mono">lightweight</td><td>минимальный отчёт без тяжёлого трекера</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Инварианты, которые не отключаются</h3>
+      <table>
+        <thead><tr><th>#</th><th>Инвариант</th><th>Проверка</th></tr></thead>
+        <tbody>
+          <tr><td>I1</td><td>Подробное описание: expected/actual, окружение, версия, шаги, входы, логи</td><td>поля <code>repro.json</code></td></tr>
+          <tr><td>I2</td><td>Воспроизводимость: ≥3 прогона с одинаковым результатом</td><td><code>probe.json</code></td></tr>
+          <tr><td>I3</td><td>Минимальный вход, каждый остаток обоснован</td><td><code>minimal_case</code>, <code>removed</code></td></tr>
+          <tr><td>I4</td><td>Падающий автотест до фикса</td><td>путь, имя, red output</td></tr>
+          <tr><td>I5</td><td>Падение соответствует symptom</td><td><code>failure_matches_symptom</code></td></tr>
+          <tr><td>I6</td><td>Диагноз: гипотезы с evidence, confidence и следующим probe</td><td><code>hypotheses[]</code></td></tr>
+          <tr><td>I7</td><td>Нет фикса до красного гейта</td><td>статус и порядок шагов</td></tr>
+          <tr><td>I8</td><td>Артефакты в <code>docs/bugs/&lt;id&gt;/</code></td><td>манифест и файлы</td></tr>
+          <tr><td>I9</td><td>Недоверенные команды не запускаются автоматически</td><td>явное решение пользователя</td></tr>
+        </tbody>
+      </table>
+
+      <div class="grid2">
+        <div class="box">
+          <h3>Вход</h3>
+          <ul>
+            <li>репозиторий или его профиль;</li>
+            <li>стек и тестовый фреймворк;</li>
+            <li>команда тестов и путь к тестам;</li>
+            <li>трекер и формат issue;</li>
+            <li>окружение: local / container / production;</li>
+            <li>команда, compliance, flake policy;</li>
+            <li>режим утверждения <code>user</code> / <code>autonomous</code>.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Выход</h3>
+          <ul>
+            <li><code>bug-processing-plan.html</code> и JSON;</li>
+            <li><code>.opencode/bug-processing.yml</code>;</li>
+            <li><code>.opencode/skill/dev-bug-process/SKILL.md</code>;</li>
+            <li>references, templates и scripts навыка;</li>
+            <li><code>docs/bugs/&lt;id&gt;/</code> — шаблон артефактов;</li>
+            <li>отчёт <code>check_bug_skill.py</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты мета-навыка</h3>
+      <ul>
+        <li><code>SKILL.md</code> — опрос, выбор подхода, генерация, границы;</li>
+        <li><code>references/approach-selection.md</code> — профили и матрица;</li>
+        <li><code>references/bug-contract.md</code> — инварианты, поля, статусы, confidence;</li>
+        <li><code>templates/bug-processing-plan.html</code> — план на утверждение;</li>
+        <li><code>templates/bug-processing.yml</code> — манифест;</li>
+        <li><code>templates/generated-SKILL.md</code> — шаблон <code>dev-bug-process</code>;</li>
+        <li><code>scripts/generate_bug_skill.py</code> — survey / plan / approve / apply;</li>
+        <li><code>scripts/check_bug_skill.py</code> — проверка сгенерированного навыка;</li>
+        <li><code>examples/answers-python.json</code>, <code>answers-container.json</code>, готовый план.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="alternatives">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>Альтернативы и цена</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead>
+        <tbody>
+          <tr><td>Один фиксированный процесс</td><td>простота</td><td>не подходит части стеков и трекеров</td><td>профиль репозитория игнорируется</td></tr>
+          <tr><td>Только шаблон issue</td><td>быстро</td><td>нет red-теста и evidence</td><td>не проверяет воспроизводимость</td></tr>
+          <tr><td>Только инструмент локализации</td><td>автоматическое ранжирование</td><td>нет reproducer и отчёта</td><td>подсказка без проверки</td></tr>
+          <tr><td>Полностью автономная генерация без approval</td><td>быстрее</td><td>неверные команды и пути</td><td>противоречит Review Gate</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="metrics">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>Метрики и план проверки</h2>
+    </div>
+    <div class="body">
+      <div class="metric">
+        <span><b>Генерация</b> — 3 профиля → 3 подхода</span>
+        <span><b>Инварианты</b> — 9/9 в манифесте</span>
+        <span><b>Проверка</b> — exit 0 на примере</span>
+        <span><b>Отказ</b> — apply до approved → exit 2</span>
+      </div>
+      <ol>
+        <li><code>generate_bug_skill.py plan</code> на python-профиле: ожидается <code>test-first</code> и 5 стадий.</li>
+        <li><code>plan</code> на container-профиле: ожидается <code>container-first</code> и блок окружения.</li>
+        <li><code>apply</code> до <code>approve</code>: ожидается отказ.</li>
+        <li><code>apply</code> после <code>approve</code>: созданы манифест и <code>dev-bug-process/SKILL.md</code>.</li>
+        <li><code>check_bug_skill.py --root</code>: exit 0; при удалённом инварианте — exit 1.</li>
+        <li><code>--dry-run</code>: ничего не пишет.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="risks">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>Риски и открытые вопросы</h2>
+    </div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead>
+        <tbody>
+          <tr><td>Слишком много вопросов</td><td>средняя</td><td>среднее: опрос бросают</td><td>6 обязательных, остальное — defaults</td></tr>
+          <tr><td>Сгенерированный навык теряет инвариант</td><td>средняя</td><td>высокое: качество падает</td><td><code>check_bug_skill.py</code> проверяет 9/9</td></tr>
+          <tr><td>Неверные команды для стека</td><td>средняя</td><td>среднее: навык не запускается</td><td>план на утверждение и правка манифеста</td></tr>
+          <tr><td>Дублирование с <code>dev-spec-chain</code></td><td>низкая</td><td>среднее: путаница</td><td>spec-chain — фичи, bug-processing — дефекты</td></tr>
+          <tr><td>Incident-first обходит red-гейт</td><td>средняя</td><td>высокое: фикс без evidence</td><td>mitigation разрешён, фикс — только после red</td></tr>
+          <tr><td>Запуск недоверенной команды</td><td>низкая</td><td>высокое: побочные эффекты</td><td>I9: только явный запуск в sandbox</td></tr>
+        </tbody>
+      </table>
+      <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+      <ol>
+        <li>Имя сгенерированного навыка: <code>dev-bug-process</code> или <code>dev-bug-processing</code>? Предлагается <code>process</code>, чтобы не конфликтовать с мета-навыком.</li>
+        <li>Минимум 3 прогона достаточно? Предлагается 3 обязательных, 5 для флейков.</li>
+        <li>Фикс при <code>estimated</code> или только при <code>derived</code>/<code>measured</code>? Предлагается <code>derived</code>.</li>
+        <li>Incident-first: mitigation до red разрешать? Предлагается да, фикс — нет.</li>
+        <li>Генерировать шаблон issue для GitHub/Jira? Предлагается опционально.</li>
+        <li>Нужен ли <code>git bisect</code> в сгенерированном навыке? Предлагается только команда, без автозапуска.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>Источники</h2>
+      <p>дата обращения 2026-11-01</p>
+    </div>
+    <div class="body">
+      <ol>
+        <li><span class="mono">https://github.com/github/spec-kit</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/Fission-AI/OpenSpec</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/bmad-code-org/BMAD-METHOD</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/soarsmu/BugsInPy</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/rjust/defects4j</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/HypothesisWorks/hypothesis</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/dubzzz/fast-check</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/GZoltar/gzoltar</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://github.com/google/oss-fuzz</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://doi.org/10.1109/32.988498</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://doi.org/10.1109/TSE.2016.2521368</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://doi.org/10.1145/2001420.2001445</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://doi.org/10.1145/1453101.1453146</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://doi.org/10.1145/2610384.2628055</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://doi.org/10.1109/TSE.2012.28</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://doi.org/10.1109/MSR66628.2025.00019</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://git-scm.com/docs/git-bisect</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://google.github.io/oss-fuzz/advanced-topics/reproducing/</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://hypothesis.readthedocs.io/en/latest/tutorial/replaying-failures.html</span> — доступно 2026-11-01</li>
+        <li><span class="mono">https://docs.pytest.org/en/stable/how-to/failures.html</span> — доступно 2026-11-01</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="decision">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>Чек-лист и решение</h2>
+      <p>без approved реализация не начинается</p>
+    </div>
+    <div class="body">
+      <ul class="checklist">
+        <li>Изучены 9 GitHub-аналогов, лицензии проверены.</li>
+        <li>Изучены 7 научных и 4 официальных источника.</li>
+        <li>Каждое утверждение имеет источник или помечено как решение автора.</li>
+        <li>Границы и не-цели сформулированы.</li>
+        <li>Метрики проверяемы: exit code, 3 профиля, 9 инвариантов.</li>
+        <li>Навык не дублирует <code>dev-feature-start</code> и <code>dev-spec-chain</code> по триггерам.</li>
+        <li>Артефакты и команды воспроизводимы.</li>
+      </ul>
+      <div class="decision">
+        <div class="approved">approved</div>
+        <div class="revise">revise</div>
+        <div class="rejected">rejected</div>
+        <div class="draft">draft</div>
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:12px">
+        Решение: draft. Комментарий ревьюера: ожидает ревью разработчика.
+        После правок обновите статус в шапке и дату.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>opencode-skills · review template</span>
+      <span>dev-bug-processing · 2026-11-01</span>
+    </div>
+  </footer>
+</main>
+</body>
+</html>

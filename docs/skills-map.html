@@ -511,11 +511,11 @@
       links: ""
     },
     {
-      id: "dev-repro-first", name: "/dev-repro-first", domain: "dev", status: "proposed", priority: "P0",
+      id: "dev-bug-processing", name: "/dev-bug-processing", domain: "dev", status: "proposed", priority: "P0",
       blocks: ["build", "verify"],
-      sum: "Воспроизвести дефект до починки: изолировать окружение, минимальный кейс, падающий тест.",
-      io: "симптом → failing test + диагноз",
-      from: "ядро практики bugfix",
+      sum: "Мета-навык: опрос → профиль репозитория → выбор подхода к отладке → генерация навыка обработки дефектов с инвариантами воспроизводимости.",
+      io: "профиль → .opencode/bug-processing.yml + dev-bug-process",
+      from: "spec-kit / OpenSpec / Defects4J",
       links: ""
     },
     {
@@ -851,7 +851,7 @@
       label: "Разработка",
       steps: [
         { t: "/dev-feature-start", c: "implemented" }, { t: "/dev-spec-chain", c: "implemented" }, { t: "/dev-adr", c: "new" },
-        { t: "/dev-repro-first", c: "new" }, { t: "/dev-verification-live", c: "new" },
+        { t: "/dev-bug-processing", c: "new" }, { t: "/dev-verification-live", c: "new" },
         { t: "/dev-milestone-audit", c: "new" }, { t: "/dev-ship", c: "new" }, { t: "/dev-release", c: "new" },
         { t: "/dev-pr-report-html", c: "implemented" }, { t: "/dev-postmortem", c: "new" }
       ]

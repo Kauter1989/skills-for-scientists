@@ -483,7 +483,7 @@
           <tr><td>D0</td><td class="mono">dev-pr-report-html</td><td><span class="tag dev">retro</span></td><td>M</td><td>DORA-метрики, code review analytics, token accounting, LLM evaluation, hallucination detection.</td><td>research/review для v2</td><td>Phase 1</td></tr>
           <tr><td>D1</td><td class="mono">dev-feature-start</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>S</td><td>spec-driven development, branch conventions, requirements engineering, TDD.</td><td>ветка + overview.md + red/green + unit*</td><td>H1, H2</td></tr>
           <tr><td>D2</td><td class="mono">dev-spec-chain</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>L</td><td>spec-kit (greenfield), OpenSpec (brownfield), BMAD, survey, chain generation.</td><td>profile → approach → generated chain</td><td>D1, H1</td></tr>
-          <tr><td>D3</td><td class="mono">dev-repro-first</td><td><span class="tag">P0</span></td><td>M</td><td>bug reproduction, TDD, fault localization, debugging empirical studies.</td><td>падающий тест + диагноз</td><td>H1</td></tr>
+          <tr><td>D3</td><td class="mono">dev-bug-processing</td><td><span class="tag">P0</span></td><td>L</td><td>bug reproduction, fault localization, TDD, survey, generation of a repo-specific bug process.</td><td>profile → approach → generated dev-bug-process</td><td>D2, H1</td></tr>
           <tr><td>D4</td><td class="mono">dev-regression-guard</td><td><span class="tag">P0</span></td><td>M</td><td>regression tests, mutation testing, defect classes, architecture tests.</td><td>защита класса ошибок</td><td>D3</td></tr>
           <tr><td>D5</td><td class="mono">dev-verification-live</td><td><span class="tag">P0</span></td><td>L</td><td>Playwright/Cypress, browser automation, E2E oracles, sandboxing.</td><td>доказательство вживую</td><td>H1, H3</td></tr>
           <tr><td>D6</td><td class="mono">dev-milestone-audit</td><td><span class="tag">P0</span></td><td>L</td><td>software audit, inspection, release readiness, coverage limitations, multi-agent review.</td><td>отчёт расхождений</td><td>D5, H3</td></tr>
@@ -715,9 +715,9 @@
         <li><code>harness-init</code> реализован, review <code>approved</code>, PR #6 merged.</li>
         <li><code>dev-feature-start</code> реализован, review <code>approved</code>, PR #7 merged.</li>
         <li><code>dev-spec-chain</code> реализован, review <code>approved</code>, PR #8.</li>
-        <li>Собрать <code>docs/research/dev-repro-first.md</code>.</li>
-        <li>Собрать <code>docs/reviews/dev-repro-first.html</code> и получить <code>approved</code>.</li>
-        <li>Реализовать <code>dev/dev-repro-first/</code>.</li>
+        <li>Собрать <code>docs/research/dev-bug-processing.md</code>.</li>
+        <li>Собрать <code>docs/reviews/dev-bug-processing.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>dev/dev-bug-processing/</code>.</li>
       </ol>
       <div class="decision">
         <div class="ok">approved</div>
