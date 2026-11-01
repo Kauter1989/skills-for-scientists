@@ -8,7 +8,7 @@
 | Автор | OpenCode agent |
 | Дата начала | `2026-11-01` |
 | Дата снимка источников | `2026-11-01` |
-| Статус | `draft` |
+| Статус | `approved` |
 
 ## 1. Задача
 
@@ -165,11 +165,11 @@
 ## 9. Что дальше
 
 - [x] Research Gate: 9 GitHub-аналогов, 7 научных источников, 4 официальных
-- [ ] Собран `docs/reviews/dev-bug-processing.html`
-- [ ] Ревью проведено, статус `approved`
-- [ ] Создан каталог `dev/dev-bug-processing/`
-- [ ] Генерация навыка и пример воспроизводятся
-- [ ] Обновлены `docs/skills-map.html` и `README.md`
+- [x] Собран `docs/reviews/dev-bug-processing.html`
+- [x] Ревью проведено, статус `approved`
+- [x] Создан каталог `dev/dev-bug-processing/`
+- [x] Генерация навыка и пример воспроизводятся
+- [x] Обновлены `docs/skills-map.html` и `README.md`
 
 ## 10. Источники
 

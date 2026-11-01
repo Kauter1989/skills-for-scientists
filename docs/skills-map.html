@@ -263,8 +263,8 @@
       означает, что без скилла процесс теряет проверяемое звено.
     </p>
     <div class="hero-stats">
-      <div class="hstat"><b id="stat-existing">8</b><span>в репозитории</span></div>
-      <div class="hstat"><b id="stat-proposed">34</b><span>предложено</span></div>
+      <div class="hstat"><b id="stat-existing">9</b><span>в репозитории</span></div>
+      <div class="hstat"><b id="stat-proposed">33</b><span>предложено</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
       <div class="hstat"><b>4</b><span>домена</span></div>
     </div>
@@ -373,6 +373,7 @@
 ├── dev/                        <span class="c">← разработка, префикс dev-</span>
 │   ├── dev-feature-start/
 │   ├── dev-spec-chain/
+│   ├── dev-bug-processing/
 │   └── dev-pr-report-html/     <span class="new">← добавлено: HTML-отчёт об изменениях</span>
 │       ├── SKILL.md
 │       ├── references/
@@ -440,7 +441,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-11-01 · 8 реализовано · 34 предложено</span>
+      <span>снимок 2026-11-01 · 9 реализовано · 33 предложено</span>
     </div>
   </footer>
 </main>
@@ -511,12 +512,12 @@
       links: ""
     },
     {
-      id: "dev-bug-processing", name: "/dev-bug-processing", domain: "dev", status: "proposed", priority: "P0",
+      id: "dev-bug-processing", name: "/dev-bug-processing", domain: "dev", status: "existing", priority: "core",
       blocks: ["build", "verify"],
       sum: "Мета-навык: опрос → профиль репозитория → выбор подхода к отладке → генерация навыка обработки дефектов с инвариантами воспроизводимости.",
       io: "профиль → .opencode/bug-processing.yml + dev-bug-process",
       from: "spec-kit / OpenSpec / Defects4J",
-      links: ""
+      links: "../dev/dev-bug-processing/SKILL.md"
     },
     {
       id: "dev-regression-guard", name: "/dev-regression-guard", domain: "dev", status: "proposed", priority: "P0",
@@ -851,7 +852,7 @@
       label: "Разработка",
       steps: [
         { t: "/dev-feature-start", c: "implemented" }, { t: "/dev-spec-chain", c: "implemented" }, { t: "/dev-adr", c: "new" },
-        { t: "/dev-bug-processing", c: "new" }, { t: "/dev-verification-live", c: "new" },
+        { t: "/dev-bug-processing", c: "implemented" }, { t: "/dev-verification-live", c: "new" },
         { t: "/dev-milestone-audit", c: "new" }, { t: "/dev-ship", c: "new" }, { t: "/dev-release", c: "new" },
         { t: "/dev-pr-report-html", c: "implemented" }, { t: "/dev-postmortem", c: "new" }
       ]

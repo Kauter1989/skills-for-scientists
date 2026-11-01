@@ -172,8 +172,8 @@
       Отчётные навыки остаются в поддержке; новые — после science.
     </p>
     <div class="stats">
-      <div class="stat"><b>8</b><span>навыка в репозитории</span></div>
-      <div class="stat"><b>34</b><span>в очереди</span></div>
+      <div class="stat"><b>9</b><span>навыков в репозитории</span></div>
+      <div class="stat"><b>33</b><span>в очереди</span></div>
       <div class="stat"><b>5</b><span>обязательных гейтов</span></div>
       <div class="stat"><b>7 / 17 / 9</b><span>harness / dev / science</span></div>
       <div class="stat"><b>3 + 2</b><span>минимум GitHub + научных источников</span></div>
@@ -470,8 +470,8 @@
   <section class="panel" id="dev">
     <div class="panel-head">
       <h2>Phase 2 · Dev</h2>
-      <p>После harness: 16 новых навыков и ретро-ревью существующего отчёта</p>
-      <span class="count">17 навыков · 2 готово · 7 × P0</span>
+      <p>После harness: 15 новых навыков и ретро-ревью существующего отчёта</p>
+      <span class="count">17 навыков · 3 готово · 7 × P0</span>
     </div>
     <div class="panel-body">
       <table>
@@ -483,7 +483,7 @@
           <tr><td>D0</td><td class="mono">dev-pr-report-html</td><td><span class="tag dev">retro</span></td><td>M</td><td>DORA-метрики, code review analytics, token accounting, LLM evaluation, hallucination detection.</td><td>research/review для v2</td><td>Phase 1</td></tr>
           <tr><td>D1</td><td class="mono">dev-feature-start</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>S</td><td>spec-driven development, branch conventions, requirements engineering, TDD.</td><td>ветка + overview.md + red/green + unit*</td><td>H1, H2</td></tr>
           <tr><td>D2</td><td class="mono">dev-spec-chain</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>L</td><td>spec-kit (greenfield), OpenSpec (brownfield), BMAD, survey, chain generation.</td><td>profile → approach → generated chain</td><td>D1, H1</td></tr>
-          <tr><td>D3</td><td class="mono">dev-bug-processing</td><td><span class="tag">P0</span></td><td>L</td><td>bug reproduction, fault localization, TDD, survey, generation of a repo-specific bug process.</td><td>profile → approach → generated dev-bug-process</td><td>D2, H1</td></tr>
+          <tr><td>D3</td><td class="mono">dev-bug-processing</td><td><span class="tag">P0</span> <span class="tag" style="background:#e7f4ec;color:#1f7a4d">готов</span></td><td>L</td><td>bug reproduction, fault localization, TDD, survey, generation of a repo-specific bug process.</td><td>profile → approach → generated dev-bug-process</td><td>D2, H1</td></tr>
           <tr><td>D4</td><td class="mono">dev-regression-guard</td><td><span class="tag">P0</span></td><td>M</td><td>regression tests, mutation testing, defect classes, architecture tests.</td><td>защита класса ошибок</td><td>D3</td></tr>
           <tr><td>D5</td><td class="mono">dev-verification-live</td><td><span class="tag">P0</span></td><td>L</td><td>Playwright/Cypress, browser automation, E2E oracles, sandboxing.</td><td>доказательство вживую</td><td>H1, H3</td></tr>
           <tr><td>D6</td><td class="mono">dev-milestone-audit</td><td><span class="tag">P0</span></td><td>L</td><td>software audit, inspection, release readiness, coverage limitations, multi-agent review.</td><td>отчёт расхождений</td><td>D5, H3</td></tr>
@@ -703,7 +703,7 @@
   <section class="panel" id="next">
     <div class="panel-head">
       <h2>Текущий шаг</h2>
-      <p>D2 готов; следующий — D3</p>
+      <p>D3 готов; следующий — D4</p>
     </div>
     <div class="panel-body">
       <ol style="margin:0;padding-left:20px">
@@ -714,10 +714,11 @@
         <li><code>harness-skill-eval</code> отложен: research/review сохранены, статус <code>deferred</code>.</li>
         <li><code>harness-init</code> реализован, review <code>approved</code>, PR #6 merged.</li>
         <li><code>dev-feature-start</code> реализован, review <code>approved</code>, PR #7 merged.</li>
-        <li><code>dev-spec-chain</code> реализован, review <code>approved</code>, PR #8.</li>
-        <li>Собрать <code>docs/research/dev-bug-processing.md</code>.</li>
-        <li>Собрать <code>docs/reviews/dev-bug-processing.html</code> и получить <code>approved</code>.</li>
-        <li>Реализовать <code>dev/dev-bug-processing/</code>.</li>
+        <li><code>dev-spec-chain</code> реализован, review <code>approved</code>, PR #8 merged.</li>
+        <li><code>dev-bug-processing</code> реализован, review <code>approved</code>, PR #10.</li>
+        <li>Собрать <code>docs/research/dev-regression-guard.md</code>.</li>
+        <li>Собрать <code>docs/reviews/dev-regression-guard.html</code> и получить <code>approved</code>.</li>
+        <li>Реализовать <code>dev/dev-regression-guard/</code>.</li>
       </ol>
       <div class="decision">
         <div class="ok">approved</div>
@@ -727,7 +728,7 @@
       </div>
       <p class="small" style="margin-top:10px">
         Решение по плану: <b>approved</b>. Комментарий:
-        <b>утверждено 2026-11-01; H1–H3, H5, D1–D2 реализованы; H4 отложен</b>. После правок обновите дату и версию.
+        <b>утверждено 2026-11-01; H1–H3, H5, D1–D3 реализованы; H4 отложен</b>. После правок обновите дату и версию.
       </p>
     </div>
   </section>

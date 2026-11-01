@@ -1,0 +1,37 @@
+version: 1
+repo: {{REPO}}
+generated_skill: dev-bug-process
+profile:
+  stack: {{STACK}}
+  test_framework: {{TEST_FRAMEWORK}}
+  test_command: {{TEST_COMMAND}}
+  test_root: {{TEST_ROOT}}
+  tracker: {{TRACKER}}
+  environment: {{ENVIRONMENT}}
+  team: {{TEAM}}
+  compliance: {{COMPLIANCE}}
+  flake_policy: {{FLAKE_POLICY}}
+  repro_depth: {{REPRO_DEPTH}}
+  approval: {{APPROVAL}}
+approach: {{APPROACH}}
+invariants:
+  detailed_description: true
+  reproducibility: true
+  minimal_case: true
+  red_test: true
+  failure_matches_symptom: true
+  evidence_based_diagnosis: true
+  no_fix_before_red: true
+  repo_artifacts: true
+  no_auto_run: true
+gates:
+  min_runs: {{MIN_RUNS}}
+  require_minimal: true
+  require_failure_match: true
+  require_hypotheses: true
+artifacts:
+  bug_dir: docs/bugs/<id>
+  report: docs/bugs/<id>/repro.md
+  manifest: docs/bugs/<id>/repro.json
+  probe: docs/bugs/<id>/probe.json
+  test_root: {{TEST_ROOT}}

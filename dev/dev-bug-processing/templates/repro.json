@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "id": "<id>",
+  "status": "not-reproduced",
+  "symptom": "",
+  "expected": "",
+  "actual": "",
+  "environment": "",
+  "command": "",
+  "runs": 0,
+  "results": {
+    "failed": 0,
+    "passed": 0
+  },
+  "minimal_case": "",
+  "removed": [],
+  "test": {
+    "path": "",
+    "name": "",
+    "red_output": "",
+    "failure_matches_symptom": false
+  },
+  "diagnosis": {
+    "hypotheses": []
+  },
+  "probe_path": "docs/bugs/<id>/probe.json",
+  "next_steps": [],
+  "blocked_reason": ""
+}

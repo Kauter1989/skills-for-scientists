@@ -1,0 +1,16 @@
+{
+  "repo": "container-service",
+  "stack": "python",
+  "test_framework": "pytest",
+  "test_command": "docker compose run --rm app python -m pytest",
+  "test_root": "tests/",
+  "tracker": "jira",
+  "environment": "container",
+  "team": "enterprise",
+  "compliance": "audit",
+  "flake_policy": "strict",
+  "repro_depth": "deep",
+  "approval": "user",
+  "approach": "auto",
+  "issue_template": "jira"
+}
