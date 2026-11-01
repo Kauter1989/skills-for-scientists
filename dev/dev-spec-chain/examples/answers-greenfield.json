@@ -1,0 +1,11 @@
+{
+  "repo": "example-service",
+  "mode": "greenfield",
+  "change_size": "medium",
+  "roles": "small",
+  "compliance": "none",
+  "stack": "python",
+  "approval": "user",
+  "strict": "standard",
+  "approach": "auto"
+}

@@ -1,0 +1,15 @@
+version: 1
+repo: {{REPO}}
+profile:
+  mode: {{MODE}}
+  change_size: {{CHANGE_SIZE}}
+  roles: {{ROLES}}
+  compliance: {{COMPLIANCE}}
+  stack: {{STACK}}
+  approval: {{APPROVAL}}
+approach: {{APPROACH}}
+gates:
+  strict: {{STRICT}}
+  tests_first: true
+stages:
+{{STAGES_YAML}}

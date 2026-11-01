@@ -8,7 +8,7 @@
 | Автор | OpenCode agent |
 | Дата начала | `2026-11-01` |
 | Дата снимка источников | `2026-11-01` |
-| Статус | `ready-for-review` |
+| Статус | `approved` |
 
 ## 1. Задача
 
@@ -118,12 +118,12 @@
 ## 8. Что дальше
 
 - [x] Research Gate: 4 GitHub-аналога, 4 научных источника, 4 спецификации
-- [ ] Собран `docs/reviews/dev-spec-chain.html`
-- [ ] Ревью проведено, статус `approved`
-- [ ] Создан каталог `dev/dev-spec-chain/`
-- [ ] Опрос и выбор подхода воспроизводятся
-- [ ] Генерация chain и `check_spec_chain.py` проверены
-- [ ] Обновлены `docs/skills-map.html` и `README.md`
+- [x] Собран `docs/reviews/dev-spec-chain.html`
+- [x] Ревью проведено, статус `approved`
+- [x] Создан каталог `dev/dev-spec-chain/`
+- [x] Опрос и выбор подхода воспроизводятся
+- [x] Генерация chain и `check_spec_chain.py` проверены
+- [x] Обновлены `docs/skills-map.html` и `README.md`
 
 ## 9. Источники
 
