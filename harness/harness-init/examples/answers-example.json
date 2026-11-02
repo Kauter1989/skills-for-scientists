@@ -13,5 +13,6 @@
   "roles": ["developer", "reviewer"],
   "tasks": ["feature", "bugfix", "report"],
   "constraints": ["private"],
-  "skills": []
+  "skills": [],
+  "plugins": ["md-viewer"]
 }

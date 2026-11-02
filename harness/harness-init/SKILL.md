@@ -2,7 +2,7 @@
 name: harness-init
 description: >-
   Разворачивает процесс в новом репозитории: опрос пользователя, подбор
-  стартовых навыков, профиль, AGENTS.md, docs, хуки, CI и утверждение workflow
+  стартовых навыков и плагинов, профиль, AGENTS.md, docs, хуки, CI и утверждение workflow
   в HTML. Use when starting a repository, onboarding a project, or creating a
   skill harness. Trigger on: инициализация репозитория, новый проект, bootstrap,
   onboarding, harness init, опрос для старта.
@@ -29,6 +29,9 @@ metadata:
 | `scripts/init_repo.py` | survey, plan, approve, apply |
 | `scripts/check_bootstrap.py` | проверка результата |
 
+> При добавлении нового плагина обновите `references/plugins.json` и строку
+> в `opencode-plugins/INSTALL.md`.
+
 > Если `skill` tool не видит навык, положите каталог в
 > `.opencode/skill/harness-init/` или
 > `~/.config/opencode/skill/harness-init/`.
@@ -51,13 +54,15 @@ metadata:
 
 - путь к новому или существующему репозиторию;
 - ответы пользователя: домен, стек, команды, роли, задачи, ограничения;
+- выбранные плагины OpenCode: `md-viewer`, `pachca` или `none`;
 - выбранный workflow: минимальный или расширенный;
 - решение по CI и перезаписи.
 
 ## Процедура
 
 1. **Провести опрос.** Задать вопросы из `references/survey.md`; сохранить
-   ответы в `answers.json`.
+   ответы в `answers.json`. Перед вопросом о плагинах показать краткие
+   описания задач для `md-viewer` и `pachca`; по умолчанию — `none`.
 
    ```bash
    python scripts/init_repo.py survey --out answers.json
@@ -72,8 +77,8 @@ metadata:
      --json bootstrap-plan.json
    ```
 
-3. **Показать план пользователю.** В плане: стартовые навыки, этапы
-   workflow, команды и список создаваемых файлов.
+3. **Показать план пользователю.** В плане: стартовые навыки, выбранные
+   плагины и их задачи, этапы workflow, команды и список создаваемых файлов.
 4. **Получить `approved`.** Только после явного решения:
 
    ```bash
@@ -97,9 +102,9 @@ metadata:
 ## Выход
 
 - `answers.json` — ответы опроса;
-- `bootstrap-plan.html` — workflow и набор навыков на утверждение;
+- `bootstrap-plan.html` — workflow, набор навыков и плагинов на утверждение;
 - `bootstrap-plan.json` — статус и данные плана;
-- `profile.yml`, `AGENTS.md`, `docs/`, `.pre-commit-config.yaml`, CI;
+- `profile.yml`, `AGENTS.md`, `docs/`, `docs/plugins.md`, `.pre-commit-config.yaml`, CI;
 - `bootstrap-report.md` — что создано и что пропущено.
 
 ## Доказательства
@@ -108,11 +113,13 @@ metadata:
 - `apply` отказывается работать со статусом `draft`;
 - `check_bootstrap.py` проходит на созданном репозитории;
 - повторный `apply` не перезаписывает файлы без `--force`;
-- в плане перечислены только реализованные навыки.
+- в плане перечислены только реализованные навыки;
+- выбранные плагины перечислены в плане, `profile.yml` и `docs/plugins.md`.
 
 ## Границы
 
 - Не устанавливает зависимости и не выбирает стек.
+- Не устанавливает плагины автоматически: только фиксирует выбор и ссылку на инструкцию.
 - Не делает commit, push и PR.
 - Не перезаписывает существующие файлы без `--force`.
 - Не рекомендует proposed-навыки как установленные.
@@ -122,6 +129,7 @@ metadata:
 
 - запуск `apply` без `approved`;
 - рекомендация proposed-навыка как готового;
+- плагин без описания задачи или без инструкции установки;
 - перезапись `AGENTS.md` без подтверждения;
 - пустая команда тестов, замаскированная под проверку;
 - план без списка создаваемых файлов;
@@ -135,6 +143,7 @@ metadata:
 - [ ] `apply` не перезаписал существующее;
 - [ ] `check_bootstrap.py` проходит;
 - [ ] `profile.yml` содержит команды и навыки;
+- [ ] выбранные плагины есть в `profile.yml` и `docs/plugins.md`;
 - [ ] CI создан только если выбран;
 - [ ] нет секретов и проектных данных в шаблонах.
 
@@ -143,6 +152,7 @@ metadata:
 | Путь | Назначение |
 |---|---|
 | `references/survey.md` | вопросы опроса |
+| `references/plugins.json` | каталог плагинов и ссылок на установку |
 | `references/bootstrap-checklist.md` | минимальный состав |
 | `templates/bootstrap-plan.html` | план на утверждение |
 | `templates/profile.yml` | профиль |

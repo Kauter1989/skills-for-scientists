@@ -400,7 +400,7 @@
         <table class="meta-table">
           <thead><tr><th>Навык</th><th>Статус</th><th>Что опрашивает</th><th>Что генерирует</th><th>Категория</th></tr></thead>
           <tbody>
-            <tr><td><code>/harness-init</code></td><td>в репозитории</td><td>репозиторий, стек, команда</td><td>scaffold, AGENTS.md, hooks, CI, workflow</td><td><span class="lvl meta">мета</span></td></tr>
+            <tr><td><code>/harness-init</code></td><td>в репозитории</td><td>репозиторий, стек, команда, плагины</td><td>scaffold, AGENTS.md, hooks, CI, workflow, <code>docs/plugins.md</code></td><td><span class="lvl meta">мета</span></td></tr>
             <tr><td><code>/dev-spec-chain</code></td><td>в репозитории</td><td>greenfield/brownfield, роли, стек</td><td>цепочка stage-навыков и manifest</td><td><span class="lvl meta">мета</span></td></tr>
             <tr><td><code>/dev-bug-processing</code></td><td>в репозитории</td><td>стек, тесты, трекер, окружение</td><td><code>dev-bug-process</code> + manifest</td><td><span class="lvl meta">мета</span></td></tr>
             <tr><td><code>/dev-regression-guard</code></td><td>предложено</td><td>классы дефектов, тесты, CI</td><td>механизм защиты и запись в registry</td><td><span class="lvl proposed">proposed</span></td></tr>
@@ -905,10 +905,10 @@
     {
       id: "harness-init", name: "/harness-init", domain: "harness", status: "existing", priority: "core",
       metaSkill: "meta",
-      metaWhy: "опрос репозитория → scaffold и workflow",
+      metaWhy: "опрос репозитория, навыков и плагинов → scaffold и workflow",
       blocks: ["intake", "meta"],
-      sum: "Bootstrap с опросом: подбор стартовых навыков, profile.yml, AGENTS.md, hooks, CI и HTML-утверждение workflow.",
-      io: "опрос → bootstrap-plan.html → scaffold",
+      sum: "Bootstrap с опросом: подбор стартовых навыков и плагинов, profile.yml, AGENTS.md, docs/plugins.md, hooks, CI и HTML-утверждение workflow.",
+      io: "опрос → bootstrap-plan.html → scaffold + docs/plugins.md",
       links: "../harness/harness-init/SKILL.md"
     },
     {

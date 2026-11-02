@@ -11,7 +11,7 @@ Pachca.
 | `md-viewer/` | `opencode-md-panel` | панель Markdown: список `.md` файлов сессии, просмотр, редактирование, сохранение |
 | `pachca/` | `opencode-pachca` | MCP-подключение Пачки, сбор чатов, интерактивный HTML-отчёт, MD-исключения и задачи с preflight прав |
 | `config/` | пример конфигурации | `opencode.json` без секретов |
-| `INSTALL.md` | инструкция | сборка, установка, проверка, troubleshooting |
+| `INSTALL.md` | каталог плагинов | краткое описание каждого плагина и ссылка на его `INSTALL.md` |
 | `NOTICE.md` | происхождение | источники и статус лицензий |
 
 ## Быстрый старт
@@ -36,7 +36,7 @@ bun run build
 ```
 
 Полная последовательность с копированием и проверкой —
-[`INSTALL.md`](INSTALL.md).
+[`md-viewer/INSTALL.md`](md-viewer/INSTALL.md).
 
 ### Pachca
 

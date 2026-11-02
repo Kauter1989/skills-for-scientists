@@ -38,10 +38,12 @@ opencode auth login
 
 ```text
 <repo>/skills/opencode-plugins/md-viewer
+<repo>/skills/opencode-plugins/pachca
 ```
 
 Если он скопирован в глобальный каталог:
 
 ```text
 ~/.config/opencode/plugins/opencode-md-panel
+~/.config/opencode/plugins/pachca
 ```

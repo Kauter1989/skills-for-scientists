@@ -30,6 +30,11 @@ SKILL_INFO = {
 }
 DEFAULT_BRANCH = "main"
 TEMPLATES = Path(__file__).resolve().parent.parent / "templates"
+PLUGIN_CATALOG = Path(__file__).resolve().parent.parent / "references" / "plugins.json"
+PLUGIN_INFO = {
+    item["name"]: item
+    for item in json.loads(PLUGIN_CATALOG.read_text(encoding="utf-8"))
+}
 
 
 def fail(message: str) -> None:
@@ -40,6 +45,19 @@ def fail(message: str) -> None:
 def ask(prompt: str, default: str) -> str:
     value = input(f"{prompt} [{default}]: ").strip()
     return value or default
+
+
+def parse_plugins(value: str) -> list[str]:
+    if not value or value.lower() in {"none", "нет", "-"}:
+        return []
+    return [x.strip() for x in value.split(",") if x.strip()]
+
+
+def selected_plugins(answers: dict) -> list[str]:
+    requested = answers.get("plugins", [])
+    if isinstance(requested, str):
+        requested = parse_plugins(requested)
+    return list(dict.fromkeys(x for x in requested if x in PLUGIN_INFO))
 
 
 def survey(out: Path) -> int:
@@ -61,6 +79,14 @@ def survey(out: Path) -> int:
         "constraints": [x.strip() for x in ask("Ограничения через запятую", "private").split(",") if x.strip()],
         "skills": [],
     }
+    print("\nПлагины OpenCode (необязательно):")
+    for name, item in PLUGIN_INFO.items():
+        print(f"- {name}: {item['description']}")
+    answers["plugins"] = selected_plugins({
+        "plugins": parse_plugins(
+            ask("Плагины к установке (md-viewer, pachca, none)", "none")
+        )
+    })
     out.write_text(json.dumps(answers, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"\nok: {out}")
     return 0
@@ -107,6 +133,40 @@ def skill_rows(skills: list[str]) -> str:
     return "\n".join(rows)
 
 
+def plugin_rows(plugins: list[str]) -> str:
+    if not plugins:
+        return '<tr><td colspan="3">Плагины не выбраны</td></tr>'
+    rows = []
+    for plugin in plugins:
+        item = PLUGIN_INFO[plugin]
+        rows.append(
+            "<tr>"
+            f'<td class="mono">{html.escape(plugin)}</td>'
+            f"<td>{html.escape(item['description'])}</td>"
+            f'<td class="mono">{html.escape(item["install"])}</td>'
+            "</tr>"
+        )
+    return "\n".join(rows)
+
+
+def plugins_markdown(plugins: list[str]) -> str:
+    if not plugins:
+        return "# Плагины OpenCode\n\nПлагины не выбраны.\n"
+    rows = "\n".join(
+        f"| `{plugin}` | {PLUGIN_INFO[plugin]['description']} | "
+        f"`{PLUGIN_INFO[plugin]['install']}` |"
+        for plugin in plugins
+    )
+    return (
+        "# Плагины OpenCode\n\n"
+        "Выбраны при bootstrap. Установка не выполняется автоматически.\n\n"
+        "| Плагин | Задача | Инструкция по установке |\n"
+        "|---|---|---|\n"
+        f"{rows}\n\n"
+        "Перед установкой проверьте требования и секреты в инструкции плагина.\n"
+    )
+
+
 def stage_rows(items: list[dict]) -> str:
     rows = []
     for item in items:
@@ -141,6 +201,7 @@ def file_rows(answers: dict) -> str:
         ("docs/reviews/", "HTML-ревью"),
         ("docs/audits/", "отчёты аудита"),
         ("docs/rules/registry.yml", "реестр правил"),
+        ("docs/plugins.md", "выбранные плагины OpenCode"),
         (".pre-commit-config.yaml", "локальные хуки"),
     ]
     if answers.get("ci") == "github":
@@ -153,15 +214,18 @@ def file_rows(answers: dict) -> str:
 
 def plan(answers: dict, out_html: Path, out_json: Path, status: str = "draft") -> dict:
     skills = recommend(answers)
+    plugins = selected_plugins(answers)
     data = {
         "status": status,
         "created": dt.date.today().isoformat(),
         "answers": answers,
         "skills": skills,
+        "plugins": plugins,
         "stages": stages(answers, skills),
         "files": [
             "profile.yml", "AGENTS.md", "docs/research/", "docs/reviews/",
-            "docs/audits/", "docs/rules/registry.yml", ".pre-commit-config.yaml",
+            "docs/audits/", "docs/rules/registry.yml", "docs/plugins.md",
+            ".pre-commit-config.yaml",
         ] + ([".github/workflows/ci.yml"] if answers.get("ci") == "github" else []),
     }
     template = (TEMPLATES / "bootstrap-plan.html").read_text(encoding="utf-8")
@@ -173,6 +237,7 @@ def plan(answers: dict, out_html: Path, out_json: Path, status: str = "draft") -
         "DATE": data["created"],
         "STATUS": status,
         "SKILL_ROWS": skill_rows(skills),
+        "PLUGIN_ROWS": plugin_rows(plugins),
         "STAGE_ROWS": stage_rows(data["stages"]),
         "COMMAND_ROWS": command_rows(answers),
         "FILE_ROWS": file_rows(answers),
@@ -226,6 +291,12 @@ def apply(root: Path, plan_json: Path, force: bool, dry: bool) -> int:
         fail("план не утверждён: статус должен быть approved")
     answers = data["answers"]
     skills = data["skills"]
+    plugins = data.get("plugins") or selected_plugins(answers)
+    plugins_md = "\n".join(
+        f"- `{p}` — {PLUGIN_INFO[p]['description']} "
+        f"(установка: `{PLUGIN_INFO[p]['install']}`)"
+        for p in plugins
+    ) or "Плагины не выбраны."
     files: list[tuple[Path, str]] = [
         (root / "profile.yml", render("profile.yml", {
             "PROJECT": answers.get("project", ""),
@@ -237,6 +308,7 @@ def apply(root: Path, plan_json: Path, force: bool, dry: bool) -> int:
             "LINT_COMMAND": answers.get("commands", {}).get("lint", ""),
             "BUILD_COMMAND": answers.get("commands", {}).get("build", ""),
             "SKILLS_YAML": "\n".join(f"  - {s}" for s in skills) or "  []",
+            "PLUGINS_YAML": "\n".join(f"  - {p}" for p in plugins) or "  []",
         })),
         (root / "AGENTS.md", render("AGENTS.md", {
             "PROJECT": answers.get("project", ""),
@@ -249,8 +321,10 @@ def apply(root: Path, plan_json: Path, force: bool, dry: bool) -> int:
             "BUILD_COMMAND": answers.get("commands", {}).get("build", ""),
             "DEFAULT_BRANCH": answers.get("default_branch", DEFAULT_BRANCH),
             "SKILLS_MD": "\n".join(f"- `{s}` — {SKILL_INFO.get(s, '')}" for s in skills),
+            "PLUGINS_MD": plugins_md,
         })),
         (root / "docs" / "rules" / "registry.yml", "version: 1\nrules: []\n"),
+        (root / "docs" / "plugins.md", plugins_markdown(plugins)),
         (root / ".pre-commit-config.yaml", (TEMPLATES / "pre-commit-config.yaml").read_text(encoding="utf-8")),
     ]
     for directory in ("docs/research", "docs/reviews", "docs/audits"):

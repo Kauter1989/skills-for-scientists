@@ -9,3 +9,5 @@ commands:
   build: "{{BUILD_COMMAND}}"
 skills:
 {{SKILLS_YAML}}
+plugins:
+{{PLUGINS_YAML}}
