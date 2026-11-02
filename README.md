@@ -26,6 +26,7 @@ Priority order: **harness → dev → science → integrations → reports**.
 | [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML report for feature or milestone changes: six agent-development metrics, evidence and decisions | standalone `report.html` |
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Rigorous PPTX presentations and analytical reports: research talks, project reports and management analytics | `deck.pptx`, PNG previews |
 | [`pachca-report`](integrations/pachca-report/SKILL.md) | `integrations/` | Pachca chats to an interactive HTML report: project progress and blockers, participant activity with >2-day silence, MD exclusions, and permission-checked channel tasks | standalone `report.html`, `.pachca/*.md` |
+| [`sci-literature-news`](reports/sci-literature-news/SKILL.md) | `reports/` | Personal scientific literature digest: saved directions and period, Q1/A*/Q2 search, synthesis, dataset table, criteria and standalone HTML | `profile.md`, `candidates.json`, `analysis.json`, `report.html` |
 
 ### Meta-skills
 
@@ -61,6 +62,13 @@ participants silent for more than two days are highlighted; exclusions and
 saved channel tasks live in human-editable Markdown. Saved tasks are refused
 until scopes, role, plan and chat access pass a preflight.
 Example: [`integrations/pachca-report/examples/example-report.html`](integrations/pachca-report/examples/example-report.html).
+
+`sci-literature-news` keeps a scientific profile, research directions and a
+six-month period in `.sci-literature-news/profile.md`. It searches OpenAlex and
+DataCite, separates Q1 journals, A* conferences and Q2 journals with explicit
+ranking evidence, synthesizes themes with DOI citations, lists new datasets and
+explains the inclusion criteria. The HTML report is standalone.
+Example: [`reports/sci-literature-news/examples/example-report.html`](reports/sci-literature-news/examples/example-report.html).
 
 ## Domains and prefixes
 
@@ -102,6 +110,9 @@ Copy-Item -Recurse .\reports\pptx-report "$env:USERPROFILE\.config\opencode\skil
 
 # Windows: Pachca integration skill
 Copy-Item -Recurse .\integrations\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
+
+# Windows: scientific literature news
+Copy-Item -Recurse .\reports\sci-literature-news "$env:USERPROFILE\.config\opencode\skill\sci-literature-news"
 ```
 
 ```bash
@@ -110,6 +121,7 @@ cp -r harness/harness-skill-template ~/.config/opencode/skill/
 cp -r dev/dev-pr-report-html ~/.config/opencode/skill/
 cp -r reports/pptx-report ~/.config/opencode/skill/
 cp -r integrations/pachca-report ~/.config/opencode/skill/
+cp -r reports/sci-literature-news ~/.config/opencode/skill/
 ```
 
 After installation, verify that the `skill` tool finds the skill. Before
@@ -216,7 +228,13 @@ skills/
 │       ├── scripts/
 │       └── templates/
 ├── reports/                   reporting, no prefix
-│   └── pptx-report/
+│   ├── pptx-report/
+│   │   ├── SKILL.md
+│   │   ├── examples/
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   └── templates/
+│   └── sci-literature-news/
 │       ├── SKILL.md
 │       ├── examples/
 │       ├── references/
@@ -279,6 +297,14 @@ node test/build-example.mjs
 cd ../../integrations/pachca-report
 python scripts/check_report.py examples/example-report.html
 python scripts/validate_analysis.py examples/example-snapshot.json examples/example-analysis.json
+
+# Scientific literature news example
+cd ../../reports/sci-literature-news
+python scripts/make_example.py
+python scripts/build_report.py --example -o examples/example-report.html --strict
+python scripts/check_report.py examples/example-report.html
+python scripts/validate_analysis.py examples/example-candidates.json examples/example-analysis.json --strict
+python scripts/profile.py --file examples/example-profile.md check
 ```
 
 Scripts use only the Python 3.9+ standard library. The Pachca plugin tests use
