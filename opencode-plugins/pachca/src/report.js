@@ -219,9 +219,9 @@ export function renderReport(model) {
   const maxCount = activity.visible.reduce((max, item) => Math.max(max, item.count), 0);
   const kpi = [
     ["Сообщений", coverage.messages, "в новом окне"],
-    ["Чатов прочитано", `${coverage.chatsRead}/${coverage.chatsAvailable}`, "доступно токену"],
+    ["Чатов прочитано", `${coverage.chatsRead}/${coverage.chatsAvailable}`, `${coverage.chatsQuiet} без новых сообщений`],
     ["Участников", activity.stats.visible, `${activity.stats.inactive} молчат > ${activity.inactivityDays} дн.`],
-    ["Проектов", projects.length, `${stats.blocked} с блокером, ${stats.atRisk} в риске`],
+    ["Проектов", projects.length, `${stats.withBlockers} с блокерами, ${stats.atRisk} в риске`],
     ["Задач", asArray(model.tasks).length, "сохранено с preflight"],
     ["Доказательства", `${stats.verified}/${projects.length}`, "проектов с цитатами"],
   ];
@@ -255,6 +255,7 @@ export function renderReport(model) {
       inactive: activity.stats.inactive,
       projects: projects.length,
       blocked: stats.blocked,
+      withBlockers: stats.withBlockers,
       atRisk: stats.atRisk,
       verifiedProjects: stats.verified,
       tasks: asArray(model.tasks).length,
@@ -373,7 +374,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
 <main id="main" class="wrap">
   ${warningItems.length ? `<div class="callout"><b>Что требует внимания</b><ul class="warnings">${warningItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>` : ""}
   <section id="projects" class="section">
-    <div class="section-head"><div><p class="eyebrow">01 · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">${stats.blocked} блокер(ов), ${stats.atRisk} в риске, ${stats.unknown} без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
+    <div class="section-head"><div><p class="eyebrow">01 · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">${stats.withBlockers} проект(ов) с блокерами, ${stats.atRisk} в риске, ${stats.unknown} без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
     <div class="section-body">
       ${model.analysis?.crossProject?.summary ? `<div class="callout"><b>Сводка по всем проектам</b><p>${escapeHtml(model.analysis.crossProject.summary)}</p></div>` : ""}
       <div class="projects">${projects.map(renderProject).join("") || `<p class="empty">В snapshot нет чатов.</p>`}</div>
@@ -403,7 +404,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
         <h4>Покрытие и ограничения</h4>
         <ul>
           <li>Окно: ${escapeHtml(formatDate(window.from))} — ${escapeHtml(formatDate(window.to))}.</li>
-          <li>Чаты: ${coverage.chatsRead} прочитано, ${coverage.chatsFailed} с ошибками, ${coverage.truncated} обрезано лимитом.</li>
+          <li>Чаты: ${coverage.chatsRead} прочитано, ${coverage.chatsQuiet} без новых сообщений, ${coverage.chatsFailed} с ошибками, ${coverage.truncated} обрезано лимитом.</li>
           <li>Треды: ${coverage.threads} найдено; сообщения треда привязаны к родительскому чату.</li>
           <li>Личные переписки: ${snapshot.chats.filter((chat) => chat.personal).length}; архивные: ${snapshot.chats.filter((chat) => chat.archived).length}.</li>
           <li>Доступ определяется токеном и ролью. Закрытые чаты вне членства не читаются.</li>

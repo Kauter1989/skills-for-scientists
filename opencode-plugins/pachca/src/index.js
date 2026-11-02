@@ -99,23 +99,33 @@ async function loadAnalysisFor(ctx, input = {}) {
 async function mcpSummary(ctx, name) {
   try {
     const list = await ctx.mcp.list();
-    const entries = Array.isArray(list) ? list : Object.entries(list || {});
+    const entries = Array.isArray(list)
+      ? list
+      : Array.isArray(list?.data)
+        ? list.data
+        : Object.entries(list || {});
     const found = entries.find((entry) => {
       if (Array.isArray(entry)) return entry[0] === name;
       return entry?.name === name;
     });
-    if (!found) return { configured: false, connected: false };
+    if (!found) return { configured: false, connected: false, status: "not_configured" };
     const config = Array.isArray(found) ? found[1] : found;
+    const rawStatus = config?.status;
+    const status =
+      typeof rawStatus === "string" ? rawStatus : rawStatus?.status || (config?.disabled ? "disabled" : "unknown");
     return {
       configured: true,
-      connected: config?.status ? /connected|ready|ok/i.test(String(config.status)) : undefined,
+      connected: status === "connected",
+      needsAuth: status === "needs_auth",
+      status,
+      error: typeof rawStatus === "object" ? rawStatus?.error || null : null,
       type: config?.type || null,
       url: config?.url || null,
       disabled: Boolean(config?.disabled),
       hasAuthorizationHeader: Boolean(config?.headers?.Authorization),
     };
   } catch (error) {
-    return { configured: false, connected: false, error: error?.message || String(error) };
+    return { configured: false, connected: false, status: "error", error: error?.message || String(error) };
   }
 }
 
@@ -366,11 +376,15 @@ export default Plugin.define({
               activeTasks: tasks.filter((task) => task.status === "active").length,
               lastCollectedAt: state.lastCollectedAt,
               lastReportAt: state.lastReportAt,
-              next: mcp.configured
-                ? mcp.disabled
-                  ? "MCP-сервер настроен, но отключён. Включите его в /mcps."
-                  : "Если соединение не установлено, откройте /mcps и войдите в Pachca."
-                : "MCP-сервер не настроен. Перезагрузите плагин или добавьте https://mcp.pachca.com/mcp вручную.",
+              next: !mcp.configured
+                ? "MCP-сервер не настроен. Перезагрузите плагин или добавьте https://mcp.pachca.com/mcp вручную."
+                : mcp.needsAuth
+                  ? "Откройте /mcps, выберите pachca и войдите в Пачку."
+                  : mcp.disabled
+                    ? "MCP-сервер настроен, но отключён. Включите его в /mcps."
+                    : mcp.connected
+                      ? "MCP подключён."
+                      : "Проверьте состояние в /mcps.",
             });
           } catch (error) {
             return errorResult(error);

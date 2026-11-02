@@ -406,6 +406,11 @@ export function buildReportModel({
       chatsAvailable: asNumber(snapshot.stats.chatsAvailable, snapshot.chats.length),
       chatsSelected: asNumber(snapshot.stats.chatsSelected, snapshot.chats.length),
       chatsRead: asNumber(snapshot.stats.chatsRead, snapshot.chats.length - failedChats.length),
+      chatsQuiet: Math.max(
+        0,
+        asNumber(snapshot.stats.chatsAvailable, snapshot.chats.length) -
+          asNumber(snapshot.stats.chatsSelected, snapshot.chats.length),
+      ),
       chatsFailed: failedChats.length,
       messages: activity.stats.messages,
       threads: asNumber(snapshot.stats.threads, 0),
