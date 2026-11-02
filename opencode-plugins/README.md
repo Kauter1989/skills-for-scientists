@@ -1,20 +1,26 @@
 # opencode-plugins
 
-Плагины OpenCode, вынесенные из локального профиля, и инструкции по их
-установке на другой машине. Сейчас здесь два плагина: Markdown-панель и
-Pachca.
+Плагины и MCP-интеграции OpenCode, вынесенные из локального профиля, и
+инструкции по установке на другой машине.
 
 ## Состав
 
-| Путь | Компонент | Назначение |
+| Категория | Компонент | Назначение |
 |---|---|---|
-| `md-viewer/` | `opencode-md-panel` | панель Markdown: список `.md` файлов сессии, просмотр, редактирование, сохранение |
-| `pachca/` | `opencode-pachca` | MCP-подключение Пачки, сбор чатов, интерактивный HTML-отчёт, MD-исключения и задачи с preflight прав |
-| `config/` | пример конфигурации | `opencode.json` без секретов |
-| `INSTALL.md` | каталог плагинов | краткое описание каждого плагина и ссылка на его `INSTALL.md` |
-| `NOTICE.md` | происхождение | источники и статус лицензий |
+| Memory & context | `supermemory/` | постоянная память: профиль, знания проекта, recall, автосохранение, индексация кода |
+| Documents & preview | `md-viewer/` | панель Markdown: список `.md` файлов сессии, просмотр, редактирование, сохранение |
+| Collaboration & reporting | `pachca/` | MCP Пачки, сбор чатов, интерактивный HTML-отчёт, исключения и задачи |
+| Engineering & simulation | `freecad-mcp/` | FreeCAD через MCP: модели, Python, документы, FEM |
+| Engineering & simulation | `cae-mesh-mcp/` | **temporary:** FieldCraft — hex/tet-мешинг, FEA/CFD, MCP |
+| Medical imaging | `ferrum/` | DICOM/NIfTI: срезы, MPR, 3D, измерения и сегментация; MCP + навык |
+| — | `config/` | примеры конфигурации без секретов |
+| — | `INSTALL.md` | каталог плагинов по категориям |
+| — | `NOTICE.md` | источники и статус лицензий |
 
-## Быстрый старт
+Внешние плагины и MCP-интеграции не вендорятся: в папках лежат проверенные
+инструкции установки и ссылки на upstream.
+
+## Быстрый старт: Markdown-панель
 
 ```bash
 git clone https://github.com/Kauter1989/opencode-skills.git
@@ -35,32 +41,67 @@ bun run build
 }
 ```
 
-Полная последовательность с копированием и проверкой —
-[`md-viewer/INSTALL.md`](md-viewer/INSTALL.md).
+Полная последовательность — [`md-viewer/INSTALL.md`](md-viewer/INSTALL.md).
 
-### Pachca
+## Memory & context
+
+### supermemory
+
+Постоянная память между сессиями и проектами: профиль пользователя, знания
+проекта, semantic recall, автосохранение turn'ов, индексация кодовой базы.
+
+```bash
+bunx opencode-supermemory@latest install --no-tui
+bunx opencode-supermemory@latest login
+bunx opencode-supermemory@latest status
+```
+
+Инструкция: [`supermemory/INSTALL.md`](supermemory/INSTALL.md).
+
+## Collaboration & reporting
+
+### pachca
+
+MCP-подключение Пачки: собирает чаты, сообщения, треды и участников, пишет
+автономный HTML-отчёт, хранит `.pachca/*.md` и проверяет права до задач.
 
 ```bash
 cd pachca
 node test/run-tests.mjs
 node test/api.test.mjs
 node --experimental-loader ./test/loader.mjs test/plugin.test.mjs
-node test/build-example.mjs
 ```
 
-Подключение — путь к каталогу `pachca/` в `plugins` и либо `PACHCA_TOKEN`,
-либо OAuth через `/mcps`. Инструкция: [`pachca/INSTALL.md`](pachca/INSTALL.md).
-Навык интеграции: [`../integrations/pachca-report/SKILL.md`](../integrations/pachca-report/SKILL.md).
+Инструкция: [`pachca/INSTALL.md`](pachca/INSTALL.md).
 
-## Что делает Pachca
+## Engineering & simulation
 
-- регистрирует официальный MCP-сервер `https://mcp.pachca.com/mcp`;
-- собирает все чаты пользователя, сообщения, треды и участников;
-- пишет интерактивный автономный HTML-отчёт: прогресс/блокеры проектов,
-  активность, молчащие > 2 дней, исключения;
-- хранит `.pachca/exclusions.md`, `.pachca/projects.md`, `.pachca/tasks.md`;
-- проверяет скоупы, роль, тариф и доступ к каналу до сохранения задачи;
-- не хранит токен и не делает внешних запросов из HTML.
+### freecad-mcp
+
+FreeCAD addon + MCP-сервер: создание и редактирование моделей, Python,
+инспекция документов и FEM.
+
+Инструкция: [`freecad-mcp/INSTALL.md`](freecad-mcp/INSTALL.md).
+
+### cae-mesh-mcp — temporary
+
+Временный upstream FieldCraft: hex/tet-мешинг, FEA/CFD и MCP. Заменить, когда
+появится специализированный CAE-mesh MCP.
+
+Инструкция: [`cae-mesh-mcp/INSTALL.md`](cae-mesh-mcp/INSTALL.md).
+
+## Medical imaging
+
+### ferrum
+
+FERRUM — визуализация и сегментация медицинских объёмов: DICOM/NIfTI, срезы,
+MPR, 3D, измерения, аннотации и сегменты. Для OpenCode: `ferrum-cli mcp` +
+навык `skills/ferrum`.
+
+Инструкция: [`ferrum/INSTALL.md`](ferrum/INSTALL.md).
+
+> FERRUM — не медицинское изделие. Результаты требуют проверки специалистом;
+> навык не ставит диагноз.
 
 ## Что делает Markdown-панель
 
@@ -76,20 +117,26 @@ node test/build-example.mjs
 
 1. Перезапустите OpenCode или откройте
    **Settings → Extensions → Plugins → Reload**.
-2. Палитра команд → **Open Markdown panel**.
-3. В боковой панели появится список `.md` файлов текущей сессии.
-4. Откройте файл, нажмите **Edit**, измените текст и **Save**.
+2. Для плагинов проверьте `opencode plugin list`.
+3. Для MCP-интеграций проверьте подключение в `/mcps`.
+4. Для каждого компонента выполните проверку из его `INSTALL.md`.
 
 ## Безопасность
 
 - `service.json`, `auth.json`, токены и ключи не входят в папку.
-- Плагин ограничен каталогом сессии и расширениями Markdown.
-- Плагин выполняет локальный код; устанавливайте только проверенные версии.
-- Перед публичным распространением проверьте лицензию:
+- MCP-интеграции исполняют локальный код и требуют доверия к upstream.
+- Ограничивайте файловые корни для FreeCAD/FieldCraft/Ferrum.
+- Медицинские данные не публикуйте; PHI не должны попадать в логи.
+- Перед публичным распространением проверьте лицензии:
   [`NOTICE.md`](NOTICE.md).
 
 ## Лицензии
 
-Исходники `md-viewer` перенесены из локального проекта, в котором не было
-файла лицензии. Перед публичным распространением добавьте лицензию или
-получите разрешение автора. Подробности — в [`NOTICE.md`](NOTICE.md).
+- `md-viewer` — лицензия не заявлена в исходном проекте;
+- `pachca` — Apache-2.0;
+- `supermemory` — MIT по README, отдельного LICENSE нет;
+- `freecad-mcp` — MIT;
+- `cae-mesh-mcp` (FieldCraft) — Apache-2.0;
+- `ferrum` — MIT OR Apache-2.0.
+
+Подробности — в [`NOTICE.md`](NOTICE.md).

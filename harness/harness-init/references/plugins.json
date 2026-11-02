@@ -1,12 +1,44 @@
 [
   {
+    "name": "supermemory",
+    "category": "Memory & context",
+    "description": "Постоянная память: профиль, знания проекта, recall, автосохранение и индексация кода",
+    "install": "opencode-plugins/supermemory/INSTALL.md",
+    "temporary": false
+  },
+  {
     "name": "md-viewer",
+    "category": "Documents & preview",
     "description": "Панель Markdown: список .md файлов сессии, просмотр, редактирование и сохранение",
-    "install": "opencode-plugins/md-viewer/INSTALL.md"
+    "install": "opencode-plugins/md-viewer/INSTALL.md",
+    "temporary": false
   },
   {
     "name": "pachca",
+    "category": "Collaboration & reporting",
     "description": "MCP Пачки, сбор чатов и интерактивный HTML-отчёт",
-    "install": "opencode-plugins/pachca/INSTALL.md"
+    "install": "opencode-plugins/pachca/INSTALL.md",
+    "temporary": false
+  },
+  {
+    "name": "freecad-mcp",
+    "category": "Engineering & simulation",
+    "description": "FreeCAD через MCP: модели, Python, документы и FEM",
+    "install": "opencode-plugins/freecad-mcp/INSTALL.md",
+    "temporary": false
+  },
+  {
+    "name": "cae-mesh-mcp",
+    "category": "Engineering & simulation",
+    "description": "Временный FieldCraft: hex/tet-мешинг, FEA/CFD и MCP",
+    "install": "opencode-plugins/cae-mesh-mcp/INSTALL.md",
+    "temporary": true
+  },
+  {
+    "name": "ferrum",
+    "category": "Medical imaging",
+    "description": "DICOM/NIfTI: срезы, MPR, 3D, измерения и сегментация; MCP + навык",
+    "install": "opencode-plugins/ferrum/INSTALL.md",
+    "temporary": false
   }
 ]

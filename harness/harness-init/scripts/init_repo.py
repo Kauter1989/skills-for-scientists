@@ -80,8 +80,13 @@ def survey(out: Path) -> int:
         "skills": [],
     }
     print("\nПлагины OpenCode (необязательно):")
+    current_category = None
     for name, item in PLUGIN_INFO.items():
-        print(f"- {name}: {item['description']}")
+        if item["category"] != current_category:
+            current_category = item["category"]
+            print(f"\n{current_category}:")
+        mark = " (temporary)" if item.get("temporary") else ""
+        print(f"- {name}{mark}: {item['description']}")
     answers["plugins"] = selected_plugins({
         "plugins": parse_plugins(
             ask("Плагины к установке (md-viewer, pachca, none)", "none")
@@ -135,15 +140,17 @@ def skill_rows(skills: list[str]) -> str:
 
 def plugin_rows(plugins: list[str]) -> str:
     if not plugins:
-        return '<tr><td colspan="3">Плагины не выбраны</td></tr>'
+        return '<tr><td colspan="4">Плагины не выбраны</td></tr>'
     rows = []
     for plugin in plugins:
         item = PLUGIN_INFO[plugin]
+        status = "temporary" if item.get("temporary") else "—"
         rows.append(
             "<tr>"
             f'<td class="mono">{html.escape(plugin)}</td>'
+            f"<td>{html.escape(item['category'])}</td>"
             f"<td>{html.escape(item['description'])}</td>"
-            f'<td class="mono">{html.escape(item["install"])}</td>'
+            f'<td class="mono">{html.escape(item["install"])} · {status}</td>'
             "</tr>"
         )
     return "\n".join(rows)
@@ -153,15 +160,17 @@ def plugins_markdown(plugins: list[str]) -> str:
     if not plugins:
         return "# Плагины OpenCode\n\nПлагины не выбраны.\n"
     rows = "\n".join(
-        f"| `{plugin}` | {PLUGIN_INFO[plugin]['description']} | "
+        f"| {PLUGIN_INFO[plugin]['category']} | `{plugin}` | "
+        f"{PLUGIN_INFO[plugin]['description']} | "
+        f"{'temporary' if PLUGIN_INFO[plugin].get('temporary') else '—'} | "
         f"`{PLUGIN_INFO[plugin]['install']}` |"
         for plugin in plugins
     )
     return (
         "# Плагины OpenCode\n\n"
         "Выбраны при bootstrap. Установка не выполняется автоматически.\n\n"
-        "| Плагин | Задача | Инструкция по установке |\n"
-        "|---|---|---|\n"
+        "| Категория | Плагин | Задача | Статус | Инструкция по установке |\n"
+        "|---|---|---|---|---|\n"
         f"{rows}\n\n"
         "Перед установкой проверьте требования и секреты в инструкции плагина.\n"
     )
@@ -294,7 +303,9 @@ def apply(root: Path, plan_json: Path, force: bool, dry: bool) -> int:
     plugins = data.get("plugins") or selected_plugins(answers)
     plugins_md = "\n".join(
         f"- `{p}` — {PLUGIN_INFO[p]['description']} "
-        f"(установка: `{PLUGIN_INFO[p]['install']}`)"
+        f"({PLUGIN_INFO[p]['category']}"
+        f"{', temporary' if PLUGIN_INFO[p].get('temporary') else ''}; "
+        f"установка: `{PLUGIN_INFO[p]['install']}`)"
         for p in plugins
     ) or "Плагины не выбраны."
     files: list[tuple[Path, str]] = [

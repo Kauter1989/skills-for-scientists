@@ -8,6 +8,8 @@
 ## Что входит
 
 - `plugins`: путь к `opencode-md-panel` или `pachca`;
+- `mcp.servers`: FreeCAD, FieldCraft и Ferrum подключаются как MCP-серверы,
+  а не как плагины;
 - `mcp.servers.pachca`: адрес MCP; плагин добавляет его сам, если сервера нет.
 
 Для токена не добавляйте его в JSON. Задайте `PACHCA_TOKEN` в окружении:
