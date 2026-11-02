@@ -1,0 +1,21 @@
+{
+  "name": "opencode-pachca",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Pachca MCP connection, interactive HTML workspace report, MD exclusions and permission-checked channel tasks for OpenCode",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "INSTALL.md"
+  ],
+  "dependencies": {
+    "@opencode/plugin": "2.2.1"
+  },
+  "scripts": {
+    "test": "node test/run-tests.mjs && node test/api.test.mjs && node --experimental-loader ./test/loader.mjs test/plugin.test.mjs",
+    "example": "node test/build-example.mjs"
+  }
+}

@@ -1,13 +1,15 @@
 # opencode-plugins
 
 Плагины OpenCode, вынесенные из локального профиля, и инструкции по их
-установке на другой машине. Сейчас здесь один плагин — Markdown-панель.
+установке на другой машине. Сейчас здесь два плагина: Markdown-панель и
+Pachca.
 
 ## Состав
 
 | Путь | Компонент | Назначение |
 |---|---|---|
 | `md-viewer/` | `opencode-md-panel` | панель Markdown: список `.md` файлов сессии, просмотр, редактирование, сохранение |
+| `pachca/` | `opencode-pachca` | MCP-подключение Пачки, сбор чатов, интерактивный HTML-отчёт, MD-исключения и задачи с preflight прав |
 | `config/` | пример конфигурации | `opencode.json` без секретов |
 | `INSTALL.md` | инструкция | сборка, установка, проверка, troubleshooting |
 | `NOTICE.md` | происхождение | источники и статус лицензий |
@@ -35,6 +37,30 @@ bun run build
 
 Полная последовательность с копированием и проверкой —
 [`INSTALL.md`](INSTALL.md).
+
+### Pachca
+
+```bash
+cd pachca
+node test/run-tests.mjs
+node test/api.test.mjs
+node --experimental-loader ./test/loader.mjs test/plugin.test.mjs
+node test/build-example.mjs
+```
+
+Подключение — путь к каталогу `pachca/` в `plugins` и либо `PACHCA_TOKEN`,
+либо OAuth через `/mcps`. Инструкция: [`pachca/INSTALL.md`](pachca/INSTALL.md).
+Навык отчёта: [`../reports/pachca-report/SKILL.md`](../reports/pachca-report/SKILL.md).
+
+## Что делает Pachca
+
+- регистрирует официальный MCP-сервер `https://mcp.pachca.com/mcp`;
+- собирает все чаты пользователя, сообщения, треды и участников;
+- пишет интерактивный автономный HTML-отчёт: прогресс/блокеры проектов,
+  активность, молчащие > 2 дней, исключения;
+- хранит `.pachca/exclusions.md`, `.pachca/projects.md`, `.pachca/tasks.md`;
+- проверяет скоупы, роль, тариф и доступ к каналу до сохранения задачи;
+- не хранит токен и не делает внешних запросов из HTML.
 
 ## Что делает Markdown-панель
 

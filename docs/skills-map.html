@@ -315,7 +315,7 @@
       <div class="hstat"><b id="stat-meta-existing" style="color:var(--cat-meta)">3</b><span>мета в репозитории</span></div>
       <div class="hstat"><b id="stat-meta-proposed" style="color:var(--cat-proposed)">11</b><span>мета proposed</span></div>
       <div class="hstat"><b id="stat-auxiliary" style="color:var(--cat-aux)">28</b><span>вспомогательные</span></div>
-      <div class="hstat"><b id="stat-total">42</b><span>всего навыков</span></div>
+      <div class="hstat"><b id="stat-total">43</b><span>всего навыков</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
     </div>
     <div class="legend">
@@ -497,14 +497,21 @@
 │           ├── telemetry-example.json
 │           └── example-report.html <span class="new">← демо</span>
 ├── reports/                    <span class="c">← отчётность, без доменного префикса</span>
-│   └── pptx-report/            <span class="c">← есть: презентации и отчёты PPTX</span>
+│   ├── pptx-report/            <span class="c">← есть: презентации и отчёты PPTX</span>
+│   │   ├── SKILL.md
+│   │   ├── examples/
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   └── templates/
+│   └── pachca-report/          <span class="new">← добавлено: статистика чатов Пачки в HTML</span>
 │       ├── SKILL.md
-│       ├── examples/
+│       ├── examples/           <span class="c">← example-report.html</span>
 │       ├── references/
-│       ├── scripts/
+│       ├── scripts/            <span class="c">← check_report.py, validate_analysis.py</span>
 │       └── templates/
 ├── opencode-plugins/           <span class="c">← плагины и setup OpenCode</span>
-│   └── md-viewer/
+│   ├── md-viewer/
+│   └── pachca/                 <span class="new">← MCP, сбор, HTML, задачи</span>
 ├── sci/                        <span class="c">← наука, префикс sci-; пока пусто</span>
 └── harness/                    <span class="c">← харнесс, префикс harness-</span>
     ├── harness-skill-template/
@@ -531,8 +538,8 @@
           <div class="note-card">
             <h4>Плагины</h4>
             <p><a href="../opencode-plugins/README.md">opencode-plugins/</a> — Markdown-панель
-            OpenCode: исходники, dist и инструкция по установке. Это setup, а не домен
-            навыков; секреты в папку не входят.</p>
+            и <code>opencode-pachca</code>: исходники, тесты и инструкции. Это setup, а не
+            домен навыков; секреты в папку не входят.</p>
           </div>
           <div class="note-card">
             <h4>Анатомия скилла</h4>
@@ -557,7 +564,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-11-01 · 9 реализовано · 33 предложено</span>
+      <span>снимок 2026-11-02 · 10 реализовано · 33 предложено</span>
     </div>
   </footer>
 </main>
@@ -594,6 +601,14 @@
       io: "git range + telemetry → автономный HTML",
       links: "../dev/dev-pr-report-html/SKILL.md",
       metrics: ["Token Budget", "Architecture Drift", "Cognitive Load", "Iteration Rate", "Hallucination Risk", "Context Utilization"]
+    },
+    {
+      id: "pachca-report", name: "/pachca-report", domain: "report", status: "existing", priority: "P1",
+      blocks: ["audit", "report"],
+      sum: "Чаты Пачки в интерактивном автономном HTML: прогресс и блокеры проектов с цитатами, активность участников и молчащие > 2 дней, MD-исключения и задачи по каналам с preflight прав.",
+      io: "Pachca MCP/REST → snapshot + analysis → HTML + .pachca/*.md",
+      links: "../reports/pachca-report/SKILL.md",
+      metrics: ["Messages", "Inactive > 2d", "Blocked projects", "Evidence coverage"]
     },
 
     // --- разработка ---

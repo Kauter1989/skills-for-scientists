@@ -25,6 +25,7 @@ Priority order: **harness → dev → science → reports**.
 | [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Meta-skill: survey, choose a debugging approach and generate `dev-bug-process` with reproducibility invariants | `.opencode/bug-processing.yml`, `dev-bug-process` |
 | [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML report for feature or milestone changes: six agent-development metrics, evidence and decisions | standalone `report.html` |
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Rigorous PPTX presentations and analytical reports: research talks, project reports and management analytics | `deck.pptx`, PNG previews |
+| [`pachca-report`](reports/pachca-report/SKILL.md) | `reports/` | Pachca chats to an interactive HTML report: project progress and blockers, participant activity with >2-day silence, MD exclusions, and permission-checked channel tasks | standalone `report.html`, `.pachca/*.md` |
 
 ### Meta-skills
 
@@ -53,6 +54,14 @@ Score, Cognitive Load Index, Agent Iteration Rate, Hallucination Risk and
 Context Window Utilization. The page needs no network and opens from disk.
 Example: [`dev/dev-pr-report-html/examples/example-report.html`](dev/dev-pr-report-html/examples/example-report.html).
 
+`pachca-report` connects to Pachca through the official MCP server or REST,
+collects all chats where the user is a member, and writes an interactive
+standalone HTML report. Project progress and blockers must cite message IDs;
+participants silent for more than two days are highlighted; exclusions and
+saved channel tasks live in human-editable Markdown. Saved tasks are refused
+until scopes, role, plan and chat access pass a preflight.
+Example: [`reports/pachca-report/examples/example-report.html`](reports/pachca-report/examples/example-report.html).
+
 ## Domains and prefixes
 
 A skill name starts with its domain prefix; the folder defines the area:
@@ -62,7 +71,7 @@ A skill name starts with its domain prefix; the folder defines the area:
 | `dev/` | `dev-` | development: features, defects, checks, audit, release |
 | `sci/` | `sci-` | research: hypotheses, experiments, statistics, data |
 | `harness/` | `harness-` | harness-wide: initialization, rules, the skills themselves |
-| `reports/` | no prefix | reporting and presentations; currently only `pptx-report` |
+| `reports/` | no prefix | reporting and presentations: `pptx-report`, `pachca-report` |
 
 The prefix makes the domain visible after installation into a flat skill
 directory (`~/.config/opencode/skill/`). The domain folder is only repository
@@ -88,6 +97,9 @@ Copy-Item -Recurse .\dev\dev-pr-report-html "$env:USERPROFILE\.config\opencode\s
 
 # Windows: reporting skill
 Copy-Item -Recurse .\reports\pptx-report "$env:USERPROFILE\.config\opencode\skill\pptx-report"
+
+# Windows: Pachca report skill
+Copy-Item -Recurse .\reports\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
 ```
 
 ```bash
@@ -95,6 +107,7 @@ Copy-Item -Recurse .\reports\pptx-report "$env:USERPROFILE\.config\opencode\skil
 cp -r harness/harness-skill-template ~/.config/opencode/skill/
 cp -r dev/dev-pr-report-html ~/.config/opencode/skill/
 cp -r reports/pptx-report ~/.config/opencode/skill/
+cp -r reports/pachca-report ~/.config/opencode/skill/
 ```
 
 After installation, verify that the `skill` tool finds the skill. Before
@@ -103,11 +116,13 @@ repository.
 
 ## OpenCode plugins
 
-`opencode-plugins/` contains the source and built artifact of the OpenCode
-Markdown panel, plus installation instructions for another machine.
+`opencode-plugins/` contains the source of the OpenCode Markdown panel and the
+Pachca plugin, plus installation instructions for another machine.
 
 - overview: [`opencode-plugins/README.md`](opencode-plugins/README.md);
 - installation: [`opencode-plugins/INSTALL.md`](opencode-plugins/INSTALL.md);
+- Pachca plugin: [`opencode-plugins/pachca/README.md`](opencode-plugins/pachca/README.md),
+  [`opencode-plugins/pachca/INSTALL.md`](opencode-plugins/pachca/INSTALL.md);
 - configuration without secrets: [`opencode-plugins/config/`](opencode-plugins/config/);
 - licenses and provenance: [`opencode-plugins/NOTICE.md`](opencode-plugins/NOTICE.md).
 
@@ -184,9 +199,21 @@ skills/
 │   ├── INSTALL.md
 │   ├── NOTICE.md
 │   ├── md-viewer/
+│   ├── pachca/
+│   │   ├── src/               plugin: MCP, API, analysis, HTML, tasks
+│   │   ├── test/              unit + mock HTTP tests
+│   │   ├── examples/
+│   │   ├── README.md
+│   │   └── INSTALL.md
 │   └── config/
 ├── reports/                   reporting, no prefix
-│   └── pptx-report/
+│   ├── pptx-report/
+│   │   ├── SKILL.md
+│   │   ├── examples/
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   └── templates/
+│   └── pachca-report/
 │       ├── SKILL.md
 │       ├── examples/
 │       ├── references/
@@ -239,9 +266,20 @@ python scripts/build_report.py --example -o examples/example-report.html --stric
 
 # collect metrics from Git
 python scripts/collect_metrics.py --repo . --from HEAD~1 --to HEAD --out metrics.json
+
+# Pachca plugin and example
+cd opencode-plugins/pachca
+node test/run-tests.mjs
+node test/api.test.mjs
+node --experimental-loader ./test/loader.mjs test/plugin.test.mjs
+node test/build-example.mjs
+cd ../../reports/pachca-report
+python scripts/check_report.py examples/example-report.html
+python scripts/validate_analysis.py examples/example-snapshot.json examples/example-analysis.json
 ```
 
-Scripts use only the Python 3.9+ standard library.
+Scripts use only the Python 3.9+ standard library. The Pachca plugin tests use
+Node 20+ and a local mock HTTP server.
 
 ## License
 
