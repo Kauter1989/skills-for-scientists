@@ -21,6 +21,7 @@ ANSWERS = {
     "tasks": ["feature", "bugfix", "report"],
     "constraints": ["private"],
     "skills": [],
+    "plugins": ["md-viewer"],
 }
 
 
@@ -49,6 +50,7 @@ class InitRepoTest(unittest.TestCase):
             data = json.loads(meta.read_text(encoding="utf-8"))
             self.assertEqual(data["status"], "draft")
             self.assertTrue(data["skills"])
+            self.assertEqual(data["plugins"], ["md-viewer"])
 
             blocked = run(str(INIT), "apply", "--root", str(root), "--plan-json", str(meta))
             self.assertNotEqual(blocked.returncode, 0)
@@ -61,7 +63,18 @@ class InitRepoTest(unittest.TestCase):
             self.assertTrue((root / "profile.yml").is_file())
             self.assertTrue((root / "AGENTS.md").is_file())
             self.assertTrue((root / "docs" / "rules" / "registry.yml").is_file())
+            self.assertTrue((root / "docs" / "plugins.md").is_file())
             self.assertTrue((root / ".github" / "workflows" / "ci.yml").is_file())
+
+            profile = (root / "profile.yml").read_text(encoding="utf-8")
+            self.assertIn("plugins:", profile)
+            self.assertIn("- md-viewer", profile)
+            agents_text = (root / "AGENTS.md").read_text(encoding="utf-8")
+            self.assertIn("md-viewer", agents_text)
+            self.assertIn("opencode-plugins/md-viewer/INSTALL.md", agents_text)
+            plugins_text = (root / "docs" / "plugins.md").read_text(encoding="utf-8")
+            self.assertIn("md-viewer", plugins_text)
+            self.assertIn("opencode-plugins/md-viewer/INSTALL.md", plugins_text)
 
             checked = run(str(CHECK), "--root", str(root))
             self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
@@ -72,6 +85,33 @@ class InitRepoTest(unittest.TestCase):
             self.assertEqual(again.returncode, 0, again.stdout + again.stderr)
             self.assertIn("skip", again.stdout)
             self.assertEqual(agents.read_text(encoding="utf-8"), "user content")
+
+    def test_no_plugins_is_supported(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            answers = root / "answers.json"
+            answers.write_text(
+                json.dumps(dict(ANSWERS, plugins=[]), ensure_ascii=False),
+                encoding="utf-8",
+            )
+            plan = root / "bootstrap-plan.html"
+            meta = root / "bootstrap-plan.json"
+            planned = run(
+                str(INIT), "plan", "--root", str(root), "--answers", str(answers),
+                "--out", str(plan), "--json", str(meta),
+            )
+            self.assertEqual(planned.returncode, 0, planned.stdout + planned.stderr)
+            approved = run(str(INIT), "approve", "--plan", str(plan), "--json", str(meta))
+            self.assertEqual(approved.returncode, 0, approved.stdout + approved.stderr)
+            applied = run(str(INIT), "apply", "--root", str(root), "--plan-json", str(meta))
+            self.assertEqual(applied.returncode, 0, applied.stdout + applied.stderr)
+
+            profile = (root / "profile.yml").read_text(encoding="utf-8")
+            self.assertIn("plugins:\n  []", profile)
+            plugins_text = (root / "docs" / "plugins.md").read_text(encoding="utf-8")
+            self.assertIn("Плагины не выбраны", plugins_text)
+            checked = run(str(CHECK), "--root", str(root))
+            self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
 
 
 if __name__ == "__main__":

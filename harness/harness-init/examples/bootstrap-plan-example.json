@@ -1,6 +1,6 @@
 {
   "status": "approved",
-  "created": "2026-10-31",
+  "created": "2026-11-03",
   "answers": {
     "project": "example-service",
     "domain": "dev",
@@ -25,13 +25,19 @@
     "constraints": [
       "private"
     ],
-    "skills": []
+    "skills": [],
+    "plugins": [
+      "md-viewer"
+    ]
   },
   "skills": [
     "harness-skill-template",
     "harness-skill-audit",
     "harness-rule-to-mechanism",
     "dev-pr-report-html"
+  ],
+  "plugins": [
+    "md-viewer"
   ],
   "stages": [
     {
@@ -67,6 +73,7 @@
     "docs/reviews/",
     "docs/audits/",
     "docs/rules/registry.yml",
+    "docs/plugins.md",
     ".pre-commit-config.yaml",
     ".github/workflows/ci.yml"
   ]

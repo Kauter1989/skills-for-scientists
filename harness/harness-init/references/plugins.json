@@ -1,0 +1,12 @@
+[
+  {
+    "name": "md-viewer",
+    "description": "Панель Markdown: список .md файлов сессии, просмотр, редактирование и сохранение",
+    "install": "opencode-plugins/md-viewer/INSTALL.md"
+  },
+  {
+    "name": "pachca",
+    "description": "MCP Пачки, сбор чатов и интерактивный HTML-отчёт",
+    "install": "opencode-plugins/pachca/INSTALL.md"
+  }
+]

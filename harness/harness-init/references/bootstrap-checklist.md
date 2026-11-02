@@ -8,6 +8,7 @@
 - [ ] опрос проведён, ответы сохранены;
 - [ ] домен, стек, команды и задачи зафиксированы;
 - [ ] стартовые навыки выбраны из реализованных;
+- [ ] плагины выбраны или явно указано `none`;
 - [ ] `bootstrap-plan.html` собран;
 - [ ] план утверждён пользователем, статус `approved`;
 - [ ] понятно, какие файлы будут созданы и какие пропущены.
@@ -16,8 +17,9 @@
 
 | Путь | Назначение |
 |---|---|
-| `profile.yml` | проект, домен, команды, навыки |
-| `AGENTS.md` | правила, команды и гейты |
+| `profile.yml` | проект, домен, команды, навыки, плагины |
+| `AGENTS.md` | правила, команды, навыки и плагины |
+| `docs/plugins.md` | выбранные плагины и ссылки на установку |
 | `docs/research/` | research ledger |
 | `docs/reviews/` | HTML-ревью |
 | `docs/audits/` | отчёты аудита |
@@ -43,8 +45,9 @@ python scripts/check_bootstrap.py --root /path/to/repo --json
 Проверяется:
 
 - обязательные файлы и каталоги;
-- `profile.yml`: project, domain, commands, skills;
+- `profile.yml`: project, domain, commands, skills, plugins;
 - `ci=github` требует workflow;
+- `docs/plugins.md` существует;
 - `docs/rules/registry.yml` содержит `version: 1`;
 - нет `{{...}}` и `TODO`;
 - код завершения `0`.
@@ -56,7 +59,8 @@ python scripts/check_bootstrap.py --root /path/to/repo --json
 - [ ] повторный `apply` не перезаписал файлы;
 - [ ] `check_bootstrap.py` проходит;
 - [ ] `bootstrap-report.md` перечисляет созданное и пропущенное;
-- [ ] стартовые навыки присутствуют в `profile.yml`.
+- [ ] стартовые навыки присутствуют в `profile.yml`;
+- [ ] выбранные плагины есть в `profile.yml` и `docs/plugins.md`.
 
 ## 6. Ошибки
 

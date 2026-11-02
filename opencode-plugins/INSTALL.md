@@ -1,156 +1,39 @@
-# Установка Markdown-панели
+# Плагины OpenCode: установка
 
-Инструкция для другой машины с OpenCode Desktop. В результате появится
-панель **Markdown** для файлов текущей сессии.
+Краткий каталог плагинов в этой папке. Подробная инструкция лежит рядом с
+каждым плагином.
 
-> Для плагина Pachca используется отдельная инструкция:
-> [`pachca/INSTALL.md`](pachca/INSTALL.md).
+| Плагин | Что решает | Подробная установка |
+|---|---|---|
+| `md-viewer` | Панель Markdown: список `.md` файлов сессии, просмотр, редактирование и сохранение | [`md-viewer/INSTALL.md`](md-viewer/INSTALL.md) |
+| `pachca` | Подключение Пачки через MCP, сбор чатов и интерактивный HTML-отчёт | [`pachca/INSTALL.md`](pachca/INSTALL.md) |
 
-## 1. Требования
+## Общие правила
 
-| Компонент | Версия / условие |
-|---|---|
-| OpenCode Desktop | 2.x с Plugin API `@opencode/plugin` 2.2.x |
-| Node.js | 20.19+ или 22+ |
-| Bun | 1.2+; можно заменить на npm + `npx vite build` |
+- Ставьте только те плагины, которые решают задачу репозитория.
+- Каждый плагин подключается путём к каталогу с `package.json`.
+- Токены и ключи не хранятся в `opencode.json` и не коммитятся.
+- После изменения `dist/` или состава плагинов перезагрузите плагины:
+  **Settings → Extensions → Plugins → Reload**.
+- Перед установкой прочитайте раздел «Ограничения» в инструкции плагина.
 
-Модель должна поддерживать tool calling: плагин добавляет RPC Markdown-панели.
+## Добавление нового плагина
 
-## 2. Клонирование
+Чтобы каталог оставался полным:
 
-```bash
-git clone https://github.com/Kauter1989/opencode-skills.git
-cd opencode-skills/skills/opencode-plugins
-```
+1. Создайте каталог `<plugin>/` с исходниками и `package.json`.
+2. Положите в него `INSTALL.md` с разделами:
+   - назначение и задачи;
+   - требования;
+   - сборка и зависимости;
+   - подключение в `opencode.json`;
+   - секреты и переменные окружения;
+   - проверка;
+   - обновление;
+   - ограничения.
+3. Добавьте строку в таблицу выше: название, краткая задача, ссылка на
+   `INSTALL.md`.
+4. Если у плагина есть пример конфигурации, положите его в `config/` и
+   сошлитесь на него из `INSTALL.md`.
 
-Дальше команды даны от каталога `opencode-plugins`.
-
-## 3. Сборка
-
-```bash
-cd md-viewer
-bun install
-bun run build
-```
-
-Если Bun нет:
-
-```bash
-npm install
-npx vite build
-```
-
-GUI-часть собирается в `dist/gui-experimental.cjs`. Серверная часть
-загружается напрямую из `src/index.ts`.
-
-## 4. Установка
-
-### Windows PowerShell
-
-```powershell
-$oc = "$env:USERPROFILE\.config\opencode"
-New-Item -ItemType Directory -Force "$oc\plugins" | Out-Null
-Copy-Item -Recurse .\md-viewer "$oc\plugins\opencode-md-panel"
-```
-
-### macOS / Linux
-
-```bash
-oc="$HOME/.config/opencode"
-mkdir -p "$oc/plugins"
-cp -r md-viewer "$oc/plugins/opencode-md-panel"
-```
-
-Можно не копировать плагин, а указать в конфигурации абсолютный путь к
-`opencode-plugins/md-viewer`. Тогда после `git pull` не нужно копировать
-заново.
-
-## 5. Конфигурация
-
-Откройте или создайте `~/.config/opencode/opencode.json`. Возьмите
-[`config/opencode.example.json`](config/opencode.example.json) и замените
-путь.
-
-```jsonc
-{
-  "$schema": "https://opencode.ai/config.json",
-  "plugins": [
-    "C:/Users/<user>/.config/opencode/plugins/opencode-md-panel"
-  ]
-}
-```
-
-Если плагин остаётся в репозитории:
-
-```jsonc
-{
-  "plugins": [
-    "C:/Users/<user>/opencode-skills/skills/opencode-plugins/md-viewer"
-  ]
-}
-```
-
-Используйте прямые слэши. Обратные слэши в JSON нужно экранировать.
-
-## 6. Секреты
-
-В исходном профиле рядом с `opencode.json` был `service.json` с паролем.
-Он **не входит** в этот репозиторий. Если ваш локальный сервис его требует,
-создайте файл вручную на новой машине и не коммитьте.
-
-Ключи провайдеров добавьте через:
-
-```bash
-opencode auth login
-```
-
-или через настройки провайдеров в Desktop. Не храните ключи в
-`opencode.json` и в этом репозитории.
-
-## 7. Перезапуск
-
-Перезапустите OpenCode или откройте
-**Settings → Extensions → Plugins → Reload**.
-
-## 8. Проверка
-
-1. Палитра команд → **Open Markdown panel**.
-2. В боковой панели появится список `.md` файлов текущей сессии.
-3. Откройте файл, нажмите **Edit**, измените текст и **Save**.
-4. **Preview** возвращает просмотр, **Revert** отменяет несохранённые
-   правки, **Reload** перечитывает файл с диска.
-
-Проверка ограничений:
-
-- файл вне каталога сессии должен быть отклонён;
-- файл не-Markdown должен быть отклонён;
-- файл больше 4 МБ должен быть отклонён.
-
-## 9. Troubleshooting
-
-| Симптом | Что проверить |
-|---|---|
-| Панели нет в меню | плагин добавлен в `plugins`; путь указывает на каталог с `package.json` |
-| Панель пустая | сессия открыта в каталоге с `.md`; плагин загружен |
-| Ошибка загрузки плагина | пересобран ли `dist/gui-experimental.cjs`; версия OpenCode |
-| Изменения не сохраняются | файл существует; расширение Markdown; размер меньше 4 МБ |
-| После `git pull` старая версия | пересобрать `dist` и перезагрузить плагины |
-
-## 10. Обновление
-
-```bash
-git pull
-cd md-viewer
-bun install
-bun run build
-```
-
-Если плагин скопирован в `~/.config/opencode/plugins`, повторите
-копирование и перезагрузите плагины.
-
-## 11. Что не переносится
-
-- `service.json` и пароли;
-- `auth.json`, ключи провайдеров, кэш моделей;
-- `node_modules`;
-- персональные абсолютные пути.
+Не добавляйте в каталог плагин без инструкции установки и проверки.
