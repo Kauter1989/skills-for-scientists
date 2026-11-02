@@ -333,17 +333,46 @@ def render_body(model: dict, candidates: dict) -> str:
             f'{"".join(f"<li>{esc(item)}</li>" for item in items)}</ul></td></tr>'
         )
 
+    def bullets(items: list) -> str:
+        return '<ul class="clean">' + "".join(f"<li>{esc(item)}</li>" for item in items) + "</ul>"
+
+    track_cards = []
+    for track in model["criteria"].get("tracks") or []:
+        if not isinstance(track, dict):
+            continue
+        new_data = track.get("newDatasets") or track.get("new_datasets") or []
+        track_cards.append(
+            '<article class="track">'
+            f'<div class="track-head"><h3>{esc(track.get("track") or track.get("directionId") or "Трек")}</h3>'
+            f'<span class="badge quiet">{esc(track.get("directionId") or "")}</span></div>'
+            f'<p class="venue">{esc(track.get("venue") or "")}</p>'
+            '<div class="track-grid">'
+            f'<div><h4>Обязательные аналоги</h4>{bullets(track.get("baselines") or [])}</div>'
+            f'<div><h4>Новые данные</h4>{bullets(new_data)}</div>'
+            f'<div><h4>Протокол валидации</h4>{bullets(track.get("validation") or [])}</div>'
+            f'<div><h4>Аблации</h4>{bullets(track.get("ablations") or [])}</div>'
+            f'<div><h4>Воспроизводимость</h4>{bullets(track.get("reproducible") or [])}</div>'
+            '</div></article>'
+        )
+    track_block = (
+        '<div class="tracks">' + "".join(track_cards) + "</div>"
+        if track_cards
+        else '<p class="empty">Track-specific требования не заполнены.</p>'
+    )
     criteria_html = (
-        '<table class="criteria"><thead><tr><th>Категория</th><th>Источник ранга</th><th>Критерии</th></tr></thead><tbody>'
+        '<div class="callout"><b>Ранг площадки — только входной фильтр</b>'
+        "<p>A*/Q1/Q2 отвечают на вопрос «где опубликовано», но не «доказано ли». Ниже — что работа должна показать внутри трека: с какими аналогами сравниться, на каких новых данных провериться и какие аблации/артефакты приложить.</p></div>"
+        '<table class="criteria"><thead><tr><th>Входной фильтр</th><th>Источник</th><th>Что проверяем</th></tr></thead><tbody>'
         + criteria_rows("a_star", "A* конференция", "ICORE / CORE")
         + criteria_rows("q1", "Q1 журнал", "SCImago SJR: квартиль в категории и году")
         + criteria_rows("q2", "Q2 журнал", "SCImago SJR: квартиль в категории и году")
         + "</tbody></table>"
-        + '<h3 class="subhead">Критерии включения исследования</h3><ul class="clean">'
-        + "".join(f"<li>{esc(item)}</li>" for item in model["criteria"].get("study") or [])
-        + "</ul><h3 class=\"subhead\">Ограничения</h3><ul class=\"clean\">"
-        + "".join(f"<li>{esc(item)}</li>" for item in model["criteria"].get("caveats") or [])
-        + "</ul>"
+        + '<h3 class="subhead">Ключевые требования по трекам</h3>'
+        + track_block
+        + '<h3 class="subhead">Общие критерии включения исследования</h3>'
+        + bullets(model["criteria"].get("study") or [])
+        + '<h3 class="subhead">Ограничения</h3>'
+        + bullets(model["criteria"].get("caveats") or [])
     )
 
     query_rows = "".join(

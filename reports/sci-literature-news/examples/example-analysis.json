@@ -121,6 +121,104 @@
       "Один журнал может быть Q1 в одной категории и Q2 в другой.",
       "OpenAlex и DataCite могут пропускать записи.",
       "Синтез основан на аннотациях и метаданных."
+    ],
+    "tracks": [
+      {
+        "directionId": "D1",
+        "track": "Foundation models для биомедицинских изображений",
+        "venue": "Q1 journal или A* (NeurIPS / CVPR / KDD)",
+        "baselines": [
+          "nnU-Net / U-Net",
+          "BiomedCLIP / FetalCLIP",
+          "MedSAM",
+          "linear probe и full fine-tuning"
+        ],
+        "newDatasets": [
+          "MedSegBench 2026",
+          "GraphBench-Materials (для graph-ветки)"
+        ],
+        "validation": [
+          "внешний test set, не использованный в pretraining",
+          "zero-shot и few-shot 1/5/10%",
+          "калибровка и subgroup analysis по центру/модальности",
+          "сравнение compute и parameters при равном бюджете"
+        ],
+        "ablations": [
+          "pretraining corpus",
+          "language supervision",
+          "PEFT vs full FT"
+        ],
+        "reproducible": [
+          "код и чекпойнты",
+          "точные split'ы",
+          "лицензии данных"
+        ]
+      },
+      {
+        "directionId": "D2",
+        "track": "Сегментация медицинских изображений",
+        "venue": "Q1 journal (TMI, MedIA, TPAMI) или A* (CVPR / MICCAI)",
+        "baselines": [
+          "nnU-Net",
+          "U-Net",
+          "SwinUNETR",
+          "SAM / MedSAM",
+          "M2SNet"
+        ],
+        "newDatasets": [
+          "MedSegBench 2026",
+          "SynAPSeg"
+        ],
+        "validation": [
+          "внешний test set на новом датасете",
+          "cross-centre и low-label regime",
+          "Dice, HD95, ASD и калибровка",
+          "анализ failure cases и boundary errors"
+        ],
+        "ablations": [
+          "encoder",
+          "prompt strategy",
+          "semi-supervision",
+          "uncertainty head"
+        ],
+        "reproducible": [
+          "код и веса",
+          "split'ы",
+          "версия датасета"
+        ]
+      },
+      {
+        "directionId": "D3",
+        "track": "Морфология шипиков и нейронная активность",
+        "venue": "Q1 journal (Neuron, J Neurosci, Bioinformatics) или A* (MICCAI)",
+        "baselines": [
+          "SpineTool",
+          "3D shape descriptors",
+          "ручная морфометрия / Fiji",
+          "CNN или transformer baseline"
+        ],
+        "newDatasets": [
+          "MicroscopySSL-2026",
+          "SynAPSeg (synapse detection)"
+        ],
+        "validation": [
+          "независимые животные/нейроны и новый микроскопный протокол",
+          "blinded manual validation",
+          "test-retest и effect size с CI",
+          "перенос на Alzheimer/контроль"
+        ],
+        "ablations": [
+          "descriptors",
+          "normalization",
+          "augmentation",
+          "segmentation backbone"
+        ],
+        "reproducible": [
+          "код",
+          "параметры микроскопии",
+          "raw data или accession"
+        ]
+      }
     ]
   },
   "ranking_notes": [

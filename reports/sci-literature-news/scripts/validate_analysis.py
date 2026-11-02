@@ -89,6 +89,28 @@ def main(argv: list[str] | None = None) -> int:
     for key in ("a_star", "q1", "q2", "study"):
         if not criteria.get(key):
             warnings.append(f"criteria.{key} пуст")
+    tracks = criteria.get("tracks") or []
+    if not tracks:
+        warnings.append("criteria.tracks пуст: нет track-specific требований к аналогам и валидации")
+    for index, track in enumerate(tracks, start=1):
+        label = f"criteria.tracks[{index}]"
+        if not isinstance(track, dict):
+            errors.append(f"{label}: должен быть объектом")
+            continue
+        direction_id = str(track.get("directionId") or "")
+        if direction_id and direction_id not in directions:
+            warnings.append(f"{label}: направление {direction_id} отсутствует в profile")
+        if not str(track.get("track") or "").strip():
+            errors.append(f"{label}: track пуст")
+        baselines = track.get("baselines") or []
+        validation = track.get("validation") or []
+        new_datasets = track.get("newDatasets") or track.get("new_datasets") or []
+        if not baselines:
+            (errors if args.strict else warnings).append(f"{label}: нет обязательных аналогов")
+        if not validation:
+            (errors if args.strict else warnings).append(f"{label}: нет протокола валидации")
+        if not new_datasets:
+            warnings.append(f"{label}: нет новых датасетов; укажите, на чём расширять валидацию")
     if candidates.get("warnings"):
         warnings.extend(candidates["warnings"])
     if errors:

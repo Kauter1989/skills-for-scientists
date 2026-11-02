@@ -89,6 +89,22 @@ sourceid,title,issn,year,field,field_code,sjr,quartile,source
 | Q1 | SJR | верхние 25% в категории/году | ранг журнала | качество статьи, цитируемость здесь и сейчас |
 | Q2 | SJR | 25–50% в категории/году | ранг журнала | «хуже Q1» автоматически |
 
+### Track-level
+
+Ранг площадки — только входной фильтр. Для каждого направления в
+`analysis.criteria.tracks` перечисляются конкретные требования. Примеры:
+
+| Трек | Обязательные аналоги | Новые данные и протокол |
+|---|---|---|
+| Foundation models для биомедицинских изображений | nnU-Net/U-Net/SwinUNETR; BiomedCLIP/FetalCLIP; MedSAM; linear probe и full FT | MedGround-35K, PAXRay++, COBRA, TotalSegmentator v3; внешний test set, zero/few-shot, калибровка, subgroup analysis |
+| Сегментация медицинских изображений | nnU-Net, U-Net, SwinUNETR, SAM/MedSAM, M2SNet | ISLES 2017, PneumoCT-202, PAXRay++, PelviSet, PUWF-AV, Longitudinal Abdominal CT; Dice/HD95/ASD, low-label, cross-centre |
+| Морфология шипиков и нейронная активность | SpineTool, 3D shape descriptors, ручная морфометрия/Fiji/Imaris, CNN/transformer baseline | SynAPSeg, high-fidelity microscopy datasets; независимые животные, blinded manual validation, test-retest |
+| Scientific ML и восстановление микроскопии | CARE/CSBDeep, Noise2Void/Noise2Self, RCAN, U-Net, diffusion denoiser, ePIE/PtychoNN | High-fidelity microscopy datasets, SynAPSeg; cross-microscope/modality, SNR sweep, downstream segmentation, FRC/SSIM/PSNR |
+| Компьютерная графика и объёмный рендеринг | path tracing, BVH builders, NeRF/Instant NGP, 3DGS, neural radiative transfer, differentiable SDF | новых DataCite-датасетов нет; Mip-NeRF 360, DL3DV, Sponza; novel view, geometry, time/memory, perceptual metrics |
+
+Если нового датасета для трека нет, это нужно сказать явно. Нельзя подменять
+«валидацию на новых данных» общими словами.
+
 ### Study-level
 
 Работа попадает в отчёт, если:

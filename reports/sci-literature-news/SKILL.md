@@ -189,7 +189,9 @@ PY
 - `summary` — 2–4 предложения о главных сдвигах;
 - `themes` — 3–6 тем; каждая с DOI-доказательствами;
 - `datasets` — новые датасеты из DataCite с описанием, годом, лицензией;
-- `criteria` — критерии A*/Q1/Q2 и включения исследования;
+- `criteria` — venue gate + `criteria.tracks`: для каждого направления
+  конкретные аналоги, новые датасеты, протокол валидации, аблации и
+  воспроизводимость;
 - `selection` — необязательный список DOI, если нужно убрать работы;
 - `warnings` — что не проверено.
 
@@ -241,6 +243,30 @@ python scripts/validate_analysis.py .sci-literature-news/candidates.json .sci-li
 - **A*** — ICORE/CORE A* для указанного source; A* — ранг конференции.
 - **Q1** — SJR верхние 25% в категории/году.
 - **Q2** — SJR 25–50% в категории/году.
+
+Ранг площадки — только входной фильтр. Он не доказывает качество статьи.
+
+### Track-level: что работа должна доказать
+
+Для каждого направления в `analysis.criteria.tracks` укажите:
+
+- **обязательные аналоги** — с какими конкретными моделями/методами сравниваться
+  (например, для сегментации: nnU-Net, U-Net, SwinUNETR, SAM/MedSAM, M2SNet;
+  для foundation models: BiomedCLIP/FetalCLIP, MedSAM, linear probe и full
+  fine-tuning; для spine: SpineTool, 3D shape descriptors, ручная морфометрия);
+- **новые данные** — на каких опубликованных датасетах валидировать и как
+  расширять задачи профиля (например, ISLES 2017, PneumoCT-202, PAXRay++,
+  PelviSet, PUWF-AV, MedGround-35K, COBRA, TotalSegmentator v3);
+- **протокол** — внешний test set, zero/few-shot, cross-centre, low-label,
+  blinded manual validation, метрики Dice/HD95/ASD/калибровка;
+- **аблации** — что именно проверяли: encoder, prompt, semi-supervision,
+  noise model, PSF, representation;
+- **воспроизводимость** — код, чекпойнты, split'ы, версии датасетов, лицензии.
+
+Если для трека нет нового датасета, это нужно сказать явно и указать, на каких
+внешних данных проверять. Пример: для graphics за период не найдено нового
+DataCite-датасета — использовать Mip-NeRF 360 / DL3DV / Sponza и добавить
+новый датасет при публикации.
 
 ### Study-level
 

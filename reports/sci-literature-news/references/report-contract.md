@@ -136,7 +136,19 @@
     "q1": ["..."],
     "q2": ["..."],
     "study": ["..."],
-    "caveats": ["..."]
+    "caveats": ["..."],
+    "tracks": [
+      {
+        "directionId": "D1",
+        "track": "...",
+        "venue": "Q1 journal или A* ...",
+        "baselines": ["nnU-Net", "MedSAM", "..."],
+        "newDatasets": ["PAXRay++", "..."],
+        "validation": ["внешний test set", "zero-shot/few-shot", "..."],
+        "ablations": ["encoder", "..."],
+        "reproducible": ["код", "split'ы", "..."]
+      }
+    ]
   },
   "ranking_notes": ["..."],
   "warnings": []
@@ -151,7 +163,10 @@
 - `selection` необязателен: без него берутся все подтверждённые категории;
 - synthesis не должен пересказывать все статьи: только сдвиги, противоречия,
   пробелы и практические следствия;
-- `confidence` — `high`, `medium`, `low`; без evidence максимум `low`.
+- `confidence` — `high`, `medium`, `low`; без evidence максимум `low`;
+- `criteria.tracks` обязательны: для каждого направления нужны конкретные
+  аналоги, новые датасеты/внешние данные и протокол валидации. Общие фразы
+  «сравнить с SOTA» или «проверить на новых данных» не принимаются.
 
 ## 4. HTML-контракт
 
