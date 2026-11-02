@@ -86,6 +86,32 @@ class InitRepoTest(unittest.TestCase):
             self.assertIn("skip", again.stdout)
             self.assertEqual(agents.read_text(encoding="utf-8"), "user content")
 
+    def test_temporary_plugin_is_marked(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            answers = root / "answers.json"
+            answers.write_text(
+                json.dumps(dict(ANSWERS, plugins=["cae-mesh-mcp"]), ensure_ascii=False),
+                encoding="utf-8",
+            )
+            plan = root / "bootstrap-plan.html"
+            meta = root / "bootstrap-plan.json"
+            planned = run(
+                str(INIT), "plan", "--root", str(root), "--answers", str(answers),
+                "--out", str(plan), "--json", str(meta),
+            )
+            self.assertEqual(planned.returncode, 0, planned.stdout + planned.stderr)
+            self.assertIn("temporary", plan.read_text(encoding="utf-8"))
+            approved = run(str(INIT), "approve", "--plan", str(plan), "--json", str(meta))
+            self.assertEqual(approved.returncode, 0, approved.stdout + approved.stderr)
+            applied = run(str(INIT), "apply", "--root", str(root), "--plan-json", str(meta))
+            self.assertEqual(applied.returncode, 0, applied.stdout + applied.stderr)
+            plugins_text = (root / "docs" / "plugins.md").read_text(encoding="utf-8")
+            self.assertIn("cae-mesh-mcp", plugins_text)
+            self.assertIn("temporary", plugins_text)
+            checked = run(str(CHECK), "--root", str(root))
+            self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
+
     def test_no_plugins_is_supported(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

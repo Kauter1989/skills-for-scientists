@@ -28,13 +28,18 @@
 
 Плагины необязательны. Значение по умолчанию — `none`.
 
-| Плагин | Задача |
-|---|---|
-| `md-viewer` | панель Markdown: список `.md` файлов сессии, просмотр, редактирование и сохранение |
-| `pachca` | MCP Пачки, сбор чатов и интерактивный HTML-отчёт |
+| Плагин | Категория | Задача |
+|---|---|---|
+| `supermemory` | Memory & context | постоянная память: профиль, знания проекта, recall, автосохранение, индексация кода |
+| `md-viewer` | Documents & preview | панель Markdown: список `.md` файлов сессии, просмотр, редактирование и сохранение |
+| `pachca` | Collaboration & reporting | MCP Пачки, сбор чатов и интерактивный HTML-отчёт |
+| `freecad-mcp` | Engineering & simulation | FreeCAD через MCP: модели, Python, документы, FEM |
+| `cae-mesh-mcp` | Engineering & simulation | **temporary:** FieldCraft — hex/tet-мешинг, FEA/CFD, MCP |
+| `ferrum` | Medical imaging | DICOM/NIfTI: срезы, MPR, 3D, измерения и сегментация; MCP + навык |
 
 Каталог хранится в `references/plugins.json`. При добавлении плагина
 обновите каталог, `opencode-plugins/INSTALL.md` и инструкцию плагина.
+Временные интеграции помечайте `temporary` и указывайте критерий замены.
 
 ## 4. Соответствие ответов и навыков
 
