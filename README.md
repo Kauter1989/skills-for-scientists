@@ -10,7 +10,7 @@ Development plan and queue: [`docs/skills-development-plan.html`](docs/skills-de
 Mandatory rules for agents: [`AGENTS.md`](AGENTS.md).
 
 No new skill is written without research into analogs and scientific sources.
-Priority order: **harness → dev → science → reports**.
+Priority order: **harness → dev → science → integrations → reports**.
 
 ## What is inside
 
@@ -25,7 +25,7 @@ Priority order: **harness → dev → science → reports**.
 | [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Meta-skill: survey, choose a debugging approach and generate `dev-bug-process` with reproducibility invariants | `.opencode/bug-processing.yml`, `dev-bug-process` |
 | [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML report for feature or milestone changes: six agent-development metrics, evidence and decisions | standalone `report.html` |
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Rigorous PPTX presentations and analytical reports: research talks, project reports and management analytics | `deck.pptx`, PNG previews |
-| [`pachca-report`](reports/pachca-report/SKILL.md) | `reports/` | Pachca chats to an interactive HTML report: project progress and blockers, participant activity with >2-day silence, MD exclusions, and permission-checked channel tasks | standalone `report.html`, `.pachca/*.md` |
+| [`pachca-report`](integrations/pachca-report/SKILL.md) | `integrations/` | Pachca chats to an interactive HTML report: project progress and blockers, participant activity with >2-day silence, MD exclusions, and permission-checked channel tasks | standalone `report.html`, `.pachca/*.md` |
 
 ### Meta-skills
 
@@ -60,7 +60,7 @@ standalone HTML report. Project progress and blockers must cite message IDs;
 participants silent for more than two days are highlighted; exclusions and
 saved channel tasks live in human-editable Markdown. Saved tasks are refused
 until scopes, role, plan and chat access pass a preflight.
-Example: [`reports/pachca-report/examples/example-report.html`](reports/pachca-report/examples/example-report.html).
+Example: [`integrations/pachca-report/examples/example-report.html`](integrations/pachca-report/examples/example-report.html).
 
 ## Domains and prefixes
 
@@ -71,10 +71,12 @@ A skill name starts with its domain prefix; the folder defines the area:
 | `dev/` | `dev-` | development: features, defects, checks, audit, release |
 | `sci/` | `sci-` | research: hypotheses, experiments, statistics, data |
 | `harness/` | `harness-` | harness-wide: initialization, rules, the skills themselves |
-| `reports/` | no prefix | reporting and presentations: `pptx-report`, `pachca-report` |
+| `reports/` | no prefix | reporting and presentations: `pptx-report` |
+| `integrations/` | `integrations-` for new skills; `pachca-report` keeps its name | external environments and APIs: Pachca, messengers, service connectors |
 
 The prefix makes the domain visible after installation into a flat skill
-directory (`~/.config/opencode/skill/`). The domain folder is only repository
+directory (`~/.config/opencode/skill/`). New integration skills use
+`integrations-`; `pachca-report` keeps its historical name. The domain folder is only repository
 organization; installation copies the specific skill, and its directory name
 must match the skill name.
 
@@ -98,8 +100,8 @@ Copy-Item -Recurse .\dev\dev-pr-report-html "$env:USERPROFILE\.config\opencode\s
 # Windows: reporting skill
 Copy-Item -Recurse .\reports\pptx-report "$env:USERPROFILE\.config\opencode\skill\pptx-report"
 
-# Windows: Pachca report skill
-Copy-Item -Recurse .\reports\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
+# Windows: Pachca integration skill
+Copy-Item -Recurse .\integrations\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
 ```
 
 ```bash
@@ -107,7 +109,7 @@ Copy-Item -Recurse .\reports\pachca-report "$env:USERPROFILE\.config\opencode\sk
 cp -r harness/harness-skill-template ~/.config/opencode/skill/
 cp -r dev/dev-pr-report-html ~/.config/opencode/skill/
 cp -r reports/pptx-report ~/.config/opencode/skill/
-cp -r reports/pachca-report ~/.config/opencode/skill/
+cp -r integrations/pachca-report ~/.config/opencode/skill/
 ```
 
 After installation, verify that the `skill` tool finds the skill. Before
@@ -206,14 +208,15 @@ skills/
 │   │   ├── README.md
 │   │   └── INSTALL.md
 │   └── config/
-├── reports/                   reporting, no prefix
-│   ├── pptx-report/
-│   │   ├── SKILL.md
-│   │   ├── examples/
-│   │   ├── references/
-│   │   ├── scripts/
-│   │   └── templates/
+├── integrations/              external environments and APIs
 │   └── pachca-report/
+│       ├── SKILL.md
+│       ├── examples/
+│       ├── references/
+│       ├── scripts/
+│       └── templates/
+├── reports/                   reporting, no prefix
+│   └── pptx-report/
 │       ├── SKILL.md
 │       ├── examples/
 │       ├── references/
@@ -273,7 +276,7 @@ node test/run-tests.mjs
 node test/api.test.mjs
 node --experimental-loader ./test/loader.mjs test/plugin.test.mjs
 node test/build-example.mjs
-cd ../../reports/pachca-report
+cd ../../integrations/pachca-report
 python scripts/check_report.py examples/example-report.html
 python scripts/validate_analysis.py examples/example-snapshot.json examples/example-analysis.json
 ```

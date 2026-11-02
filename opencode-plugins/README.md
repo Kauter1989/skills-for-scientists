@@ -50,7 +50,7 @@ node test/build-example.mjs
 
 Подключение — путь к каталогу `pachca/` в `plugins` и либо `PACHCA_TOKEN`,
 либо OAuth через `/mcps`. Инструкция: [`pachca/INSTALL.md`](pachca/INSTALL.md).
-Навык отчёта: [`../reports/pachca-report/SKILL.md`](../reports/pachca-report/SKILL.md).
+Навык интеграции: [`../integrations/pachca-report/SKILL.md`](../integrations/pachca-report/SKILL.md).
 
 ## Что делает Pachca
 

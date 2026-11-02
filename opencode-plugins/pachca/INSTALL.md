@@ -108,14 +108,14 @@ search:users
 Скопируйте навык:
 
 ```powershell
-Copy-Item -Recurse ..\..\reports\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
+Copy-Item -Recurse ..\..\integrations\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
 ```
 
 или в проект:
 
 ```powershell
 New-Item -ItemType Directory -Force .opencode\skill | Out-Null
-Copy-Item -Recurse ..\..\reports\pachca-report .opencode\skill\pachca-report
+Copy-Item -Recurse ..\..\integrations\pachca-report .opencode\skill\pachca-report
 ```
 
 OpenCode перечитывает конфигурацию и навыки без перезапуска; принудительно —
@@ -156,7 +156,7 @@ node test/run-tests.mjs
 node test/api.test.mjs
 node --experimental-loader ./test/loader.mjs test/plugin.test.mjs
 node test/build-example.mjs
-cd ../../reports/pachca-report
+cd ../../integrations/pachca-report
 python scripts/check_report.py examples/example-report.html
 python scripts/validate_analysis.py examples/example-snapshot.json examples/example-analysis.json
 ```

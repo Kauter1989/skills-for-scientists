@@ -133,7 +133,7 @@ node test/build-example.mjs
 
 The tests use Node 20+ built-ins, a local mock HTTP server and a stub for
 `@opencode/plugin`; they do not call Pachca. The example report is written to `examples/example-report.html` and
-`reports/pachca-report/examples/example-report.html`.
+`integrations/pachca-report/examples/example-report.html`.
 
 ## Boundaries
 

@@ -9,7 +9,7 @@ import { renderExclusions, renderProjects, renderTasks } from "../src/state.js";
 const here = dirname(fileURLToPath(import.meta.url));
 const pluginRoot = join(here, "..");
 const repoRoot = join(pluginRoot, "..", "..");
-const skillRoot = join(repoRoot, "reports", "pachca-report");
+const skillRoot = join(repoRoot, "integrations", "pachca-report");
 
 const snapshot = JSON.parse(await readFile(join(here, "fixtures", "snapshot.json"), "utf8"));
 const analysis = JSON.parse(await readFile(join(here, "fixtures", "analysis.json"), "utf8"));

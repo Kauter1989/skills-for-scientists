@@ -90,7 +90,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
 <body>
 <a class="skip" href="#main">К содержанию</a>
 <header class="hero"><div class="wrap">
-  <div class="topline"><span class="brand">Pachca · workspace report</span><span class="stamp">сформировано 02 нояб. 2026 г., 12:36 · Pachca REST API</span></div>
+  <div class="topline"><span class="brand">Pachca · workspace report</span><span class="stamp">сформировано 02 нояб. 2026 г., 13:33 · Pachca REST API</span></div>
   <h1>Pachca · рабочие чаты, 2 недели</h1>
   <p class="lede">Что сдвинулось в проектах, где блокеры и кто перестал писать. Все числа собраны из сообщений, доступных токену; прогресс и блокеры подтверждены цитатами или помечены как неподтверждённые.</p>
   <div class="chips">
@@ -100,7 +100,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
     <span class="chip">Качество анализа: <b>medium</b></span>
     <span class="chip">Источник: <b>Pachca REST API</b></span>
   </div>
-  <div class="kpis"><div class="kpi"><span>Сообщений</span><b>12</b><small>в новом окне</small></div><div class="kpi"><span>Чатов прочитано</span><b>5/5</b><small>доступно токену</small></div><div class="kpi"><span>Участников</span><b>4</b><small>2 молчат &gt; 2 дн.</small></div><div class="kpi"><span>Проектов</span><b>5</b><small>1 с блокером, 1 в риске</small></div><div class="kpi"><span>Задач</span><b>2</b><small>сохранено с preflight</small></div><div class="kpi"><span>Доказательства</span><b>4/5</b><small>проектов с цитатами</small></div></div>
+  <div class="kpis"><div class="kpi"><span>Сообщений</span><b>12</b><small>в новом окне</small></div><div class="kpi"><span>Чатов прочитано</span><b>5/5</b><small>0 без новых сообщений</small></div><div class="kpi"><span>Участников</span><b>4</b><small>2 молчат &gt; 2 дн.</small></div><div class="kpi"><span>Проектов</span><b>5</b><small>1 с блокерами, 1 в риске</small></div><div class="kpi"><span>Задач</span><b>2</b><small>сохранено с preflight</small></div><div class="kpi"><span>Доказательства</span><b>4/5</b><small>проектов с цитатами</small></div></div>
 </div></header>
 <nav class="nav" aria-label="Разделы отчёта"><div class="wrap">
   <a href="#projects">Проекты</a><a href="#activity">Активность</a><a href="#tasks">Задачи</a><a href="#method">Методика</a>
@@ -109,7 +109,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
 <main id="main" class="wrap">
   
   <section id="projects" class="section">
-    <div class="section-head"><div><p class="eyebrow">01 · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">1 блокер(ов), 1 в риске, 1 без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
+    <div class="section-head"><div><p class="eyebrow">01 · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">1 проект(ов) с блокерами, 1 в риске, 1 без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
     <div class="section-body">
       <div class="callout"><b>Сводка по всем проектам</b><p>Два проекта движутся, один заблокирован инфраструктурным доступом. Основной риск — staging-ключ, он влияет и на мобильный релиз, и на дизайн-систему.</p></div>
       <div class="projects"><article class="project" data-status="on_track">
@@ -385,7 +385,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
         <h4>Покрытие и ограничения</h4>
         <ul>
           <li>Окно: 19 окт. 2026 г., 12:00 — 02 нояб. 2026 г., 12:00.</li>
-          <li>Чаты: 5 прочитано, 0 с ошибками, 0 обрезано лимитом.</li>
+          <li>Чаты: 5 прочитано, 0 без новых сообщений, 0 с ошибками, 0 обрезано лимитом.</li>
           <li>Треды: 1 найдено; сообщения треда привязаны к родительскому чату.</li>
           <li>Личные переписки: 1; архивные: 1.</li>
           <li>Доступ определяется токеном и ролью. Закрытые чаты вне членства не читаются.</li>
@@ -395,8 +395,8 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
     </div>
   </section>
 </main>
-<footer class="footer"><div class="wrap"><span>opencode-pachca · автономный отчёт, без внешних запросов</span><span>02 нояб. 2026 г., 12:36</span></div></footer>
-<script id="report-data" type="application/json">{"schemaVersion":1,"generatedAt":"2026-11-02T12:36:41.354Z","asOf":"2026-11-02T12:00:00.000Z","title":"Pachca · рабочие чаты, 2 недели","window":{"from":"2026-10-19T12:00:00.000Z","to":"2026-11-02T12:00:00.000Z"},"source":"rest","stats":{"messages":12,"chatsRead":5,"chatsAvailable":5,"participants":4,"inactive":2,"projects":5,"blocked":1,"atRisk":1,"verifiedProjects":4,"tasks":2},"analysisQuality":"medium"}</script>
+<footer class="footer"><div class="wrap"><span>opencode-pachca · автономный отчёт, без внешних запросов</span><span>02 нояб. 2026 г., 13:33</span></div></footer>
+<script id="report-data" type="application/json">{"schemaVersion":1,"generatedAt":"2026-11-02T13:33:25.619Z","asOf":"2026-11-02T12:00:00.000Z","title":"Pachca · рабочие чаты, 2 недели","window":{"from":"2026-10-19T12:00:00.000Z","to":"2026-11-02T12:00:00.000Z"},"source":"rest","stats":{"messages":12,"chatsRead":5,"chatsAvailable":5,"participants":4,"inactive":2,"projects":5,"blocked":1,"withBlockers":1,"atRisk":1,"verifiedProjects":4,"tasks":2},"analysisQuality":"medium"}</script>
 <script>
 (function(){
   "use strict";

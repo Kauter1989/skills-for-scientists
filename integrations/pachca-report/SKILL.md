@@ -15,6 +15,9 @@ description: >-
 
 # pachca-report — статистика чатов Пачки в HTML
 
+Домен — интеграции с внешними средами и API: навык лежит в `integrations/` и
+имя каталога `pachca-report` сохраняется как историческое.
+
 Навык превращает новый слой сообщений из всех чатов Пачки, где состоит
 пользователь, в один файл `report.html`. Файл открывается с диска, не делает
 внешних запросов, печатается в A4 и прикладывается к ревью, ретро или отчёту.
@@ -23,7 +26,7 @@ description: >-
 
 | Компонент | Путь | Роль |
 |---|---|---|
-| Навык | `reports/pachca-report/` | процедура, нормативы, проверки, пример |
+| Навык | `integrations/pachca-report/` | процедура, нормативы, проверки, пример |
 | Плагин | `opencode-plugins/pachca/` | MCP-подключение, сбор, расчёт, HTML, MD-состояние, preflight задач |
 
 Плагин регистрирует MCP-сервер Пачки `https://mcp.pachca.com/mcp` и локальные
@@ -105,7 +108,7 @@ description: >-
 
 ```powershell
 # навык
-Copy-Item -Recurse .\reports\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
+Copy-Item -Recurse .\integrations\pachca-report "$env:USERPROFILE\.config\opencode\skill\pachca-report"
 
 # плагин: путь к каталогу, а не к файлу
 # ~/.config/opencode/opencode.json
@@ -320,7 +323,7 @@ node test/api.test.mjs
 node --experimental-loader ./test/loader.mjs test/plugin.test.mjs
 node test/build-example.mjs
 
-cd ../../reports/pachca-report
+cd ../../integrations/pachca-report
 python scripts/check_report.py examples/example-report.html
 python scripts/validate_analysis.py examples/example-snapshot.json examples/example-analysis.json
 ```
