@@ -11,16 +11,24 @@ CHECK = ROOT / "scripts" / "check_bootstrap.py"
 
 ANSWERS = {
     "project": "example-service",
-    "domain": "dev",
+    "domain": "mixed",
     "stack": "python",
     "default_branch": "main",
-    "workflow": "minimal",
+    "workflow": "extended",
     "ci": "github",
     "commands": {"test": "pytest -q", "lint": "ruff check .", "build": ""},
-    "roles": ["developer", "reviewer"],
-    "tasks": ["feature", "bugfix", "report"],
+    "roles": ["developer", "reviewer", "researcher"],
+    "tasks": ["feature", "bugfix", "literature", "report", "dataset"],
     "constraints": ["private"],
     "skills": [],
+    "science_work": ["literature", "dataset"],
+    "science_data": "OpenAlex/DataCite metadata; public",
+    "science_outputs": ["html-report", "dataset"],
+    "reproducibility": "code, data, env, license",
+    "project_mode": "greenfield",
+    "dev_specifics": "python, cli, integrations",
+    "sdd_setup": "yes",
+    "library_contribution": "new-skill",
 }
 
 
@@ -49,6 +57,9 @@ class InitRepoTest(unittest.TestCase):
             data = json.loads(meta.read_text(encoding="utf-8"))
             self.assertEqual(data["status"], "draft")
             self.assertTrue(data["skills"])
+            self.assertIn("sci-literature-news", data["skills"])
+            self.assertEqual(data["route"]["sdd"], "/dev-spec-chain")
+            self.assertTrue(any(stage["skills"] == "/dev-spec-chain" for stage in data["stages"]))
 
             blocked = run(str(INIT), "apply", "--root", str(root), "--plan-json", str(meta))
             self.assertNotEqual(blocked.returncode, 0)
@@ -62,6 +73,10 @@ class InitRepoTest(unittest.TestCase):
             self.assertTrue((root / "AGENTS.md").is_file())
             self.assertTrue((root / "docs" / "rules" / "registry.yml").is_file())
             self.assertTrue((root / ".github" / "workflows" / "ci.yml").is_file())
+            agents_text = (root / "AGENTS.md").read_text(encoding="utf-8")
+            self.assertIn("/dev-spec-chain", agents_text)
+            self.assertIn("Научные данные и отчёты", agents_text)
+            self.assertIn("Пополнение библиотеки навыков", agents_text)
 
             checked = run(str(CHECK), "--root", str(root))
             self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)

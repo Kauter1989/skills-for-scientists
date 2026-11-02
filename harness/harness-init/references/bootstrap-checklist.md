@@ -6,7 +6,12 @@
 ## 1. До scaffold
 
 - [ ] опрос проведён, ответы сохранены;
+- [ ] научная работа, данные, отчёты и воспроизводимость зафиксированы или
+      явно пропущены;
 - [ ] домен, стек, команды и задачи зафиксированы;
+- [ ] для разработки указаны greenfield/brownfield и специфика;
+- [ ] пользователю названа отдельная команда `/dev-spec-chain` для SDD;
+- [ ] решение по пополнению библиотеки навыков зафиксировано;
 - [ ] стартовые навыки выбраны из реализованных;
 - [ ] `bootstrap-plan.html` собран;
 - [ ] план утверждён пользователем, статус `approved`;
@@ -44,6 +49,8 @@ python scripts/check_bootstrap.py --root /path/to/repo --json
 
 - обязательные файлы и каталоги;
 - `profile.yml`: project, domain, commands, skills;
+- `profile.yml`: project_mode, science_work, science_outputs, sdd, если
+  заполнены;
 - `ci=github` требует workflow;
 - `docs/rules/registry.yml` содержит `version: 1`;
 - нет `{{...}}` и `TODO`;
@@ -61,8 +68,11 @@ python scripts/check_bootstrap.py --root /path/to/repo --json
 ## 6. Ошибки
 
 - scaffold без утверждения;
+- bootstrap выдан за настройку SDD вместо `/dev-spec-chain`;
+- пропущены научные данные, отчёты или специфика разработки;
 - рекомендация proposed-навыка как установленного;
 - перезапись `AGENTS.md`;
 - CI с пустыми командами;
+- новый навык добавлен без research/review;
 - `check_bootstrap.py` не запускался;
 - отчёт не перечисляет пропущенные файлы.

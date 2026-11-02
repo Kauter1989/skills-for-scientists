@@ -97,6 +97,9 @@ def main(argv: list[str] | None = None) -> int:
             warnings.append("profile.yml: не задана команда tests")
         if not profile.get("commands", {}).get("lint"):
             warnings.append("profile.yml: не задана команда lint")
+        for key in ("project_mode", "science_work", "science_outputs", "sdd"):
+            if not profile.get(key):
+                warnings.append(f"profile.yml: не заполнено поле {key}")
         if not profile.get("skills"):
             errors.append("profile.yml: пустой список skills")
         if profile.get("ci") == "github" and not (root / ".github" / "workflows" / "ci.yml").is_file():

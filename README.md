@@ -12,6 +12,22 @@ Mandatory rules for agents: [`AGENTS.md`](AGENTS.md).
 No new skill is written without research into analogs and scientific sources.
 Priority order: **harness → dev → science → integrations → reports**.
 
+## Start here
+
+`harness-init` is the single entry point for building a harness:
+
+1. **New repository, scientific data/report work, or “where do I start?”** —
+   run `harness-init`. It surveys the work, data, reports, development
+   specifics and intent to extend the library, then proposes a route.
+2. **New project with development** — the whole spec-driven workflow is
+   configured separately by **`/dev-spec-chain`**. `harness-init` records the
+   project specifics but does not replace SDD setup.
+3. **New skill in this library** — `harness-skill-template` → research/review
+   → `harness-skill-audit` → PR.
+4. **Rule to check, library audit, scientific digest, report or deck** —
+   `harness-rule-to-mechanism`, `harness-skill-audit`,
+   `sci-literature-news`, `dev-pr-report-html`, `pptx-report`.
+
 ## What is inside
 
 | Skill | Folder | Purpose | Artifact |
@@ -19,7 +35,7 @@ Priority order: **harness → dev → science → integrations → reports**.
 | [`harness-skill-template`](harness/harness-skill-template/SKILL.md) | `harness/` | Skill contract and scaffold: frontmatter, required sections, template, generator and validator | `SKILL.md`, validator report |
 | [`harness-rule-to-mechanism`](harness/harness-rule-to-mechanism/SKILL.md) | `harness/` | Turns a rule into an executable check: hook, lint, test, policy or CI, with a registry and test evidence | check, `docs/rules/registry.yml` |
 | [`harness-skill-audit`](harness/harness-skill-audit/SKILL.md) | `harness/` | Library audit: structure, duplicate triggers, artifacts, links and domain coverage | `docs/audits/<date>.html` and `.json` |
-| [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Meta-skill bootstrap: survey, starter skills, profile, AGENTS.md, hooks, CI and HTML workflow approval | `bootstrap-plan.html`, `profile.yml` |
+| [`harness-init`](harness/harness-init/SKILL.md) | `harness/` | Single entry point: survey of scientific data/report work, development specifics and library contributions; starter skills, profile, AGENTS.md, hooks, CI and HTML workflow approval | `bootstrap-plan.html`, `profile.yml` |
 | [`dev-feature-start`](dev/dev-feature-start/SKILL.md) | `dev/` | Feature start: branch, brief with user stories, behavioral, functional and unit tests when coverage rules apply, red/green gates | `overview.md`, branch |
 | [`dev-spec-chain`](dev/dev-spec-chain/SKILL.md) | `dev/` | Meta-skill: survey, choose spec-kit/OpenSpec/BMAD/lightweight and generate a repository-specific stage-skill chain | `.opencode/spec-chain.yml`, stage skills |
 | [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Meta-skill: survey, choose a debugging approach and generate `dev-bug-process` with reproducibility invariants | `.opencode/bug-processing.yml`, `dev-bug-process` |
@@ -35,7 +51,7 @@ approach and generates artifacts for a specific repository or field.
 
 | Skill | What it surveys | What it generates |
 |---|---|---|
-| `harness-init` | repository, stack, team | scaffold, AGENTS.md, hooks, CI, workflow |
+| `harness-init` | scientific data/report work, development specifics, library contribution, repository, stack, team | route, scaffold, AGENTS.md, hooks, CI, workflow |
 | `dev-spec-chain` | greenfield/brownfield, roles, stack | stage-skill chain and manifest |
 | `dev-bug-processing` | stack, tests, tracker, environment | `dev-bug-process` and manifest |
 

@@ -27,7 +27,9 @@ SKILL_INFO = {
     "harness-skill-audit": "аудит структуры и дублей библиотеки",
     "dev-pr-report-html": "HTML-отчёт об изменениях фичи",
     "pptx-report": "презентации и отчёты PPTX",
+    "sci-literature-news": "научный дайджест: Q1/A*/Q2, темы, датасеты, HTML",
 }
+SDD_COMMAND = "/dev-spec-chain"
 DEFAULT_BRANCH = "main"
 TEMPLATES = Path(__file__).resolve().parent.parent / "templates"
 
@@ -42,8 +44,44 @@ def ask(prompt: str, default: str) -> str:
     return value or default
 
 
+def csv_list(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 def survey(out: Path) -> int:
     print("Опрос для bootstrap. Enter — значение по умолчанию.\n")
+
+    print("Блок 1/3: научные данные и отчёты.")
+    science_work = csv_list(
+        ask(
+            "Научная работа (analysis,experiment,literature,dataset,visualization,none)",
+            "none",
+        )
+    )
+    science_data = ask("Данные: формат, объём, чувствительность", "не задано")
+    science_outputs = csv_list(
+        ask("Результаты (article,html-report,pptx,dashboard,dataset,none)", "none")
+    )
+    reproducibility = ask("Воспроизводимость (code,data,env,license,none)", "code")
+
+    print("\nБлок 2/3: разработка.")
+    project_mode = ask("Режим разработки (greenfield,brownfield,none)", "none")
+    dev_specifics = ask(
+        "Специфика разработки (web,ml,cli,library,critical,integrations)",
+        "не задано",
+    )
+    sdd_setup = ask(
+        f"Настроить SDD отдельно командой {SDD_COMMAND}? (yes/no/later)",
+        "later",
+    )
+
+    print("\nБлок 3/3: библиотека навыков.")
+    library_contribution = ask(
+        "Дополнить библиотеку навыков? (none,new-skill,improve-existing)",
+        "none",
+    )
+
+    print("\nОбщие вопросы.")
     answers = {
         "project": ask("Имя проекта", Path.cwd().name),
         "domain": ask("Домен (dev/science/integrations/reports/mixed)", "dev"),
@@ -56,10 +94,23 @@ def survey(out: Path) -> int:
             "lint": ask("Команда линтера", "ruff check ."),
             "build": ask("Команда сборки", ""),
         },
-        "roles": [x.strip() for x in ask("Роли через запятую", "developer, reviewer").split(",") if x.strip()],
-        "tasks": [x.strip() for x in ask("Стартовые задачи (feature,bugfix,release,report,rules,presentation)", "feature, bugfix, report").split(",") if x.strip()],
-        "constraints": [x.strip() for x in ask("Ограничения через запятую", "private").split(",") if x.strip()],
+        "roles": csv_list(ask("Роли через запятую", "developer, reviewer")),
+        "tasks": csv_list(
+            ask(
+                "Стартовые задачи (feature,bugfix,release,report,audit,rules,presentation,literature,dataset)",
+                "feature, bugfix, report",
+            )
+        ),
+        "constraints": csv_list(ask("Ограничения через запятую", "private")),
         "skills": [],
+        "science_work": science_work,
+        "science_data": science_data,
+        "science_outputs": science_outputs,
+        "reproducibility": reproducibility,
+        "project_mode": project_mode,
+        "dev_specifics": dev_specifics,
+        "sdd_setup": sdd_setup,
+        "library_contribution": library_contribution,
     }
     out.write_text(json.dumps(answers, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"\nok: {out}")
@@ -71,13 +122,21 @@ def recommend(answers: dict) -> list[str]:
     if explicit:
         return explicit
     tasks = {str(x).lower() for x in answers.get("tasks", [])}
+    science_work = {str(x).lower() for x in answers.get("science_work", [])}
+    outputs = {str(x).lower() for x in answers.get("science_outputs", [])}
     skills = ["harness-skill-template", "harness-skill-audit"]
     if tasks & {"rules", "quality", "feature", "bugfix"}:
         skills.append("harness-rule-to-mechanism")
-    if tasks & {"report", "release", "audit"}:
+    if tasks & {"report", "release", "audit"} or "html-report" in outputs:
         skills.append("dev-pr-report-html")
-    if "presentation" in tasks:
+    if "presentation" in tasks or "pptx" in outputs:
         skills.append("pptx-report")
+    if (
+        science_work & {"literature", "digest"}
+        or outputs & {"literature-digest", "article"}
+        or "literature" in tasks
+    ):
+        skills.append("sci-literature-news")
     return list(dict.fromkeys(skills))
 
 
@@ -85,13 +144,56 @@ def stages(answers: dict, skills: list[str]) -> list[dict]:
     def present(items: list[str]) -> str:
         return ", ".join(item for item in items if item in skills) or "—"
 
-    return [
+    science_work = {str(x).lower() for x in answers.get("science_work", [])} - {"none"}
+    outputs = {str(x).lower() for x in answers.get("science_outputs", [])} - {"none"}
+    result = [
         {"stage": "Старт", "what": "Открыть репозиторий и выбрать первый шаг", "skills": present(["harness-skill-template"])},
-        {"stage": "Правила", "what": "Проверить, что правила имеют механизм", "skills": present(["harness-rule-to-mechanism"])},
-        {"stage": "Работа", "what": "Выполнить стартовую задачу", "skills": present(["dev-pr-report-html"])},
-        {"stage": "Проверка", "what": "Проверить структуру и дубли", "skills": present(["harness-skill-audit"])},
-        {"stage": "Отчёт", "what": "Собрать результат для ревью", "skills": present(["dev-pr-report-html", "pptx-report"])},
     ]
+    if science_work or outputs:
+        result.append(
+            {
+                "stage": "Научные данные",
+                "what": "Зафиксировать данные, лицензии и воспроизводимость",
+                "skills": present(["sci-literature-news", "dev-pr-report-html"]),
+            }
+        )
+        result.append(
+            {
+                "stage": "Научный результат",
+                "what": "Собрать дайджест, отчёт, презентацию или датасет",
+                "skills": present(["sci-literature-news", "dev-pr-report-html", "pptx-report"]),
+            }
+        )
+    result.append(
+        {"stage": "Правила", "what": "Проверить, что правила имеют механизм", "skills": present(["harness-rule-to-mechanism"])}
+    )
+    if str(answers.get("project_mode", "none")).lower() in {"greenfield", "brownfield"}:
+        result.append(
+            {
+                "stage": "Разработка и SDD",
+                "what": f"Настроить spec-driven workflow отдельной командой {SDD_COMMAND}",
+                "skills": SDD_COMMAND,
+            }
+        )
+    else:
+        result.append(
+            {"stage": "Работа", "what": "Выполнить стартовую задачу", "skills": present(["dev-pr-report-html"])}
+        )
+    if str(answers.get("library_contribution", "none")).lower() != "none":
+        result.append(
+            {
+                "stage": "Библиотека",
+                "what": "Добавить или улучшить навык по гейтам research → review → PR",
+                "skills": present(["harness-skill-template", "harness-skill-audit"]),
+            }
+        )
+    result.append(
+        {"stage": "Проверка", "what": "Проверить структуру и дубли", "skills": present(["harness-skill-audit"])}
+    )
+    result.append(
+        {"stage": "Отчёт", "what": "Собрать результат для ревью", "skills": present(["dev-pr-report-html", "pptx-report"])}
+    )
+    return result
 
 
 def skill_rows(skills: list[str]) -> str:
@@ -151,6 +253,79 @@ def file_rows(answers: dict) -> str:
     )
 
 
+def value_text(value: object) -> str:
+    if isinstance(value, list):
+        return ", ".join(str(item) for item in value) or "не задано"
+    return str(value or "не задано")
+
+
+def science_rows(answers: dict) -> str:
+    rows = [
+        ("Научная работа", answers.get("science_work")),
+        ("Данные", answers.get("science_data")),
+        ("Результаты", answers.get("science_outputs")),
+        ("Воспроизводимость", answers.get("reproducibility")),
+    ]
+    return "\n".join(
+        f'<tr><td>{html.escape(label)}</td><td>{html.escape(value_text(value))}</td></tr>'
+        for label, value in rows
+    )
+
+
+def dev_rows(answers: dict) -> str:
+    rows = [
+        ("Режим проекта", answers.get("project_mode")),
+        ("Специфика", answers.get("dev_specifics")),
+        ("SDD", answers.get("sdd_setup")),
+        ("Команда SDD", SDD_COMMAND),
+    ]
+    return "\n".join(
+        f'<tr><td>{html.escape(label)}</td><td>{html.escape(value_text(value))}</td></tr>'
+        for label, value in rows
+    )
+
+
+def library_note(answers: dict) -> str:
+    contribution = str(answers.get("library_contribution", "none")).lower()
+    if contribution == "new-skill":
+        return (
+            "Новый навык: `harness-skill-audit` (проверить дубли) → "
+            "`docs/research/<skill>.md` → `docs/reviews/<skill>.html` со статусом "
+            "`approved` → `harness-skill-template` → пример и валидатор → PR."
+        )
+    if contribution == "improve-existing":
+        return (
+            "Улучшение навыка: прочитать `SKILL.md`, `references/` и `examples/`, "
+            "проверить триггеры через `harness-skill-audit`, обновить research/review "
+            "и открыть PR."
+        )
+    return (
+        "Не планируется. Если появится новый навык, начинать с "
+        "`harness-skill-template` и проходить research/review до реализации."
+    )
+
+
+def route_rows(answers: dict) -> str:
+    mode = str(answers.get("project_mode", "none")).lower()
+    if mode in {"greenfield", "brownfield"}:
+        sdd = f'<code>{SDD_COMMAND}</code> — отдельная команда, bootstrap её не запускает'
+    else:
+        sdd = "не требуется"
+    contribution = str(answers.get("library_contribution", "none")).lower()
+    library = {
+        "new-skill": "<code>harness-skill-template</code> → research/review → <code>harness-skill-audit</code> → PR",
+        "improve-existing": "<code>harness-skill-audit</code> → правка навыка → research/review → PR",
+    }.get(contribution, "не требуется")
+    rows = [
+        ("Научные данные и отчёты", "<code>harness-init</code> → рекомендованные научные и отчётные навыки"),
+        ("Разработка и SDD", sdd),
+        ("Пополнение библиотеки", library),
+    ]
+    return "\n".join(
+        f"<tr><td>{html.escape(label)}</td><td>{value}</td></tr>" for label, value in rows
+    )
+
+
 def plan(answers: dict, out_html: Path, out_json: Path, status: str = "draft") -> dict:
     skills = recommend(answers)
     data = {
@@ -159,6 +334,11 @@ def plan(answers: dict, out_html: Path, out_json: Path, status: str = "draft") -
         "answers": answers,
         "skills": skills,
         "stages": stages(answers, skills),
+        "route": {
+            "entry": "harness-init",
+            "sdd": SDD_COMMAND,
+            "library": "harness-skill-template → research/review → harness-skill-audit → PR",
+        },
         "files": [
             "profile.yml", "AGENTS.md", "docs/research/", "docs/reviews/",
             "docs/audits/", "docs/rules/registry.yml", ".pre-commit-config.yaml",
@@ -172,6 +352,10 @@ def plan(answers: dict, out_html: Path, out_json: Path, status: str = "draft") -
         "WORKFLOW": answers.get("workflow", "minimal"),
         "DATE": data["created"],
         "STATUS": status,
+        "SDD_COMMAND": SDD_COMMAND,
+        "SCIENCE_ROWS": science_rows(answers),
+        "DEV_ROWS": dev_rows(answers),
+        "ROUTE_ROWS": route_rows(answers),
         "SKILL_ROWS": skill_rows(skills),
         "STAGE_ROWS": stage_rows(data["stages"]),
         "COMMAND_ROWS": command_rows(answers),
@@ -236,6 +420,10 @@ def apply(root: Path, plan_json: Path, force: bool, dry: bool) -> int:
             "TEST_COMMAND": answers.get("commands", {}).get("test", ""),
             "LINT_COMMAND": answers.get("commands", {}).get("lint", ""),
             "BUILD_COMMAND": answers.get("commands", {}).get("build", ""),
+            "PROJECT_MODE": value_text(answers.get("project_mode")),
+            "SCIENCE_WORK": value_text(answers.get("science_work")),
+            "SCIENCE_OUTPUTS": value_text(answers.get("science_outputs")),
+            "SDD_SETUP": value_text(answers.get("sdd_setup")),
             "SKILLS_YAML": "\n".join(f"  - {s}" for s in skills) or "  []",
         })),
         (root / "AGENTS.md", render("AGENTS.md", {
@@ -248,6 +436,15 @@ def apply(root: Path, plan_json: Path, force: bool, dry: bool) -> int:
             "LINT_COMMAND": answers.get("commands", {}).get("lint", ""),
             "BUILD_COMMAND": answers.get("commands", {}).get("build", ""),
             "DEFAULT_BRANCH": answers.get("default_branch", DEFAULT_BRANCH),
+            "SCIENCE_WORK": value_text(answers.get("science_work")),
+            "SCIENCE_DATA": value_text(answers.get("science_data")),
+            "SCIENCE_OUTPUTS": value_text(answers.get("science_outputs")),
+            "REPRODUCIBILITY": value_text(answers.get("reproducibility")),
+            "PROJECT_MODE": value_text(answers.get("project_mode")),
+            "DEV_SPECIFICS": value_text(answers.get("dev_specifics")),
+            "SDD_SETUP": value_text(answers.get("sdd_setup")),
+            "SDD_COMMAND": SDD_COMMAND,
+            "LIBRARY_NOTE": library_note(answers),
             "SKILLS_MD": "\n".join(f"- `{s}` — {SKILL_INFO.get(s, '')}" for s in skills),
         })),
         (root / "docs" / "rules" / "registry.yml", "version: 1\nrules: []\n"),

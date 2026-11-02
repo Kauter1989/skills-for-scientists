@@ -3,6 +3,10 @@ domain: {{DOMAIN}}
 stack: {{STACK}}
 workflow: {{WORKFLOW}}
 ci: {{CI}}
+project_mode: {{PROJECT_MODE}}
+science_work: {{SCIENCE_WORK}}
+science_outputs: {{SCIENCE_OUTPUTS}}
+sdd: {{SDD_SETUP}}
 commands:
   test: "{{TEST_COMMAND}}"
   lint: "{{LINT_COMMAND}}"

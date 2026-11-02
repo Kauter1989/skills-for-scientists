@@ -1,17 +1,25 @@
 {
   "project": "example-service",
-  "domain": "dev",
+  "domain": "mixed",
   "stack": "python",
   "default_branch": "main",
-  "workflow": "minimal",
+  "workflow": "extended",
   "ci": "github",
   "commands": {
     "test": "pytest -q",
     "lint": "ruff check .",
     "build": ""
   },
-  "roles": ["developer", "reviewer"],
-  "tasks": ["feature", "bugfix", "report"],
+  "roles": ["developer", "reviewer", "researcher"],
+  "tasks": ["feature", "bugfix", "literature", "report", "dataset"],
   "constraints": ["private"],
-  "skills": []
+  "skills": [],
+  "science_work": ["literature", "dataset"],
+  "science_data": "OpenAlex/DataCite metadata; public; DOI and license",
+  "science_outputs": ["html-report", "dataset"],
+  "reproducibility": "code, data, env, license",
+  "project_mode": "greenfield",
+  "dev_specifics": "python, cli, integrations, critical",
+  "sdd_setup": "yes",
+  "library_contribution": "new-skill"
 }
