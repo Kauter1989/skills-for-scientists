@@ -35,6 +35,8 @@ opencode-plugins/                плагины и setup OpenCode
   `integrations-`. `integrations/pachca-report` сохраняет имя `pachca-report`
   как историческое исключение.
 - Отчётные навыки лежат в `reports/` и не получают доменный префикс.
+  `reports/sci-literature-news` сохраняет имя `sci-literature-news` по запросу
+  пользователя, хотя начинается с `sci-`.
 - `opencode-plugins/` хранит плагины и инструкции по установке; это не
   домен навыков. Секреты, токены, `auth.json` и локальный `service.json`
   в него не коммитятся.

@@ -1,4 +1,5 @@
 reports/pptx-report/templates/*
 .pachca/
+.sci-literature-news/
 __pycache__/
 *.pyc

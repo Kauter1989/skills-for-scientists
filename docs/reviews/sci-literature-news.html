@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Skill review — sci-literature-news</title>
+<style>
+  :root { --paper:#f6f5f2;--card:#fff;--ink:#14181f;--muted:#5f6875;--line:#dfe2e7;--line-strong:#c4cad2;--accent:#1f5f5b;--green:#1f7a4d;--amber:#a96500;--red:#b42318;--mono:ui-monospace,"Cascadia Code",Consolas,monospace;--sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}.topbar{position:sticky;top:0;z-index:20;background:rgba(246,245,242,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;gap:14px;min-height:50px;flex-wrap:wrap}.brand{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  nav{margin-left:auto;display:flex;gap:12px;flex-wrap:wrap}nav a{font-size:11.5px;color:var(--muted);text-decoration:none}nav a:hover{color:var(--ink)}
+  header{padding:40px 0 10px}.kicker{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}h1{font-size:clamp(30px,4vw,44px);line-height:1.1;letter-spacing:-.02em;margin:0 0 10px}h1 code{font-size:inherit}.sub{color:var(--muted);font-size:17px;margin:0 0 18px;max-width:850px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 10px;font-size:11.5px;color:var(--muted)}.chip b{color:var(--ink)}.status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 8px;border-radius:6px;background:#e7f4ec;color:var(--green)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden;scroll-margin-top:64px}.sec-head{padding:16px 22px 13px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.sec-head h2{margin:0;font-size:20px;letter-spacing:-.01em}.sec-head .n{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 6px}.sec-head p{margin:0;color:var(--muted);font-size:12px}.body{padding:18px 22px 22px}
+  p{margin:0 0 12px}ul,ol{margin:0 0 12px;padding-left:20px}li{margin-bottom:5px}.callout{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:14px 16px;background:#fcfdfd;margin-bottom:16px}.callout b{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px}.callout p{margin:0}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0 14px}caption{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-bottom:6px}th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid var(--line-strong);padding:7px 8px}td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}tr:last-child td{border-bottom:0}td.mono,code{font-family:var(--mono);font-size:11.5px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{border:1px solid var(--line);border-radius:9px;padding:12px 14px;background:#fff}.box h3{margin:0 0 7px;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.box ul{margin:0;padding-left:17px}.box li{font-size:12.5px}
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 14px}.step{border:1px solid var(--line);border-radius:7px;padding:5px 9px;font-size:12px;background:#fff}.step.hot{border-color:#b8d0cd;background:#e6efee}.arrow{color:var(--line-strong)}.metric{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.metric span{border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:11.5px;color:var(--muted)}.metric b{color:var(--ink)}
+  .checklist{list-style:none;padding:0;margin:0}.checklist li{padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.checklist li:last-child{border-bottom:0}.checklist li::before{content:"☑";margin-right:8px;color:var(--green)}
+  .decision{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.decision div{border:1px solid var(--line);border-radius:8px;padding:10px;font-size:12px;text-align:center;color:var(--muted)}.decision div.approved{border-color:#bfe0cb;background:#e7f4ec;color:var(--green);font-weight:700}
+  footer{padding:8px 0 40px;color:var(--muted);font-size:11.5px}footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  @media(max-width:760px){.wrap{padding:0 14px}.grid2{grid-template-columns:1fr}.decision{grid-template-columns:1fr 1fr}}
+  @media print{@page{size:A4;margin:14mm}body{background:#fff;font-size:10pt}.topbar{display:none}.wrap{max-width:none;padding:0}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><span class="brand">Skill review</span><nav><a href="#problem">Проблема</a><a href="#github">GitHub</a><a href="#science">Наука</a><a href="#design">Дизайн</a><a href="#metrics">Метрики</a><a href="#sources">Источники</a><a href="#decision">Решение</a></nav></div></div>
+<main class="wrap">
+<header>
+  <div class="kicker">План навыка · утверждено</div>
+  <h1><code>sci-literature-news</code></h1>
+  <p class="sub">Персональный научный дайджест: сохранённые направления и период → поиск публикаций Q1, A* и Q2 → синтез тем → новые датасеты → критерии A*/Q1 → автономный HTML.</p>
+  <div class="chips"><span class="chip">Домен: <b>reports</b></span><span class="chip">Приоритет: <b>P1</b></span><span class="chip">Автор: <b>OpenCode agent</b></span><span class="chip">Дата: <b>2026-11-02</b></span><span class="chip">Источники: <b>17</b></span><span class="status">approved</span></div>
+  <div class="callout"><b>Запрос решения</b><p>Утвердить навык <code>sci-literature-news</code>: MD-профиль направлений и периода, показ и правка перед запуском, поиск OpenAlex/DataCite, категории Q1/A*/Q2 с ranking-источником, синтез, таблица датасетов, критерии и автономный HTML.</p></div>
+</header>
+
+<section id="problem"><div class="sec-head"><span class="n">01</span><h2>Проблема и границы</h2></div><div class="body">
+  <p>Научный сотрудник должен регулярно просматривать новые публикации по своим направлениям, но ручной поиск по журналам, конференциям, квартилям и датасетам занимает часы и плохо воспроизводится. Нужен отчёт, который помнит направления и период, показывает их перед запуском и отделяет метаданные от интерпретации.</p>
+  <div class="grid2"><div class="box"><h3>Входит в задачу</h3><ul><li>научный профиль или список направлений;</li><li>правка и сохранение направлений в MD;</li><li>период 6 месяцев по умолчанию, правка и сохранение;</li><li>поиск Q1-журналов, A*-конференций, Q2-журналов;</li><li>синтез ключевых тем с DOI-доказательствами;</li><li>таблица новых датасетов;</li><li>критерии A*/Q1 и ограничения;</li><li>один автономный HTML.</li></ul></div>
+  <div class="box"><h3>Не входит</h3><ul><li>полный systematic review и full-text screening;</li><li>замена Scopus, Web of Science, JCR;</li><li>оценка конкретного исследователя;</li><li>гарантия полноты OpenAlex/DataCite;</li><li>автоматическое присвоение квартиля без источника;</li><li>публикация отчёта без проверки человеком.</li></ul></div></div>
+</div></section>
+
+<section id="github"><div class="sec-head"><span class="n">02</span><h2>GitHub-аналоги</h2><p>минимум три репозитория</p></div><div class="body">
+  <table><caption>Что уже существует и что из этого следует</caption><thead><tr><th>Репозиторий</th><th>Лицензия</th><th>Коммит</th><th>Подход</th><th>Берём</th><th>Отвергаем</th></tr></thead><tbody>
+    <tr><td class="mono">bpiwowar/sci-report-analyzer</td><td>NOASSERTION</td><td class="mono">2026-10-18</td><td>Публикации исследователя, CORE/Scimago, папки и отчёты</td><td>Профиль → ranking → отчёт</td><td>Лицензия не позволяет копировать код; нет HTML/MD-профиля</td></tr>
+    <tr><td class="mono">Michael-E-Rose/SCImagoJournalRankIndicators</td><td>MIT</td><td class="mono">2026-07-21</td><td>Панель SCImago с 1999 года, CSV/Parquet</td><td>Источник SJR и локальный кэш</td><td>Не бандлим 84 МБ; не считаем квартиль без методики</td></tr>
+    <tr><td class="mono">ikashnitsky/sjrdata</td><td>NOASSERTION</td><td class="mono">2026-06-07</td><td>R-пакет со всеми данными SCImago</td><td>Атрибуция и кэширование</td><td>R-зависимость и неясная лицензия данных</td></tr>
+    <tr><td class="mono">benkeks/icore-ranks</td><td>не заявлена</td><td class="mono">2026-02-27</td><td>Пакет ICORE-рангов</td><td>Сопоставление по акрониму</td><td>Код без лицензии</td></tr>
+    <tr><td class="mono">kael-odin/awesome-academic-research-skills</td><td>MIT</td><td class="mono">2026-11-02</td><td>Каталог научных agent-skills</td><td>Триггеры и упаковка</td><td>Нет собственного анализа литературы</td></tr>
+  </tbody></table>
+  <p>Готового навыка с MD-профилем, периодом, Q1/A*/Q2, синтезом, датасетами и HTML не найдено. Ranking-слой и отчёт пишем самостоятельно.</p>
+</div></section>
+
+<section id="science"><div class="sec-head"><span class="n">03</span><h2>Научные источники и стандарты</h2><p>минимум два источника</p></div><div class="body">
+  <table><caption>Что подтверждено и какие есть ограничения</caption><thead><tr><th>Источник</th><th>Тип</th><th>Вклад</th><th>Ограничение</th><th>Вывод для навыка</th></tr></thead><tbody>
+    <tr><td class="mono">PRISMA 2020, DOI 10.1136/bmj.n71</td><td>standard</td><td>Прозрачный отбор: identification → screening → eligibility → included</td><td>Не заменяет SLR</td><td>Структура методики и критериев включения</td></tr>
+    <tr><td class="mono">PRISMA-S, DOI 10.1186/s13643-020-01542-z</td><td>standard</td><td>Воспроизводимость поиска: базы, запросы, даты, лимиты</td><td>Библиотечный фокус</td><td>Сохранять запросы, даты и версии ranking</td></tr>
+    <tr><td class="mono">Kitchenham &amp; Charters 2007</td><td>guideline</td><td>Протокол SLR до поиска</td><td>Software engineering</td><td>Критерии до результатов; правка до подтверждения</td></tr>
+    <tr><td class="mono">OpenAlex, arXiv:2205.01833</td><td>preprint / dataset</td><td>Открытый индекс работ и площадок</td><td>Метаданные не полный текст</td><td>Основной поиск и venue metadata</td></tr>
+    <tr><td class="mono">SJR, DOI 10.1016/j.joi.2009.11.005</td><td>paper</td><td>SJR — престиж журнала</td><td>Квартиль зависит от категории/года</td><td>Q1/Q2 с фиксацией года и категории</td></tr>
+    <tr><td class="mono">ICORE Conference Rankings</td><td>official ranking</td><td>A* — топовые CS-конференции (~7,5%)</td><td>Только CS</td><td>Источник A* и критериев</td></tr>
+  </tbody></table>
+  <div class="box"><h3>Waiver научной части</h3><p>Не требуется: есть рецензируемые работы и официальные стандарты.</p></div>
+</div></section>
+
+<section id="design"><div class="sec-head"><span class="n">04</span><h2>Синтез и предлагаемый дизайн</h2></div><div class="body">
+  <p>Навык разделяет протокол, поиск и интерпретацию. Профиль и период сохраняются в MD и показываются до запуска. Скрипты собирают метаданные и ranking-доказательства. Модель пишет синтез только по аннотациям и с DOI; HTML собирает код.</p>
+  <div class="flow"><span class="step hot">profile.md</span><span class="arrow">→</span><span class="step">подтверждение</span><span class="arrow">→</span><span class="step">OpenAlex + DataCite</span><span class="arrow">→</span><span class="step">SJR + ICORE</span><span class="arrow">→</span><span class="step">analysis.json</span><span class="arrow">→</span><span class="step">report.html</span></div>
+  <div class="grid2"><div class="box"><h3>Вход</h3><p>Научный профиль (ORCID, Google Scholar, Scopus, сайт или текст) либо список направлений; период; категории; язык; лимиты.</p></div><div class="box"><h3>Выход</h3><p><code>.sci-literature-news/profile.md</code>, <code>candidates.json</code>, <code>analysis.json</code>, <code>report.html</code>, список запросов и ranking-источников.</p></div></div>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Процедура</h3>
+  <ol>
+    <li><b>Профиль.</b> Если `profile.md` нет — запросить профиль или направления; сохранить.</li>
+    <li><b>Подтверждение.</b> Показать направления и период (6 месяцев по умолчанию); принять правки; сохранить; только после подтверждения искать.</li>
+    <li><b>Поиск.</b> OpenAlex по каждому направлению; DataCite по датасетам; сохранить запросы, даты и лимиты.</li>
+    <li><b>Категории.</b> Q1/Q2 по SJR с указанием года и категории; A* по ICORE; при отсутствии доказательства — `unranked`, не выдумывать.</li>
+    <li><b>Синтез.</b> Модель выделяет темы, противоречия и пробелы; каждый тезис — с DOI.</li>
+    <li><b>Датасеты.</b> Таблица из DataCite: название, описание, год, лицензия, DOI, направление.</li>
+    <li><b>Критерии.</b> Отдельно venue-level (A*/Q1) и study-level (включение в отчёт).</li>
+    <li><b>HTML.</b> Автономная страница с фильтрами, сворачиваемыми аннотациями и ссылками DOI.</li>
+  </ol>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты</h3>
+  <ul><li><code>SKILL.md</code> — триггеры, процедура, границы, QA.</li><li><code>references/sources-and-rankings.md</code> — OpenAlex/DataCite/SJR/ICORE, критерии, лицензии.</li><li><code>references/report-contract.md</code> — profile, candidates, analysis, HTML.</li><li><code>scripts/profile.py</code> — чтение/запись/проверка MD.</li><li><code>scripts/collect_literature.py</code> — поиск и категоризация.</li><li><code>scripts/update_rankings.py</code> — кэш SJR и ICORE A*.</li><li><code>scripts/build_report.py</code> — HTML; <code>check_report.py</code> — автономность.</li></ul>
+</div></section>
+
+<section id="alternatives"><div class="sec-head"><span class="n">05</span><h2>Альтернативы и цена</h2></div><div class="body"><table><thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead><tbody>
+  <tr><td>Только websearch + LLM</td><td>Быстро</td><td>Невоспроизводимо, нет метаданных пачкой</td><td>Нельзя проверить запросы и ranking</td></tr>
+  <tr><td>Scopus/Web of Science API</td><td>Официальные квартили</td><td>Ключи, лицензии, платно</td><td>Недоступно в базовой версии</td></tr>
+  <tr><td>OpenAlex + DataCite + SJR/ICORE cache</td><td>Открыто, воспроизводимо, метаданные</td><td>Нужен первичный кэш ranking</td><td>Выбран</td></tr>
+  <tr><td>Только OpenAlex без ranking</td><td>Проще</td><td>Нет Q1/A*/Q2</td><td>Не отвечает задаче</td></tr>
+</tbody></table></div></section>
+
+<section id="metrics"><div class="sec-head"><span class="n">06</span><h2>Метрики и план проверки</h2></div><div class="body">
+  <div class="metric"><span><b>Покрытие</b> — доля работ с DOI и venue</span><span><b>Ranking evidence</b> — 100% категорий с источником</span><span><b>Датасеты</b> — не менее 1 при наличии</span><span><b>Offline</b> — 0 внешних ресурсов</span></div>
+  <ol><li>Проверить `profile.py --check` на примере и на пустых направлениях.</li><li>Собрать `candidates` из фикстур и проверить дедупликацию, категории и ranking evidence.</li><li>Собрать HTML; проверить `check_report.py` и `validate_analysis.py --strict`.</li><li>Проверить, что все DOI в синтезе и таблице датасетов существуют в candidates.</li><li>Проверить, что при отсутствии ranking работа попадает в `unranked`, а не в Q1/A*.</li><li>Проверить, что направления и период читаются из MD и сохраняются после правки.</li></ol>
+</div></section>
+
+<section id="risks"><div class="sec-head"><span class="n">07</span><h2>Риски и открытые вопросы</h2></div><div class="body">
+  <table><thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead><tbody>
+    <tr><td>Квартиль журнала зависит от категории/года</td><td>высокая</td><td>высокое</td><td>Хранить категорию и год; показывать источник; `unranked` при отсутствии</td></tr>
+    <tr><td>A* перепутан с A или другим годом</td><td>средняя</td><td>высокое</td><td>Кэш ICORE с версией; матчинг по названию/акрониму; ручная проверка</td></tr>
+    <tr><td>Ложные темы в синтезе</td><td>средняя</td><td>высокое</td><td>Каждый тезис с DOI; ограничиться аннотациями; не выдавать за full-text</td></tr>
+    <tr><td>Пропуски OpenAlex/DataCite</td><td>средняя</td><td>среднее</td><td>Показать coverage и лимиты; дополнить Crossref при необходимости</td></tr>
+    <tr><td>Нет доступа к SJR/ICORE</td><td>средняя</td><td>среднее</td><td>Кэш и `unranked`; не выдумывать категории</td></tr>
+    <tr><td>Утечка профиля</td><td>низкая</td><td>среднее</td><td>Локальный MD, не коммитить; не отправлять профиль во внешние сервисы без запроса</td></tr>
+  </tbody></table>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3><ol><li>Считать Q1/Q2 по лучшей категории или по категории, ближайшей к направлению?</li><li>Включать ли препринты отдельной пометкой?</li><li>Нужен ли режим только датасетов?</li></ol>
+</div></section>
+
+<section id="sources"><div class="sec-head"><span class="n">08</span><h2>Источники</h2><p>дата обращения обязательна</p></div><div class="body"><ol>
+  <li><span class="mono">https://github.com/bpiwowar/sci-report-analyzer</span> — 2026-11-02</li>
+  <li><span class="mono">https://github.com/Michael-E-Rose/SCImagoJournalRankIndicators</span> — 2026-11-02</li>
+  <li><span class="mono">https://github.com/ikashnitsky/sjrdata</span> — 2026-11-02</li>
+  <li><span class="mono">https://github.com/benkeks/icore-ranks</span> — 2026-11-02</li>
+  <li><span class="mono">https://github.com/kael-odin/awesome-academic-research-skills</span> — 2026-11-02</li>
+  <li><span class="mono">https://doi.org/10.1136/bmj.n71</span> — 2026-11-02</li>
+  <li><span class="mono">https://doi.org/10.1186/s13643-020-01542-z</span> — 2026-11-02</li>
+  <li><span class="mono">https://arxiv.org/abs/2205.01833</span> — 2026-11-02</li>
+  <li><span class="mono">https://doi.org/10.1016/j.joi.2009.11.005</span> — 2026-11-02</li>
+  <li><span class="mono">https://portal.core.edu.au/conf-ranks/</span> — 2026-11-02</li>
+  <li><span class="mono">https://schema.datacite.org/</span> — 2026-11-02</li>
+  <li><span class="mono">https://docs.openalex.org/</span> — 2026-11-02</li>
+</ol></div></section>
+
+<section id="decision"><div class="sec-head"><span class="n">09</span><h2>Чек-лист и решение</h2><p>без approved реализация не начинается</p></div><div class="body">
+  <ul class="checklist"><li>Изучены минимум 3 GitHub-аналога, лицензии проверены.</li><li>Изучены минимум 2 научных/официальных источника.</li><li>Каждое утверждение имеет источник или помечено как решение автора.</li><li>Границы и не-цели сформулированы.</li><li>Метрики проверяемы.</li><li>Нет дублирования существующих навыков по триггерам.</li><li>Артефакты и команды воспроизводимы.</li></ul>
+  <div class="decision"><div class="approved">approved</div><div>revise</div><div>rejected</div><div>draft</div></div>
+  <p style="margin-top:12px;color:var(--muted);font-size:12px">Решение: approved. Основание: пользователь запросил разработку 2026-11-02; рамки зафиксированы в research ledger и этом файле.</p>
+</div></section>
+<footer><div class="row"><span>opencode-skills · skill review</span><span>sci-literature-news · 2026-11-02</span></div></footer>
+</main></body></html>

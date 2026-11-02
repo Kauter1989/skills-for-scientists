@@ -1,0 +1,486 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-02T11:55:00.000Z",
+  "period": {
+    "from": "2026-05-02",
+    "to": "2026-11-02"
+  },
+  "profile": {
+    "profile": {
+      "name": "Анна Иванова",
+      "affiliation": "Лаборатория анализа данных, пример",
+      "orcid": "0000-0002-0000-0001",
+      "google_scholar": "https://scholar.google.com/citations?user=example",
+      "scopus": "00000000000",
+      "researchgate": "—",
+      "personal_site": "https://example.org/anna",
+      "profile_source": "example",
+      "profile_fetched_at": "2026-11-02"
+    },
+    "directions": [
+      {
+        "id": "D1",
+        "direction": "Графовые нейронные сети",
+        "query": "graph neural networks",
+        "notes": "архитектуры, обучение, приложения"
+      },
+      {
+        "id": "D2",
+        "direction": "Сегментация медицинских изображений",
+        "query": "medical image segmentation",
+        "notes": "КТ, МРТ, микроскопия"
+      },
+      {
+        "id": "D3",
+        "direction": "Scientific machine learning",
+        "query": "scientific machine learning",
+        "notes": "нейрооператоры и физически-информированные модели"
+      }
+    ],
+    "preferences": {
+      "period_months": 6,
+      "from": "2026-05-02",
+      "to": "2026-11-02",
+      "categories": [
+        "Q1 journals",
+        "A* conferences",
+        "Q2 journals"
+      ],
+      "languages": [
+        "en"
+      ],
+      "include_preprints": false,
+      "max_results_per_direction": 100,
+      "ranking_source": "SJR 2025; ICORE2026",
+      "report_language": "ru",
+      "last_confirmed": "2026-11-02"
+    }
+  },
+  "queries": [
+    {
+      "direction_id": "D1",
+      "query": "graph neural networks",
+      "source": "OpenAlex"
+    },
+    {
+      "direction_id": "D2",
+      "query": "medical image segmentation",
+      "source": "OpenAlex"
+    },
+    {
+      "direction_id": "D3",
+      "query": "scientific machine learning",
+      "source": "OpenAlex"
+    },
+    {
+      "direction_id": "D1",
+      "query": "graph neural networks",
+      "source": "DataCite"
+    },
+    {
+      "direction_id": "D2",
+      "query": "medical image segmentation",
+      "source": "DataCite"
+    },
+    {
+      "direction_id": "D3",
+      "query": "scientific machine learning",
+      "source": "DataCite"
+    }
+  ],
+  "ranking": {
+    "sjr": "",
+    "core": "",
+    "note": "Демо: Q1/Q2 по SJR 2025, A* по ICORE2026; данные синтетические."
+  },
+  "papers": [
+    {
+      "id": "10-1016-j-media-2026-103001",
+      "doi": "10.1016/j.media.2026.103001",
+      "title": "Foundation models for medical image segmentation: a multi-centre evaluation",
+      "abstract": "We evaluate a family of foundation models for CT and MRI segmentation across six hospitals. The best model improves the Dice score by 4.8 points on external data, but calibration remains sensitive to scanner shift.",
+      "date": "2026-09-12",
+      "year": 2026,
+      "type": "article",
+      "venue": "Medical Image Analysis",
+      "venue_type": "journal",
+      "issn": [],
+      "authors": [
+        "A. Petrova",
+        "M. Chen",
+        "R. Singh"
+      ],
+      "citations": 84,
+      "oa_url": "",
+      "url": "https://doi.org/10.1016/j.media.2026.103001",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D2"
+      ],
+      "category": "q1",
+      "ranking_evidence": [
+        "SCImago SJR 2025 · Q1 · Computer Science"
+      ],
+      "sjr": {
+        "quartile": "Q1",
+        "source": "SCImago SJR 2025",
+        "year": "2025",
+        "field": "Computer Science",
+        "match": "field"
+      },
+      "core": null,
+      "quality": "measured"
+    },
+    {
+      "id": "10-1038-s42256-026-01001-1",
+      "doi": "10.1038/s42256-026-01001-1",
+      "title": "Self-supervised microscopy representation learning with limited labels",
+      "abstract": "A masked-image objective learns transferable representations from unlabelled microscopy volumes. Fine-tuning with 5% of labels matches a fully supervised baseline on two external datasets.",
+      "date": "2026-07-03",
+      "year": 2026,
+      "type": "article",
+      "venue": "Nature Machine Intelligence",
+      "venue_type": "journal",
+      "issn": [],
+      "authors": [
+        "L. Moroz",
+        "K. Sato",
+        "D. Williams"
+      ],
+      "citations": 61,
+      "oa_url": "",
+      "url": "https://doi.org/10.1038/s42256-026-01001-1",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D2"
+      ],
+      "category": "q1",
+      "ranking_evidence": [
+        "SCImago SJR 2025 · Q1 · Computer Science"
+      ],
+      "sjr": {
+        "quartile": "Q1",
+        "source": "SCImago SJR 2025",
+        "year": "2025",
+        "field": "Computer Science",
+        "match": "field"
+      },
+      "core": null,
+      "quality": "measured"
+    },
+    {
+      "id": "10-1109-TPAMI-2026-1001",
+      "doi": "10.1109/TPAMI.2026.1001",
+      "title": "Uncertainty-aware segmentation under distribution shift",
+      "abstract": "The paper introduces a conformal prediction layer for segmentation masks. It provides pixel-level coverage guarantees and improves failure detection under domain shift.",
+      "date": "2026-10-01",
+      "year": 2026,
+      "type": "article",
+      "venue": "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+      "venue_type": "journal",
+      "issn": [],
+      "authors": [
+        "V. Orlova",
+        "T. Nguyen"
+      ],
+      "citations": 37,
+      "oa_url": "",
+      "url": "https://doi.org/10.1109/TPAMI.2026.1001",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D2",
+        "D3"
+      ],
+      "category": "q1",
+      "ranking_evidence": [
+        "SCImago SJR 2025 · Q1 · Computer Science"
+      ],
+      "sjr": {
+        "quartile": "Q1",
+        "source": "SCImago SJR 2025",
+        "year": "2025",
+        "field": "Computer Science",
+        "match": "field"
+      },
+      "core": null,
+      "quality": "measured"
+    },
+    {
+      "id": "10-5555-neurips-2026-001",
+      "doi": "10.5555/neurips.2026.001",
+      "title": "Scaling graph transformers with adaptive sparsity",
+      "abstract": "We combine graph transformers with learned sparse attention and show that the resulting model scales to million-node graphs without losing long-range dependencies. Code and configs are released.",
+      "date": "2026-09-25",
+      "year": 2026,
+      "type": "article",
+      "venue": "NeurIPS 2026",
+      "venue_type": "conference",
+      "issn": [],
+      "authors": [
+        "I. Smirnov",
+        "H. Lee",
+        "P. Garcia"
+      ],
+      "citations": 29,
+      "oa_url": "",
+      "url": "https://doi.org/10.5555/neurips.2026.001",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D1"
+      ],
+      "category": "a_star",
+      "ranking_evidence": [
+        "ICORE2026 · A* · NeurIPS"
+      ],
+      "sjr": null,
+      "core": {
+        "rank": "A*",
+        "source": "ICORE2026",
+        "match": "acronym"
+      },
+      "quality": "measured"
+    },
+    {
+      "id": "10-5555-cvpr-2026-014",
+      "doi": "10.5555/cvpr.2026.014",
+      "title": "Test-time adaptation for medical image segmentation",
+      "abstract": "A lightweight test-time adaptation procedure updates normalization statistics and a small adapter at inference. It recovers 70% of the drop caused by a new scanner.",
+      "date": "2026-06-18",
+      "year": 2026,
+      "type": "article",
+      "venue": "CVPR 2026",
+      "venue_type": "conference",
+      "issn": [],
+      "authors": [
+        "N. Ivanov",
+        "S. Kim"
+      ],
+      "citations": 45,
+      "oa_url": "",
+      "url": "https://doi.org/10.5555/cvpr.2026.014",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D2"
+      ],
+      "category": "a_star",
+      "ranking_evidence": [
+        "ICORE2026 · A* · CVPR"
+      ],
+      "sjr": null,
+      "core": {
+        "rank": "A*",
+        "source": "ICORE2026",
+        "match": "acronym"
+      },
+      "quality": "measured"
+    },
+    {
+      "id": "10-5555-icml-2026-088",
+      "doi": "10.5555/icml.2026.088",
+      "title": "Neural operators with physics-aware latent dynamics",
+      "abstract": "We learn a latent dynamical system constrained by conservation laws and use it as a neural operator for parametric PDEs. The model generalizes to unseen boundary conditions with a 3x data reduction.",
+      "date": "2026-07-22",
+      "year": 2026,
+      "type": "article",
+      "venue": "ICML 2026",
+      "venue_type": "conference",
+      "issn": [],
+      "authors": [
+        "E. Volkova",
+        "J. Brown",
+        "A. Kumar"
+      ],
+      "citations": 33,
+      "oa_url": "",
+      "url": "https://doi.org/10.5555/icml.2026.088",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D3"
+      ],
+      "category": "a_star",
+      "ranking_evidence": [
+        "ICORE2026 · A* · ICML"
+      ],
+      "sjr": null,
+      "core": {
+        "rank": "A*",
+        "source": "ICORE2026",
+        "match": "acronym"
+      },
+      "quality": "measured"
+    },
+    {
+      "id": "10-1016-j-cmpb-2026-108001",
+      "doi": "10.1016/j.cmpb.2026.108001",
+      "title": "Lightweight segmentation for point-of-care ultrasound",
+      "abstract": "A compact U-Net variant runs on a mobile GPU while preserving 96% of the baseline Dice score. The authors release an annotated point-of-care ultrasound subset.",
+      "date": "2026-08-14",
+      "year": 2026,
+      "type": "article",
+      "venue": "Computer Methods and Programs in Biomedicine",
+      "venue_type": "journal",
+      "issn": [],
+      "authors": [
+        "O. Sokolova",
+        "R. Mehta"
+      ],
+      "citations": 18,
+      "oa_url": "",
+      "url": "https://doi.org/10.1016/j.cmpb.2026.108001",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D2"
+      ],
+      "category": "q2",
+      "ranking_evidence": [
+        "SCImago SJR 2025 · Q2 · Medicine"
+      ],
+      "sjr": {
+        "quartile": "Q2",
+        "source": "SCImago SJR 2025",
+        "year": "2025",
+        "field": "Computer Science",
+        "match": "field"
+      },
+      "core": null,
+      "quality": "measured"
+    },
+    {
+      "id": "10-1016-j-jbi-2026-104501",
+      "doi": "10.1016/j.jbi.2026.104501",
+      "title": "Benchmarking graph learning for clinical prediction",
+      "abstract": "We compare eight graph learning pipelines on three clinical prediction tasks. Performance is dominated by graph construction rather than the message-passing architecture.",
+      "date": "2026-06-30",
+      "year": 2026,
+      "type": "article",
+      "venue": "Journal of Biomedical Informatics",
+      "venue_type": "journal",
+      "issn": [],
+      "authors": [
+        "M. Fischer",
+        "Y. Wang",
+        "A. Petrov"
+      ],
+      "citations": 22,
+      "oa_url": "",
+      "url": "https://doi.org/10.1016/j.jbi.2026.104501",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D1",
+        "D2"
+      ],
+      "category": "q2",
+      "ranking_evidence": [
+        "SCImago SJR 2025 · Q2 · Medicine"
+      ],
+      "sjr": {
+        "quartile": "Q2",
+        "source": "SCImago SJR 2025",
+        "year": "2025",
+        "field": "Computer Science",
+        "match": "field"
+      },
+      "core": null,
+      "quality": "measured"
+    },
+    {
+      "id": "10-1016-j-commatsci-2026-113201",
+      "doi": "10.1016/j.commatsci.2026.113201",
+      "title": "Data-efficient scientific discovery with physics-informed surrogates",
+      "abstract": "A physics-informed surrogate reduces the number of expensive simulations by an order of magnitude on a materials discovery task. The paper reports negative results for two transfer settings.",
+      "date": "2026-09-05",
+      "year": 2026,
+      "type": "article",
+      "venue": "Computational Materials Science",
+      "venue_type": "journal",
+      "issn": [],
+      "authors": [
+        "S. Novak",
+        "T. Ali"
+      ],
+      "citations": 15,
+      "oa_url": "",
+      "url": "https://doi.org/10.1016/j.commatsci.2026.113201",
+      "field": "Computer Science",
+      "subfield": "Artificial Intelligence",
+      "direction_ids": [
+        "D3"
+      ],
+      "category": "q2",
+      "ranking_evidence": [
+        "SCImago SJR 2025 · Q2 · Materials Science"
+      ],
+      "sjr": {
+        "quartile": "Q2",
+        "source": "SCImago SJR 2025",
+        "year": "2025",
+        "field": "Computer Science",
+        "match": "field"
+      },
+      "core": null,
+      "quality": "measured"
+    }
+  ],
+  "datasets": [
+    {
+      "doi": "10.5281/zenodo.10000001",
+      "title": "MedSegBench 2026",
+      "description": "Multi-centre CT and MRI segmentation benchmark with scanner metadata and external test splits.",
+      "year": 2026,
+      "publisher": "Zenodo",
+      "license": "CC BY 4.0",
+      "url": "",
+      "creators": [
+        "A. Petrova",
+        "M. Chen"
+      ],
+      "direction_ids": [
+        "D2"
+      ]
+    },
+    {
+      "doi": "10.5281/zenodo.10000002",
+      "title": "GraphBench-Materials",
+      "description": "Graph construction variants and property-prediction splits for materials discovery.",
+      "year": 2026,
+      "publisher": "Zenodo",
+      "license": "CC0 1.0",
+      "url": "",
+      "creators": [
+        "S. Novak"
+      ],
+      "direction_ids": [
+        "D1",
+        "D3"
+      ]
+    },
+    {
+      "doi": "10.5281/zenodo.10000003",
+      "title": "MicroscopySSL-2026",
+      "description": "Unlabelled and partially labelled microscopy volumes for self-supervised representation learning.",
+      "year": 2026,
+      "publisher": "Zenodo",
+      "license": "CC BY-NC 4.0",
+      "url": "",
+      "creators": [
+        "L. Moroz",
+        "D. Williams"
+      ],
+      "direction_ids": [
+        "D2",
+        "D3"
+      ]
+    }
+  ],
+  "warnings": [
+    "Демонстрационные данные: названия и DOI синтетические, не являются реальными публикациями."
+  ]
+}
