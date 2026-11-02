@@ -52,6 +52,47 @@
     <p>Набор стартовых навыков, этапы workflow, команды проверки и список создаваемых файлов. До <code>approved</code> scaffold не выполняется.</p>
   </div>
 
+  <div class="callout">
+    <b>Единая точка входа</b>
+    <p><code>harness-init</code> проводит опрос и собирает базовый профиль. Для нового проекта с разработкой SDD настраивается отдельно командой <code>{{SDD_COMMAND}}</code>; bootstrap её не заменяет.</p>
+  </div>
+
+  <section>
+    <div class="head"><h2>Профиль работы</h2><p>научные данные и отчёты</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Параметр</th><th>Ответ</th></tr></thead>
+        <tbody>
+{{SCIENCE_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Разработка и SDD</h2><p>специфика проекта и отдельная команда</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Параметр</th><th>Ответ</th></tr></thead>
+        <tbody>
+{{DEV_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Маршрут</h2><p>куда идти после bootstrap</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Что нужно</th><th>Маршрут</th></tr></thead>
+        <tbody>
+{{ROUTE_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <section>
     <div class="head"><h2>Стартовые навыки</h2><p>только реализованные в библиотеке</p></div>
     <div class="body">

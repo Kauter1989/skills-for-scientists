@@ -43,7 +43,7 @@
   <div class="kicker">Bootstrap plan · на утверждение</div>
   <h1>example-service</h1>
   <div class="meta">
-    Домен: <b>dev</b> · Стек: <b>python</b> · Workflow: <b>minimal</b> · Дата: <b>2026-10-31</b>
+    Домен: <b>mixed</b> · Стек: <b>python</b> · Workflow: <b>extended</b> · Дата: <b>2026-11-02</b>
     · <span id="approval" class="status approved">approved</span>
   </div>
 
@@ -51,6 +51,55 @@
     <b>Что утверждается</b>
     <p>Набор стартовых навыков, этапы workflow, команды проверки и список создаваемых файлов. До <code>approved</code> scaffold не выполняется.</p>
   </div>
+
+  <div class="callout">
+    <b>Единая точка входа</b>
+    <p><code>harness-init</code> проводит опрос и собирает базовый профиль. Для нового проекта с разработкой SDD настраивается отдельно командой <code>/dev-spec-chain</code>; bootstrap её не заменяет.</p>
+  </div>
+
+  <section>
+    <div class="head"><h2>Профиль работы</h2><p>научные данные и отчёты</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Параметр</th><th>Ответ</th></tr></thead>
+        <tbody>
+<tr><td>Научная работа</td><td>literature, dataset</td></tr>
+<tr><td>Данные</td><td>OpenAlex/DataCite metadata; public; DOI and license</td></tr>
+<tr><td>Результаты</td><td>html-report, dataset</td></tr>
+<tr><td>Воспроизводимость</td><td>code, data, env, license</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Разработка и SDD</h2><p>специфика проекта и отдельная команда</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Параметр</th><th>Ответ</th></tr></thead>
+        <tbody>
+<tr><td>Режим проекта</td><td>greenfield</td></tr>
+<tr><td>Специфика</td><td>python, cli, integrations, critical</td></tr>
+<tr><td>SDD</td><td>yes</td></tr>
+<tr><td>Команда SDD</td><td>/dev-spec-chain</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Маршрут</h2><p>куда идти после bootstrap</p></div>
+    <div class="body">
+      <table>
+        <thead><tr><th>Что нужно</th><th>Маршрут</th></tr></thead>
+        <tbody>
+<tr><td>Научные данные и отчёты</td><td><code>harness-init</code> → рекомендованные научные и отчётные навыки</td></tr>
+<tr><td>Разработка и SDD</td><td><code>/dev-spec-chain</code> — отдельная команда, bootstrap её не запускает</td></tr>
+<tr><td>Пополнение библиотеки</td><td><code>harness-skill-template</code> → research/review → <code>harness-skill-audit</code> → PR</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <section>
     <div class="head"><h2>Стартовые навыки</h2><p>только реализованные в библиотеке</p></div>
@@ -62,6 +111,7 @@
 <tr><td class="mono">harness-skill-audit</td><td>аудит структуры и дублей библиотеки</td><td>реализован</td></tr>
 <tr><td class="mono">harness-rule-to-mechanism</td><td>правило → проверка и registry</td><td>реализован</td></tr>
 <tr><td class="mono">dev-pr-report-html</td><td>HTML-отчёт об изменениях фичи</td><td>реализован</td></tr>
+<tr><td class="mono">sci-literature-news</td><td>научный дайджест: Q1/A*/Q2, темы, датасеты, HTML</td><td>реализован</td></tr>
         </tbody>
       </table>
     </div>
@@ -74,8 +124,11 @@
         <thead><tr><th>Этап</th><th>Что происходит</th><th>Навыки</th></tr></thead>
         <tbody>
 <tr><td>Старт</td><td>Открыть репозиторий и выбрать первый шаг</td><td class="mono">harness-skill-template</td></tr>
+<tr><td>Научные данные</td><td>Зафиксировать данные, лицензии и воспроизводимость</td><td class="mono">sci-literature-news, dev-pr-report-html</td></tr>
+<tr><td>Научный результат</td><td>Собрать дайджест, отчёт, презентацию или датасет</td><td class="mono">sci-literature-news, dev-pr-report-html</td></tr>
 <tr><td>Правила</td><td>Проверить, что правила имеют механизм</td><td class="mono">harness-rule-to-mechanism</td></tr>
-<tr><td>Работа</td><td>Выполнить стартовую задачу</td><td class="mono">dev-pr-report-html</td></tr>
+<tr><td>Разработка и SDD</td><td>Настроить spec-driven workflow отдельной командой /dev-spec-chain</td><td class="mono">/dev-spec-chain</td></tr>
+<tr><td>Библиотека</td><td>Добавить или улучшить навык по гейтам research → review → PR</td><td class="mono">harness-skill-template, harness-skill-audit</td></tr>
 <tr><td>Проверка</td><td>Проверить структуру и дубли</td><td class="mono">harness-skill-audit</td></tr>
 <tr><td>Отчёт</td><td>Собрать результат для ревью</td><td class="mono">dev-pr-report-html</td></tr>
         </tbody>

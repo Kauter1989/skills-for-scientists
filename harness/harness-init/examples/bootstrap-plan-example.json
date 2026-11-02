@@ -1,12 +1,12 @@
 {
   "status": "approved",
-  "created": "2026-10-31",
+  "created": "2026-11-02",
   "answers": {
     "project": "example-service",
-    "domain": "dev",
+    "domain": "mixed",
     "stack": "python",
     "default_branch": "main",
-    "workflow": "minimal",
+    "workflow": "extended",
     "ci": "github",
     "commands": {
       "test": "pytest -q",
@@ -15,23 +15,41 @@
     },
     "roles": [
       "developer",
-      "reviewer"
+      "reviewer",
+      "researcher"
     ],
     "tasks": [
       "feature",
       "bugfix",
-      "report"
+      "literature",
+      "report",
+      "dataset"
     ],
     "constraints": [
       "private"
     ],
-    "skills": []
+    "skills": [],
+    "science_work": [
+      "literature",
+      "dataset"
+    ],
+    "science_data": "OpenAlex/DataCite metadata; public; DOI and license",
+    "science_outputs": [
+      "html-report",
+      "dataset"
+    ],
+    "reproducibility": "code, data, env, license",
+    "project_mode": "greenfield",
+    "dev_specifics": "python, cli, integrations, critical",
+    "sdd_setup": "yes",
+    "library_contribution": "new-skill"
   },
   "skills": [
     "harness-skill-template",
     "harness-skill-audit",
     "harness-rule-to-mechanism",
-    "dev-pr-report-html"
+    "dev-pr-report-html",
+    "sci-literature-news"
   ],
   "stages": [
     {
@@ -40,14 +58,29 @@
       "skills": "harness-skill-template"
     },
     {
+      "stage": "Научные данные",
+      "what": "Зафиксировать данные, лицензии и воспроизводимость",
+      "skills": "sci-literature-news, dev-pr-report-html"
+    },
+    {
+      "stage": "Научный результат",
+      "what": "Собрать дайджест, отчёт, презентацию или датасет",
+      "skills": "sci-literature-news, dev-pr-report-html"
+    },
+    {
       "stage": "Правила",
       "what": "Проверить, что правила имеют механизм",
       "skills": "harness-rule-to-mechanism"
     },
     {
-      "stage": "Работа",
-      "what": "Выполнить стартовую задачу",
-      "skills": "dev-pr-report-html"
+      "stage": "Разработка и SDD",
+      "what": "Настроить spec-driven workflow отдельной командой /dev-spec-chain",
+      "skills": "/dev-spec-chain"
+    },
+    {
+      "stage": "Библиотека",
+      "what": "Добавить или улучшить навык по гейтам research → review → PR",
+      "skills": "harness-skill-template, harness-skill-audit"
     },
     {
       "stage": "Проверка",
@@ -60,6 +93,11 @@
       "skills": "dev-pr-report-html"
     }
   ],
+  "route": {
+    "entry": "harness-init",
+    "sdd": "/dev-spec-chain",
+    "library": "harness-skill-template → research/review → harness-skill-audit → PR"
+  },
   "files": [
     "profile.yml",
     "AGENTS.md",
