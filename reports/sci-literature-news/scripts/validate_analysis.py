@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 
 STATUS = {"q1", "a_star", "q2", "unranked"}
@@ -111,6 +112,65 @@ def main(argv: list[str] | None = None) -> int:
             (errors if args.strict else warnings).append(f"{label}: нет протокола валидации")
         if not new_datasets:
             warnings.append(f"{label}: нет новых датасетов; укажите, на чём расширять валидацию")
+    a_star_counts = Counter()
+    selected_a_star = selection.get("a_star")
+    if not selected_a_star:
+        selected_a_star = [
+            item.get("doi") for item in papers if item.get("category") == "a_star" and item.get("doi")
+        ]
+    for doi in selected_a_star:
+        item = paper_by_doi.get(str(doi).lower())
+        if item:
+            for direction_id in set(item.get("direction_ids") or []):
+                a_star_counts[direction_id] += 1
+    coverage = analysis.get("aStarCoverage") or analysis.get("aStarGaps") or []
+    if not coverage:
+        (errors if args.strict else warnings).append(
+            "analysis.aStarCoverage пуст: не показано покрытие A* и ближайшие площадки"
+        )
+    covered_directions = set()
+    for index, entry in enumerate(coverage, start=1):
+        label = f"aStarCoverage[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: должен быть объектом")
+            continue
+        direction_id = str(entry.get("directionId") or "")
+        if not direction_id:
+            errors.append(f"{label}: directionId пуст")
+            continue
+        if direction_id not in directions:
+            warnings.append(f"{label}: направление {direction_id} отсутствует в profile")
+        covered_directions.add(direction_id)
+        expected = a_star_counts.get(direction_id, 0)
+        declared = entry.get("found")
+        if declared is not None and int(declared) != expected:
+            (errors if args.strict else warnings).append(
+                f"{label}: found={declared}, а в selection.a_star {expected} работ по {direction_id}"
+            )
+        nearest = entry.get("nearest") or []
+        if expected == 0:
+            if not nearest:
+                (errors if args.strict else warnings).append(
+                    f"{label}: A* не найден, но nearest пуст — укажите ближайшие A*-площадки"
+                )
+            for venue_index, venue in enumerate(nearest, start=1):
+                if not isinstance(venue, dict):
+                    errors.append(f"{label}.nearest[{venue_index}]: должен быть объектом")
+                    continue
+                if not str(venue.get("venue") or "").strip():
+                    errors.append(f"{label}.nearest[{venue_index}]: venue пуст")
+                if not str(venue.get("note") or "").strip():
+                    warnings.append(
+                        f"{label}.nearest[{venue_index}]: нет пояснения, почему площадка ближайшая"
+                    )
+        else:
+            if not entry.get("venues"):
+                warnings.append(f"{label}: A* найден, но venues пуст")
+    missing_coverage = sorted(directions - covered_directions)
+    if missing_coverage:
+        (errors if args.strict else warnings).append(
+            "aStarCoverage не покрывает направления: " + ", ".join(missing_coverage)
+        )
     if candidates.get("warnings"):
         warnings.extend(candidates["warnings"])
     if errors:

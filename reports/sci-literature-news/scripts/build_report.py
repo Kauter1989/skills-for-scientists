@@ -14,6 +14,7 @@ import html
 import json
 import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -25,6 +26,23 @@ CATEGORY_LABELS = {
     "a_star": "Конференции A*",
     "q2": "Журналы Q2",
     "unranked": "Без подтверждённого ранга",
+}
+STOPWORDS = {
+    "and",
+    "for",
+    "the",
+    "with",
+    "from",
+    "into",
+    "using",
+    "based",
+    "via",
+    "over",
+    "under",
+    "among",
+    "through",
+    "toward",
+    "towards",
 }
 QUALITY = {
     "measured": "measured",
@@ -54,6 +72,53 @@ def safe_url(value: object) -> str:
 def truncate(value: object, limit: int) -> str:
     text = re.sub(r"\s+", " ", str(value or "")).strip()
     return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
+
+
+def bar_row(
+    label: str,
+    value: float,
+    maximum: float,
+    *,
+    color: str = "",
+    value_label: str | None = None,
+    note: str = "",
+) -> str:
+    width = 0.0 if not maximum else max(0.0, min(100.0, value / maximum * 100))
+    display = value_label if value_label is not None else f"{value:g}"
+    color_class = f" {color}" if color else ""
+    note_html = f"<small>{esc(note)}</small>" if note else ""
+    return (
+        '<div class="bar-row">'
+        f'<div class="bar-label">{esc(label)}{note_html}</div>'
+        f'<div class="bar-track"><span class="bar-fill{color_class}" style="width:{width:.1f}%"></span></div>'
+        f'<div class="bar-val">{esc(display)}</div>'
+        "</div>"
+    )
+
+
+def stacked_row(
+    label: str,
+    segments: list[tuple[float, str]],
+    maximum: float,
+    value_label: str,
+    *,
+    note: str = "",
+) -> str:
+    total = sum(value for value, _ in segments)
+    width = 0.0 if not maximum else max(0.0, min(100.0, total / maximum * 100))
+    parts = []
+    for value, color in segments:
+        if value <= 0 or not maximum:
+            continue
+        parts.append(f'<span class="bar-seg {color}" style="width:{value / maximum * 100:.1f}%"></span>')
+    note_html = f"<small>{esc(note)}</small>" if note else ""
+    return (
+        '<div class="bar-row">'
+        f'<div class="bar-label">{esc(label)}{note_html}</div>'
+        f'<div class="bar-track"><span class="bar-stack" style="width:{width:.1f}%">{"".join(parts)}</span></div>'
+        f'<div class="bar-val">{esc(value_label)}</div>'
+        "</div>"
+    )
 
 
 def load_json(path: Path) -> dict:
@@ -174,6 +239,37 @@ def normalize_analysis(analysis: dict | None, candidates: dict) -> dict:
     if not datasets:
         warnings.append("Новые датасеты не найдены или не добавлены в analysis.datasets")
 
+    a_star_by_direction = Counter()
+    for paper in selected_by_category["a_star"]:
+        for direction_id in set(paper.get("direction_ids") or []):
+            a_star_by_direction[direction_id] += 1
+    coverage_entries = {}
+    for item in analysis.get("aStarCoverage") or analysis.get("aStarGaps") or []:
+        if isinstance(item, dict) and item.get("directionId"):
+            coverage_entries[str(item["directionId"])] = item
+    a_star_coverage = []
+    for direction in directions:
+        direction_id = str(direction.get("id"))
+        entry = coverage_entries.get(direction_id, {})
+        found = a_star_by_direction.get(direction_id, 0)
+        nearest = [item for item in entry.get("nearest") or [] if isinstance(item, dict)]
+        a_star_coverage.append(
+            {
+                "directionId": direction_id,
+                "direction": direction.get("direction") or direction_id,
+                "found": found,
+                "status": "found" if found else "missing",
+                "venues": entry.get("venues") or [],
+                "target": entry.get("target") or "",
+                "note": entry.get("note") or "",
+                "nearest": nearest,
+            }
+        )
+        if not found and not nearest:
+            warnings.append(
+                f"{direction_id}: A*-публикаций нет и не указаны ближайшие площадки (analysis.aStarCoverage)"
+            )
+
     return {
         "title": analysis.get("title") or "Научный дайджест литературы",
         "summary": analysis.get("summary") or "",
@@ -181,6 +277,7 @@ def normalize_analysis(analysis: dict | None, candidates: dict) -> dict:
         "selected": selected_by_category,
         "datasets": datasets,
         "criteria": criteria,
+        "aStarCoverage": a_star_coverage,
         "warnings": warnings,
         "direction_names": direction_names,
         "generatedAt": analysis.get("generatedAt") or datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
@@ -375,28 +472,257 @@ def render_body(model: dict, candidates: dict) -> str:
         + bullets(model["criteria"].get("caveats") or [])
     )
 
-    query_rows = "".join(
-        f'<tr><td>{esc(item.get("direction_id"))}</td><td>{esc(item.get("query"))}</td><td>{esc(item.get("source"))}</td></tr>'
-        for item in candidates.get("queries") or []
+    query_meta = {}
+    for item in candidates.get("queries") or []:
+        direction_id = str(item.get("direction_id") or "")
+        entry = query_meta.setdefault(
+            direction_id, {"query": str(item.get("query") or ""), "sources": []}
+        )
+        source = str(item.get("source") or "")
+        if source and source not in entry["sources"]:
+            entry["sources"].append(source)
+
+    direction_counts = {
+        str(item.get("id")): {"q1": 0, "a_star": 0, "q2": 0} for item in directions
+    }
+    for category in ("q1", "a_star", "q2"):
+        for paper in model["selected"][category]:
+            for direction_id in set(paper.get("direction_ids") or []):
+                if direction_id in direction_counts:
+                    direction_counts[direction_id][category] += 1
+
+    candidate_papers = Counter()
+    candidate_datasets = Counter()
+    for paper in candidates.get("papers") or []:
+        for direction_id in set(paper.get("direction_ids") or []):
+            candidate_papers[direction_id] += 1
+    for dataset in candidates.get("datasets") or []:
+        for direction_id in set(dataset.get("direction_ids") or []):
+            candidate_datasets[direction_id] += 1
+
+    max_direction_total = max(
+        (sum(values.values()) for values in direction_counts.values()), default=0
+    ) or 1
+
+    keyword_rows = []
+    for item in directions:
+        direction_id = str(item.get("id"))
+        meta = query_meta.get(
+            direction_id,
+            {"query": str(item.get("query") or item.get("direction") or ""), "sources": []},
+        )
+        query = meta["query"]
+        words = [
+            word
+            for word in re.split(r"[^0-9A-Za-zА-Яа-я-]+", query)
+            if len(word) > 2 and word.lower() not in STOPWORDS
+        ]
+        selected_total = sum(direction_counts.get(direction_id, {}).values())
+        share = selected_total / max_direction_total * 100
+        keyword_rows.append(
+            '<div class="kw-row">'
+            f'<div class="kw-head"><b>{esc(direction_id)}</b><span>{esc(item.get("direction"))}</span></div>'
+            f'<div class="kw-terms">{"".join(f"<span class=\"kw\">{esc(word)}</span>" for word in words)}</div>'
+            f'<div class="kw-query">запрос: <code>{esc(query)}</code></div>'
+            f'<div class="kw-meter"><span style="width:{share:.1f}%"></span></div>'
+            f'<div class="kw-counts">{esc(" + ".join(meta["sources"]) or "источник не сохранён")} · '
+            f'кандидатов: OpenAlex {candidate_papers.get(direction_id, 0)}, '
+            f'DataCite {candidate_datasets.get(direction_id, 0)} · '
+            f'отобрано {selected_total}</div>'
+            "</div>"
+        )
+
+    source_max = max(
+        len(candidates.get("papers") or []), len(candidates.get("datasets") or []), 1
     )
+    source_chart = (
+        bar_row(
+            "OpenAlex · найдено",
+            len(candidates.get("papers") or []),
+            source_max,
+            color="ghost",
+            value_label=str(len(candidates.get("papers") or [])),
+        )
+        + bar_row(
+            "OpenAlex · отобрано",
+            counts["papers"],
+            source_max,
+            value_label=f'{counts["papers"]} из {len(candidates.get("papers") or [])}',
+        )
+        + bar_row(
+            "DataCite · найдено",
+            len(candidates.get("datasets") or []),
+            source_max,
+            color="ghost",
+            value_label=str(len(candidates.get("datasets") or [])),
+        )
+        + bar_row(
+            "DataCite · отобрано",
+            counts["datasets"],
+            source_max,
+            value_label=f'{counts["datasets"]} из {len(candidates.get("datasets") or [])}',
+        )
+    )
+
+    category_max = max(counts["q1"], counts["a_star"], counts["q2"], 1)
+    category_chart = (
+        bar_row(
+            "Q1 журналы",
+            counts["q1"],
+            category_max,
+            color="q1",
+            value_label=f'{counts["q1"]} · {counts["q1"] / max(counts["papers"], 1) * 100:.0f}%',
+        )
+        + bar_row(
+            "A* конференции",
+            counts["a_star"],
+            category_max,
+            color="a_star",
+            value_label=f'{counts["a_star"]} · {counts["a_star"] / max(counts["papers"], 1) * 100:.0f}%',
+        )
+        + bar_row(
+            "Q2 журналы",
+            counts["q2"],
+            category_max,
+            color="q2",
+            value_label=f'{counts["q2"]} · {counts["q2"] / max(counts["papers"], 1) * 100:.0f}%',
+        )
+    )
+
+    direction_chart = "".join(
+        stacked_row(
+            f'{str(entry.get("id"))} · {truncate(entry.get("direction") or "", 30)}',
+            [
+                (direction_counts[str(entry.get("id"))]["q1"], "q1"),
+                (direction_counts[str(entry.get("id"))]["a_star"], "a_star"),
+                (direction_counts[str(entry.get("id"))]["q2"], "q2"),
+            ],
+            max_direction_total,
+            str(sum(direction_counts[str(entry.get("id"))].values())),
+            note=(
+                f'Q1 {direction_counts[str(entry.get("id"))]["q1"]} · '
+                f'A* {direction_counts[str(entry.get("id"))]["a_star"]} · '
+                f'Q2 {direction_counts[str(entry.get("id"))]["q2"]}'
+            ),
+        )
+        for entry in directions
+    )
+
+    venue_counts = Counter()
+    for category in ("q1", "a_star", "q2"):
+        for paper in model["selected"][category]:
+            venue_counts[paper.get("venue") or "—"] += 1
+    top_venues = venue_counts.most_common(8)
+    venue_max = top_venues[0][1] if top_venues else 1
+    venue_chart = "".join(
+        bar_row(truncate(venue, 34), number, venue_max, value_label=str(number))
+        for venue, number in top_venues
+    ) or '<p class="empty">Площадки не определены.</p>'
+
+    a_star_max = max((item["found"] for item in model["aStarCoverage"]), default=0) or 1
+    a_star_chart = "".join(
+        bar_row(
+            f'{item["directionId"]} · {truncate(item["direction"], 32)}',
+            item["found"],
+            a_star_max,
+            color="a_star" if item["found"] else "missing",
+            value_label=str(item["found"]),
+            note="" if item["found"] else "A* не найден",
+        )
+        for item in model["aStarCoverage"]
+    )
+
+    gap_cards = []
+    for item in model["aStarCoverage"]:
+        head = (
+            f'<div class="gap-head"><h4>{esc(item["directionId"])} · {esc(item["direction"])}</h4>'
+        )
+        if item["found"]:
+            venues = ", ".join(item["venues"]) or "площадка не указана"
+            gap_cards.append(
+                '<article class="gap found">'
+                + head
+                + f'<span class="badge high">A* найден: {item["found"]}</span></div>'
+                + f'<p><b>Площадки:</b> {esc(venues)}</p>'
+                + (f'<p><b>Целевые A*:</b> {esc(item["target"])}</p>' if item["target"] else "")
+                + (f'<p>{esc(item["note"])}</p>' if item["note"] else "")
+                + "</article>"
+            )
+        else:
+            nearest = "".join(
+                f'<li><b>{esc(venue.get("venue"))}</b> '
+                f'<span class="badge quiet">A*</span> — {esc(venue.get("note"))}</li>'
+                for venue in item["nearest"]
+            ) or "<li>Ближайшие площадки не указаны.</li>"
+            gap_cards.append(
+                '<article class="gap missing">'
+                + head
+                + '<span class="badge low">A* не найден</span></div>'
+                + f'<p>{esc(item["note"])}</p>'
+                + '<div class="gap-nearest"><b>Ближайшие A*-площадки</b>'
+                + f'<ul class="clean">{nearest}</ul></div></article>'
+            )
+
+    missing_directions = [
+        item["directionId"] for item in model["aStarCoverage"] if not item["found"]
+    ]
+    if missing_directions:
+        missing_callout = (
+            '<div class="callout warn"><b>A* не найден по части направлений</b>'
+            f'<p>За период {esc(period.get("from"))} — {esc(period.get("to"))} в выборке нет '
+            f'A*-публикаций по направлениям <b>{esc(", ".join(missing_directions))}</b>. '
+            "Это ограничение выборки, а не доказательство отсутствия работ: ниже перечислены "
+            "ближайшие A*-площадки, на которые стоит ориентировать следующую итерацию поиска.</p></div>"
+        )
+    else:
+        missing_callout = ""
+
     method_html = f"""
-    <div class="method-grid">
-      <div>
-        <h3 class="subhead">Поиск</h3>
-        <table class="queries"><thead><tr><th>Направление</th><th>Запрос</th><th>Источник</th></tr></thead><tbody>{query_rows or '<tr><td colspan="3">Запросы не сохранены</td></tr>'}</tbody></table>
-        <p><b>Период:</b> {esc(period.get('from'))} — {esc(period.get('to'))}. <b>Сформировано:</b> {esc(model['generatedAt'])}.</p>
-        <p><b>Ranking:</b> {esc(candidates.get('ranking', {}).get('note') or '—')}</p>
+    <p class="method-lede">Поиск шёл по сохранённым запросам профиля: OpenAlex — статьи, DataCite — датасеты.
+    Ниже — ключевые слова, объём выдачи по источникам, фильтрация и покрытие A* по направлениям.
+    Все диаграммы построены по <code>candidates.json</code> и <code>analysis.json</code>; внешних библиотек нет.</p>
+    <h3 class="subhead">Ключевые слова и объём поиска</h3>
+    <p class="hint">Длина полосы — число отобранных работ относительно самого крупного направления; чипы — слова запроса.</p>
+    <div class="kw-map">{''.join(keyword_rows) or '<p class="empty">Запросы не сохранены.</p>'}</div>
+    <div class="charts">
+      <div class="chart">
+        <h3>Записи по источникам</h3>
+        <p class="hint">Сколько вернул каждый источник и сколько осталось после отбора.</p>
+        {source_chart}
       </div>
-      <div>
-        <h3 class="subhead">Качество данных</h3>
-        <ul class="clean">
-          <li><code>measured</code> — метаданные OpenAlex/DataCite: дата, DOI, площадка, авторы.</li>
-          <li><code>derived</code> — SJR-квартиль и ICORE A* после сопоставления площадки.</li>
-          <li><code>expert</code> — синтез и критерии, с DOI-доказательствами.</li>
-          <li><code>missing</code> — нет ранга или цитаты; не подставляется правдоподобное значение.</li>
-        </ul>
-        <p><b>Ограничения:</b> аннотации и метаданные, не full text; OpenAlex/DataCite могут быть неполными; квартиль зависит от категории и года.</p>
+      <div class="chart">
+        <h3>Публикации по категориям</h3>
+        <p class="hint">Доля от {counts["papers"]} отобранных работ.</p>
+        {category_chart}
+        <div class="legend"><span><i class="q1"></i>Q1</span><span><i class="a_star"></i>A*</span><span><i class="q2"></i>Q2</span></div>
       </div>
+    </div>
+    <div class="charts">
+      <div class="chart">
+        <h3>Отобрано по направлениям</h3>
+        <p class="hint">Работа может входить в несколько направлений.</p>
+        {direction_chart}
+        <div class="legend"><span><i class="q1"></i>Q1</span><span><i class="a_star"></i>A*</span><span><i class="q2"></i>Q2</span></div>
+      </div>
+      <div class="chart">
+        <h3>Топ площадок</h3>
+        <p class="hint">Топ-8 по числу отобранных работ; полный список — в таблицах Q1/A*/Q2.</p>
+        {venue_chart}
+      </div>
+    </div>
+    <h3 class="subhead">Покрытие A* по направлениям</h3>
+    {missing_callout}
+    <div class="chart chart-wide">
+      <h3>A* по направлениям</h3>
+      <p class="hint">Ноль означает, что в выборке за период нет A*-публикации по направлению.</p>
+      {a_star_chart}
+    </div>
+    <div class="gaps">{''.join(gap_cards)}</div>
+    <div class="method-notes">
+      <p><b>Период:</b> {esc(period.get('from'))} — {esc(period.get('to'))}. <b>Сформировано:</b> {esc(model['generatedAt'])}.</p>
+      <p><b>Ranking:</b> {esc(candidates.get('ranking', {}).get('note') or '—')}</p>
+      <p><b>Качество данных:</b> <code>measured</code> — метаданные OpenAlex/DataCite; <code>derived</code> — SJR-квартиль и ICORE A*; <code>expert</code> — синтез и критерии; <code>missing</code> — нет ранга или цитаты, значение не подставляется.</p>
+      <p><b>Ограничения:</b> аннотации и метаданные, не full text; OpenAlex/DataCite могут быть неполными; квартиль зависит от категории и года.</p>
     </div>
     """
 

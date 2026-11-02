@@ -35,6 +35,12 @@
         "direction": "Scientific machine learning",
         "query": "scientific machine learning",
         "notes": "нейрооператоры и физически-информированные модели"
+      },
+      {
+        "id": "D4",
+        "direction": "Нейроморфные вычисления",
+        "query": "neuromorphic computing spiking neural networks",
+        "notes": "spiking networks и event-based vision"
       }
     ],
     "preferences": {
@@ -73,6 +79,11 @@
       "source": "OpenAlex"
     },
     {
+      "direction_id": "D4",
+      "query": "neuromorphic computing spiking neural networks",
+      "source": "OpenAlex"
+    },
+    {
       "direction_id": "D1",
       "query": "graph neural networks",
       "source": "DataCite"
@@ -85,6 +96,11 @@
     {
       "direction_id": "D3",
       "query": "scientific machine learning",
+      "source": "DataCite"
+    },
+    {
+      "direction_id": "D4",
+      "query": "neuromorphic computing spiking neural networks",
       "source": "DataCite"
     }
   ],

@@ -22,6 +22,7 @@
 | D1 | Графовые нейронные сети | graph neural networks | архитектуры, обучение, приложения |
 | D2 | Сегментация медицинских изображений | medical image segmentation | КТ, МРТ, микроскопия |
 | D3 | Scientific machine learning | scientific machine learning | нейрооператоры и физически-информированные модели |
+| D4 | Нейроморфные вычисления | neuromorphic computing spiking neural networks | spiking networks и event-based vision |
 
 ## Preferences
 
