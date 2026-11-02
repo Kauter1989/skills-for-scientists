@@ -17,6 +17,7 @@
     --dev: #2f6f6a;
     --science: #5b4b9a;
     --report: #a8622a;
+    --integrations: #2f5f9a;
     --harness: #59636e;
     --green: #1f7a4d;
     --amber: #a96500;
@@ -182,6 +183,7 @@
   .badge-mini.dev { background: #e6efee; color: var(--dev); }
   .badge-mini.science { background: #efebf9; color: var(--science); }
   .badge-mini.report { background: #fbf0dc; color: var(--report); }
+  .badge-mini.integrations { background: #e7eef8; color: var(--integrations); }
   .badge-mini.harness { background: #eef0f3; color: var(--harness); }
   .badge-mini.meta { background: #e6efee; color: var(--accent); border: 1px solid #b8d0cd; }
   .badge-mini.meta-candidate { background: #fff8ea; color: var(--amber); border: 1px dashed #ead3a8; }
@@ -203,6 +205,7 @@
   .card[data-domain="dev"] { border-left-color: var(--dev); }
   .card[data-domain="science"] { border-left-color: var(--science); }
   .card[data-domain="report"] { border-left-color: var(--report); }
+  .card[data-domain="integrations"] { border-left-color: var(--integrations); }
   .card[data-domain="harness"] { border-left-color: var(--harness); }
   .card-top { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
   .tag { font-size: 8.5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; padding: 2px 5px; border-radius: 3px; }
@@ -315,7 +318,7 @@
       <div class="hstat"><b id="stat-meta-existing" style="color:var(--cat-meta)">3</b><span>мета в репозитории</span></div>
       <div class="hstat"><b id="stat-meta-proposed" style="color:var(--cat-proposed)">11</b><span>мета proposed</span></div>
       <div class="hstat"><b id="stat-auxiliary" style="color:var(--cat-aux)">28</b><span>вспомогательные</span></div>
-      <div class="hstat"><b id="stat-total">42</b><span>всего навыков</span></div>
+      <div class="hstat"><b id="stat-total">43</b><span>всего навыков</span></div>
       <div class="hstat"><b>9</b><span>блоков процесса</span></div>
     </div>
     <div class="legend">
@@ -336,6 +339,7 @@
       <button class="chip-btn" data-domain="all" aria-pressed="true">Все домены</button>
       <button class="chip-btn" data-domain="dev" aria-pressed="false"><i class="c-dot" style="background:#2f6f6a"></i>Разработка</button>
       <button class="chip-btn" data-domain="science" aria-pressed="false"><i class="c-dot" style="background:#5b4b9a"></i>Наука</button>
+      <button class="chip-btn" data-domain="integrations" aria-pressed="false"><i class="c-dot" style="background:#2f5f9a"></i>Интеграции</button>
       <button class="chip-btn" data-domain="report" aria-pressed="false"><i class="c-dot" style="background:#a8622a"></i>Отчёты</button>
       <button class="chip-btn" data-domain="harness" aria-pressed="false"><i class="c-dot" style="background:#59636e"></i>Харнесс</button>
     </div>
@@ -496,6 +500,13 @@
 │           ├── metrics-example.json
 │           ├── telemetry-example.json
 │           └── example-report.html <span class="new">← демо</span>
+├── integrations/               <span class="new">← интеграции с внешними средами и API</span>
+│   └── pachca-report/          <span class="new">← статистика чатов Пачки в HTML</span>
+│       ├── SKILL.md
+│       ├── examples/           <span class="c">← example-report.html</span>
+│       ├── references/
+│       ├── scripts/            <span class="c">← check_report.py, validate_analysis.py</span>
+│       └── templates/
 ├── reports/                    <span class="c">← отчётность, без доменного префикса</span>
 │   └── pptx-report/            <span class="c">← есть: презентации и отчёты PPTX</span>
 │       ├── SKILL.md
@@ -504,7 +515,8 @@
 │       ├── scripts/
 │       └── templates/
 ├── opencode-plugins/           <span class="c">← плагины и setup OpenCode</span>
-│   └── md-viewer/
+│   ├── md-viewer/
+│   └── pachca/                 <span class="new">← MCP, сбор, HTML, задачи</span>
 ├── sci/                        <span class="c">← наука, префикс sci-; пока пусто</span>
 └── harness/                    <span class="c">← харнесс, префикс harness-</span>
     ├── harness-skill-template/
@@ -522,7 +534,7 @@
           <div class="note-card">
             <h4>Установка</h4>
             <ul>
-              <li>домен: скопировать навык из <code>dev/</code>, <code>sci/</code> или <code>harness/</code></li>
+              <li>домен: скопировать навык из <code>dev/</code>, <code>sci/</code>, <code>harness/</code> или <code>integrations/</code></li>
               <li>отчёты: скопировать из <code>reports/</code></li>
               <li>личная: <code>~/.config/opencode/skill/&lt;name&gt;/</code></li>
               <li>проектная: <code>.opencode/skill/&lt;name&gt;/</code></li>
@@ -531,8 +543,8 @@
           <div class="note-card">
             <h4>Плагины</h4>
             <p><a href="../opencode-plugins/README.md">opencode-plugins/</a> — Markdown-панель
-            OpenCode: исходники, dist и инструкция по установке. Это setup, а не домен
-            навыков; секреты в папку не входят.</p>
+            и <code>opencode-pachca</code>: исходники, тесты и инструкции. Это setup, а не
+            домен навыков; секреты в папку не входят.</p>
           </div>
           <div class="note-card">
             <h4>Анатомия скилла</h4>
@@ -557,7 +569,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-11-01 · 9 реализовано · 33 предложено</span>
+      <span>снимок 2026-11-02 · 10 реализовано · 33 предложено</span>
     </div>
   </footer>
 </main>
@@ -594,6 +606,14 @@
       io: "git range + telemetry → автономный HTML",
       links: "../dev/dev-pr-report-html/SKILL.md",
       metrics: ["Token Budget", "Architecture Drift", "Cognitive Load", "Iteration Rate", "Hallucination Risk", "Context Utilization"]
+    },
+    {
+      id: "pachca-report", name: "/pachca-report", domain: "integrations", status: "existing", priority: "P1",
+      blocks: ["report", "audit"],
+      sum: "Чаты Пачки в интерактивном автономном HTML: прогресс и блокеры проектов с цитатами, активность участников и молчащие > 2 дней, MD-исключения и задачи по каналам с preflight прав.",
+      io: "Pachca MCP/REST → snapshot + analysis → HTML + .pachca/*.md",
+      links: "../integrations/pachca-report/SKILL.md",
+      metrics: ["Messages", "Inactive > 2d", "Blocked projects", "Evidence coverage"]
     },
 
     // --- разработка ---

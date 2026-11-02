@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Skill review — pachca-report</title>
+<style>
+  :root {
+    --paper: #f6f5f2; --card: #fff; --ink: #14181f; --muted: #5f6875;
+    --line: #dfe2e7; --line-strong: #c4cad2; --accent: #1f5f5b;
+    --green: #1f7a4d; --amber: #a96500; --red: #b42318; --violet: #6d5aa8;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .topbar { position: sticky; top: 0; z-index: 20; background: rgba(246,245,242,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar .wrap { display: flex; align-items: center; gap: 14px; min-height: 50px; flex-wrap: wrap; }
+  .brand { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  nav { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  nav a { font-size: 11.5px; color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  header { padding: 40px 0 10px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 10px; }
+  h1 code { font-size: inherit; letter-spacing: -.02em; }
+  .sub { color: var(--muted); font-size: 17px; margin: 0 0 18px; max-width: 850px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 10px; font-size: 11.5px; color: var(--muted); }
+  .chip b { color: var(--ink); }
+  .status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 4px 8px; border-radius: 6px; }
+  .status.approved { background: #e7f4ec; color: var(--green); }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 16px; overflow: hidden; scroll-margin-top: 64px; }
+  .sec-head { padding: 16px 22px 13px; border-bottom: 1px solid var(--line); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .sec-head h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+  .sec-head .n { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: 12px; }
+  .body { padding: 18px 22px 22px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 20px; }
+  li { margin-bottom: 5px; }
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; background: #fcfdfd; margin-bottom: 16px; }
+  .callout b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 5px; }
+  .callout p { margin: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 14px; }
+  caption { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding-bottom: 6px; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 1px solid var(--line-strong); padding: 7px 8px; }
+  td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, code { font-family: var(--mono); font-size: 11.5px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; background: #fff; }
+  .box h3 { margin: 0 0 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .box ul { margin: 0; padding-left: 17px; }
+  .box li { font-size: 12.5px; }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 14px; }
+  .step { border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; font-size: 12px; background: #fff; }
+  .step.hot { border-color: #b8d0cd; background: #e6efee; }
+  .arrow { color: var(--line-strong); }
+  .metric { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .metric span { border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; font-size: 11.5px; color: var(--muted); }
+  .metric b { color: var(--ink); }
+  .checklist { list-style: none; padding: 0; margin: 0; }
+  .checklist li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .checklist li:last-child { border-bottom: 0; }
+  .checklist li::before { content: "☑"; margin-right: 8px; color: var(--green); }
+  .decision { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .decision div { border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+  .decision div.approved { border-color: #bfe0cb; background: #e7f4ec; color: var(--green); font-weight: 700; }
+  footer { padding: 8px 0 40px; color: var(--muted); font-size: 11.5px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  @media (max-width: 760px) {
+    .wrap { padding: 0 14px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .decision { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10pt; }
+    .topbar { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    section { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap">
+  <span class="brand">Skill review</span>
+  <nav aria-label="Разделы ревью">
+    <a href="#problem">Проблема</a><a href="#github">GitHub</a><a href="#science">Наука</a>
+    <a href="#design">Дизайн</a><a href="#metrics">Метрики</a><a href="#sources">Источники</a><a href="#decision">Решение</a>
+  </nav>
+</div></div>
+<main class="wrap">
+<header>
+  <div class="kicker">План навыка · утверждено</div>
+  <h1><code>pachca-report</code></h1>
+  <p class="sub">Статистика всех чатов Пачки в одном автономном HTML: прогресс и блокеры проектов, активность участников с выделением молчащих более двух дней, хранимые исключения и задачи по каналам с проверкой прав API до сохранения.</p>
+  <div class="chips">
+    <span class="chip">Домен: <b>integrations</b></span>
+    <span class="chip">Приоритет: <b>P1</b></span>
+    <span class="chip">Автор: <b>OpenCode agent</b></span>
+    <span class="chip">Дата: <b>2026-11-02</b></span>
+    <span class="chip">Источники: <b>17</b></span>
+    <span class="status approved">approved</span>
+  </div>
+  <div class="callout">
+    <b>Запрос решения</b>
+    <p>Утвердить навык <code>pachca-report</code> и плагин <code>opencode-pachca</code>: подключение MCP-сервера Пачки, сбор нового слоя сообщений, интерактивный HTML-отчёт, MD-исключения, MD-реестр задач и preflight прав по скоупам, роли, тарифу и доступу к чату.</p>
+  </div>
+</header>
+
+<section id="problem"><div class="sec-head"><span class="n">01</span><h2>Проблема и границы</h2></div><div class="body">
+  <p>Пользователь состоит во многих чатах Пачки. Чтобы понять, что сдвинулось по проектам, где блокеры и кто перестал писать, приходится вручную открывать каждый чат и держать в голове историю. Официальный MCP даёт доступ к методам API, но не собирает из них отчёт, не хранит исключения и не проверяет права до сохранения задачи.</p>
+  <div class="grid2">
+    <div class="box"><h3>Входит в задачу</h3><ul>
+      <li>все чаты пользователя, доступные токену;</li>
+      <li>новые сообщения за окно и цитаты-доказательства;</li>
+      <li>прогресс, статус и блокеры по проектам;</li>
+      <li>активность участников и молчание более 2 дней;</li>
+      <li><code>.pachca/exclusions.md</code> для исключений из диаграммы;</li>
+      <li><code>.pachca/tasks.md</code> для задач по каналу;</li>
+      <li>preflight прав и повторная проверка перед запуском;</li>
+      <li>один HTML-файл без сети и CDN.</li>
+    </ul></div>
+    <div class="box"><h3>Не входит</h3><ul>
+      <li>оценка сотрудников и рейтинги;</li>
+      <li>автоматическая отправка сообщений без задачи;</li>
+      <li>обход скоупов, ролей и закрытых чатов;</li>
+      <li>замена аналитики Пачки и экспорта;</li>
+      <li>гарантия истинности смыслового анализа блокеров;</li>
+      <li>хранение токена в отчёте или репозитории.</li>
+    </ul></div>
+  </div>
+</div></section>
+
+<section id="github"><div class="sec-head"><span class="n">02</span><h2>GitHub-аналоги</h2><p>минимум три репозитория</p></div><div class="body">
+  <table><caption>Что уже существует и что из этого следует</caption>
+    <thead><tr><th>Репозиторий</th><th>Лицензия</th><th>Коммит</th><th>Подход</th><th>Берём</th><th>Отвергаем</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">pachca/openapi</td><td>MIT</td><td class="mono">2026-11-02</td><td>Официальный OpenAPI, MCP, плагин, скиллы, CLI, SDK</td><td>Контракты, MCP URL, скоупы, роли, пагинация</td><td>Не дублируем весь сервер и каталог методов</td></tr>
+      <tr><td class="mono">r-ms/mcp-pachca</td><td>MIT</td><td class="mono">2026-08-28</td><td>Тонкий MCP над REST</td><td>Одноцелевой адаптер</td><td>Нет отчёта, истории, задач и preflight</td></tr>
+      <tr><td class="mono">shiryavsky/memorandum</td><td>MIT</td><td class="mono">2026-10-19</td><td>Локальный агрегатор нескольких мессенджеров в SQLite + Chroma</td><td>Локальное хранение и мультиисточники</td><td>Векторная БД как обязательная зависимость; нет HTML и задач</td></tr>
+      <tr><td class="mono">AlexeyKobevko/mcp-pachca-readonly</td><td>MIT</td><td class="mono">2026-07-24</td><td>Read-only MCP</td><td>Минимальные права чтения</td><td>Нет аналитики и артефактов</td></tr>
+    </tbody>
+  </table>
+  <p class="mono">Поисковые запросы: pachca mcp; pachca openapi; opencode plugin; slack activity report; chat analytics dashboard.</p>
+  <p>Готового открытого аналога с комбинацией «Пачка + новый слой сообщений + автономный HTML + MD-исключения + реестр задач + preflight прав» не найдено. Продуктовую логику пишем сами, контракты берём из официального репозитория.</p>
+</div></section>
+
+<section id="science"><div class="sec-head"><span class="n">03</span><h2>Научные источники и стандарты</h2><p>минимум два источника</p></div><div class="body">
+  <table><caption>Что подтверждено и какие есть ограничения</caption>
+    <thead><tr><th>Источник</th><th>Тип</th><th>Вклад</th><th>Ограничение</th><th>Вывод для навыка</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">Wang et al. 2022, DOI 10.1145/3512941</td><td>paper</td><td>4 300 каналов, 54 команды; 21 метапризнак без содержания; связь стиля чата с результатом</td><td>Одна организация, корреляция</td><td>Считать сообщения, активное окно и нормировку; не выдавать за продуктивность</td></tr>
+      <tr><td class="mono">Kuutila et al. 2020, DOI 10.1145/3387940.3392224</td><td>paper</td><td>30 704 сообщения, 200 дней; число сообщений — лучший предиктор коммитов, R²=0.33</td><td>Одна команда, прокси-метрики</td><td>Число сообщений допустимо как сигнал активности с оговоркой</td></tr>
+      <tr><td class="mono">“Just slack it” 2020, DOI 10.1177/1461444820975723</td><td>paper</td><td>18-месячная этнография; активность связана с вехами</td><td>Одна команда</td><td>Привязка к проектам и окну времени</td></tr>
+      <tr><td class="mono">“Archetypes of delay” 2020, DOI 10.1016/j.infsof.2020.106435</td><td>paper</td><td>Задержки связаны с медленными ответами и недостаточной коммуникацией</td><td>Кейс IBM Jazz</td><td>Блокеры — с цитатами и ID, а не по ключевым словам</td></tr>
+      <tr><td class="mono">Dashboard Design Patterns 2022, DOI 10.1109/TVCG.2022.3209448</td><td>paper</td><td>Паттерны дашбордов</td><td>Обзор</td><td>Компактные KPI, фильтры, последовательные цвета</td></tr>
+      <tr><td class="mono">MCP 2025-11-25 Authorization</td><td>standard</td><td>OAuth 2.1, PKCE, audience, least privilege</td><td>Не заменяет проверку downstream API</td><td>Токен не в HTML; preflight по scopes и ролям</td></tr>
+    </tbody>
+  </table>
+  <div class="box"><h3>Waiver научной части</h3><p>Не требуется: есть рецензируемые работы и официальные спецификации.</p></div>
+</div></section>
+
+<section id="design"><div class="sec-head"><span class="n">04</span><h2>Синтез и предлагаемый дизайн</h2></div><div class="body">
+  <p>Отчёт разделяет измерение и интерпретацию. Плагин измеряет: собирает сообщения, считает активность, проверяет права, рендерит HTML. Модель интерпретирует: определяет прогресс, статус и блокеры по новым сообщениям, но обязана приложить ID сообщений-доказательств. Неподтверждённый вывод получает низкое качество и предупреждение, а не выдаётся за факт.</p>
+  <div class="flow"><span class="step hot">MCP / REST</span><span class="arrow">→</span><span class="step">snapshot.json</span><span class="arrow">→</span><span class="step">analysis.json + exclusions.md + tasks.md</span><span class="arrow">→</span><span class="step">report.html</span></div>
+  <div class="grid2">
+    <div class="box"><h3>Вход</h3><p>Токен Пачки в <code>PACHCA_TOKEN</code> или OAuth-подключение MCP; окно дат; каталог состояния <code>.pachca/</code>; при необходимости — готовый snapshot и analysis.</p></div>
+    <div class="box"><h3>Выход</h3><p><code>.pachca/reports/pachca-report-YYYY-MM-DD.html</code>, <code>snapshots/*.json</code>, <code>exclusions.md</code>, <code>projects.md</code>, <code>tasks.md</code>, результаты задач.</p></div>
+  </div>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Процедура</h3>
+  <ol>
+    <li><b>Связь.</b> Плагин добавляет MCP-сервер <code>pachca</code> (OAuth или Bearer из env). <code>pachca_status</code> показывает состояние, скоупы и доступные чаты.</li>
+    <li><b>Сбор.</b> <code>pachca.collect</code> читает все чаты пользователя, сообщения с курсорной пагинацией, треды, участников и пользователей; пишет snapshot и обновляет состояние.</li>
+    <li><b>Анализ.</b> Агент по новым сообщениям заполняет <code>analysis.json</code>: проект, статус, прогресс, блокеры с ID-доказательствами, следующие шаги, уверенность.</li>
+    <li><b>Активность.</b> Плагин считает сообщения по участникам, последнее сообщение и дни молчания; исключения из <code>exclusions.md</code> убираются из диаграммы, но остаются в отдельной панели.</li>
+    <li><b>Рендер.</b> <code>pachca.report</code> валидирует цитаты и пишет автономный HTML с фильтрами, KPI, карточками проектов и диаграммой.</li>
+    <li><b>Задачи.</b> <code>pachca.tasks add</code> проверяет канал, скоупы, роль, тариф и доступ; при провале задача не сохраняется. <code>check</code> перепроверяет, <code>run</code> выполняет детерминированные задачи или готовит контекст для модели.</li>
+  </ol>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Артефакты</h3>
+  <ul>
+    <li><code>SKILL.md</code> — триггеры, процедура, границы, QA.</li>
+    <li><code>references/pachca-api.md</code> — методы, скоупы, роли, лимиты.</li>
+    <li><code>references/report-schema.md</code> — snapshot/analysis, формулы, качество данных.</li>
+    <li><code>references/tasks.md</code> — действия, preflight, запуск.</li>
+    <li><code>scripts/check_report.py</code> и <code>scripts/validate_analysis.py</code> — независимые проверки.</li>
+    <li><code>templates/</code> и <code>examples/example-report.html</code> — форма и эталон.</li>
+    <li>Плагин <code>opencode-plugins/pachca/</code> — MCP-регистрация, инструменты, тесты.</li>
+  </ul>
+</div></section>
+
+<section id="alternatives"><div class="sec-head"><span class="n">05</span><h2>Альтернативы и цена</h2></div><div class="body">
+  <table><thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Почему не выбран</th></tr></thead><tbody>
+    <tr><td>Только skill + MCP без плагина</td><td>Нет кода, быстро</td><td>Нет детерминированного HTML, MD-реестра и preflight</td><td>Не выдерживает повторяемость и проверку прав</td></tr>
+    <tr><td>Плагин только на REST</td><td>Полный контроль и тесты</td><td>Дублирует MCP, требует токен всегда</td><td>Пользователь просил подключение через MCP</td></tr>
+    <tr><td>MCP + локальный плагин</td><td>OAuth или токен, детерминированные артефакты, preflight</td><td>Два компонента и состояние в <code>.pachca/</code></td><td>Выбран: разделяет доступ и логику</td></tr>
+    <tr><td>LLM генерирует весь HTML</td><td>Гибко</td><td>Нестабильно, не проверяемо, риск XSS</td><td>HTML собирает код, модель даёт только анализ</td></tr>
+  </tbody></table>
+</div></section>
+
+<section id="metrics"><div class="sec-head"><span class="n">06</span><h2>Метрики и план проверки</h2></div><div class="body">
+  <div class="metric">
+    <span><b>Покрытие чатов</b> — прочитано / доступно</span>
+    <span><b>Цитаты</b> — доля проектов с evidence ID</span>
+    <span><b>Молчащие</b> — порог 2 дня, настраивается</span>
+    <span><b>Preflight</b> — 100% задач до сохранения</span>
+  </div>
+  <ol>
+    <li>Прогнать <code>node test/run-tests.mjs</code>: snapshot, активность, исключения, задачи, HTML.</li>
+    <li>Сгенерировать <code>examples/example-report.html</code> и проверить <code>python scripts/check_report.py</code>.</li>
+    <li>Проверить <code>python scripts/validate_analysis.py</code> на примере и на повреждённом analysis.</li>
+    <li>Проверить, что в HTML нет внешних <code>script</code>, <code>link</code>, <code>@import</code>, <code>fetch</code> и CDN.</li>
+    <li>Проверить, что задача без скоупа/доступа не сохраняется и объясняет причину.</li>
+    <li>Проверить, что исключённый участник не попадает в диаграмму, но виден в панели исключений.</li>
+    <li>Проверить, что блокер без цитаты помечается как неподтверждённый.</li>
+  </ol>
+</div></section>
+
+<section id="risks"><div class="sec-head"><span class="n">07</span><h2>Риски и открытые вопросы</h2></div><div class="body">
+  <table><thead><tr><th>Риск</th><th>Вероятность</th><th>Влияние</th><th>Мера</th></tr></thead><tbody>
+    <tr><td>Модель придумает прогресс или блокер</td><td>средняя</td><td>высокое</td><td>Обязательные evidence ID; неподтверждённое — с пометкой; статус unknown при отсутствии данных</td></tr>
+    <tr><td>Активность примут за оценку человека</td><td>высокая</td><td>среднее</td><td>Дисклеймер, отсутствие рейтингов, формулировки про сообщения, а не про людей</td></tr>
+    <tr><td>Закрытый чат не прочитан, отчёт неполный</td><td>средняя</td><td>среднее</td><td>Coverage, список ошибок по чатам, качество данных</td></tr>
+    <tr><td>Права изменились после сохранения задачи</td><td>средняя</td><td>высокое</td><td><code>pachca.tasks check</code> перед каждым запуском; blocked при отзыве прав</td></tr>
+    <tr><td>Prompt injection из сообщений</td><td>средняя</td><td>высокое</td><td>Текст сообщений — данные; HTML экранируется; плагин не выполняет инструкции из сообщений</td></tr>
+    <tr><td>Токен утечёт в отчёт</td><td>низкая</td><td>критическое</td><td>Только env/заголовок; в HTML и MD токен не пишется</td></tr>
+    <tr><td>Канал-подписчик не может писать</td><td>средняя</td><td>среднее</td><td>Для отправки проверять owner/admin/editor; иначе blocked</td></tr>
+    <tr><td>Треды удваивают счётчики</td><td>средняя</td><td>низкое</td><td>Уникальные ID сообщений, отдельный признак треда</td></tr>
+  </tbody></table>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px">Вопросы к ревьюеру</h3>
+  <ol>
+    <li>Окно по умолчанию 14 дней и порог 2 дня — приемлемые продуктовые значения?</li>
+    <li>Нужно ли включать личные переписки в отчёт по умолчанию?</li>
+    <li>Должен ли отчёт отправляться в Пачку или только сохраняться локально?</li>
+  </ol>
+</div></section>
+
+<section id="sources"><div class="sec-head"><span class="n">08</span><h2>Источники</h2><p>дата обращения обязательна</p></div><div class="body">
+  <ol>
+    <li><span class="mono">https://github.com/pachca/openapi</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://github.com/r-ms/mcp-pachca</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://github.com/shiryavsky/memorandum</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://github.com/AlexeyKobevko/mcp-pachca-readonly</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://doi.org/10.1145/3512941</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://doi.org/10.1145/3387940.3392224</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://doi.org/10.1177/1461444820975723</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://doi.org/10.1016/j.infsof.2020.106435</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://doi.org/10.1109/TVCG.2022.3209448</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://doi.org/10.1109/TVCG.2018.2864903</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://dev.pachca.com/guides/mcp/overview</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://dev.pachca.com/guides/mcp/tools</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://dev.pachca.com/api/authorization</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://dev.pachca.com/guides/permissions</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://opencode.ai/v2/docs/build/plugins</span> — доступно 2026-11-02</li>
+    <li><span class="mono">https://opencode.ai/v2/docs/mcp-servers</span> — доступно 2026-11-02</li>
+  </ol>
+</div></section>
+
+<section id="decision"><div class="sec-head"><span class="n">09</span><h2>Чек-лист и решение</h2><p>без approved реализация не начинается</p></div><div class="body">
+  <ul class="checklist">
+    <li>Изучены минимум 3 GitHub-аналога, лицензии проверены.</li>
+    <li>Изучены минимум 2 научных/официальных источника или утверждён waiver.</li>
+    <li>Каждое утверждение в дизайне имеет источник или явно помечено как решение автора.</li>
+    <li>Границы и не-цели сформулированы.</li>
+    <li>Метрики проверяемы, а не оценочны.</li>
+    <li>План не дублирует существующий навык по триггерам.</li>
+    <li>Артефакты и команды воспроизводимы.</li>
+  </ul>
+  <div class="decision">
+    <div class="approved">approved</div>
+    <div>revise</div>
+    <div>rejected</div>
+    <div>draft</div>
+  </div>
+  <p style="margin-top:12px;color:var(--muted);font-size:12px">Решение: approved. Основание: пользователь запросил разработку навыка и плагина 2026-11-02; рамки зафиксированы в этом файле и research ledger. Комментарий: реализация должна сохранить evidence-first, MD-состояние и preflight прав.</p>
+</div></section>
+
+<footer><div class="row"><span>opencode-skills · skill review</span><span>pachca-report · 2026-11-02</span></div></footer>
+</main>
+</body>
+</html>

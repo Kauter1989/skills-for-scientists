@@ -2,10 +2,16 @@
 
 `opencode.example.json` — минимальный пример глобального
 `~/.config/opencode/opencode.json` с Markdown-панелью.
+`opencode.pachca.example.json` — пример с плагином Pachca и MCP-сервером
+(вход через OAuth).
 
 ## Что входит
 
-- `plugins`: путь к `opencode-md-panel`.
+- `plugins`: путь к `opencode-md-panel` или `pachca`;
+- `mcp.servers.pachca`: адрес MCP; плагин добавляет его сам, если сервера нет.
+
+Для токена не добавляйте его в JSON. Задайте `PACHCA_TOKEN` в окружении:
+плагин подставит `Bearer {env:PACHCA_TOKEN}` в заголовок MCP.
 
 ## Что не входит
 

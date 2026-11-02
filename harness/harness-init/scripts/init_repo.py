@@ -46,7 +46,7 @@ def survey(out: Path) -> int:
     print("Опрос для bootstrap. Enter — значение по умолчанию.\n")
     answers = {
         "project": ask("Имя проекта", Path.cwd().name),
-        "domain": ask("Домен (dev/science/reports/mixed)", "dev"),
+        "domain": ask("Домен (dev/science/integrations/reports/mixed)", "dev"),
         "stack": ask("Стек", "python"),
         "default_branch": ask("Основная ветка", DEFAULT_BRANCH),
         "workflow": ask("Workflow (minimal/extended)", "minimal"),

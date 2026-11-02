@@ -21,15 +21,19 @@
 ## 2. Структура и префиксы
 
 ```
-dev/       → dev-*       разработка
-sci/       → sci-*       наука
-harness/   → harness-*   общее для харнесса
-reports/   → без префикса отчётность
-opencode-plugins/        плагины и setup OpenCode
+dev/           → dev-*           разработка
+sci/           → sci-*           наука
+harness/       → harness-*       общее для харнесса
+integrations/  → integrations-*  интеграции с внешними средами и API
+reports/       → без префикса    отчётность
+opencode-plugins/                плагины и setup OpenCode
 ```
 
 - Папка задаёт домен, имя навыка начинается с префикса домена.
 - Внутри домена каталоги плоские: `dev/dev-ship/`, `sci/sci-stats-report/`.
+- Интеграционные навыки лежат в `integrations/`; новые получают префикс
+  `integrations-`. `integrations/pachca-report` сохраняет имя `pachca-report`
+  как историческое исключение.
 - Отчётные навыки лежат в `reports/` и не получают доменный префикс.
 - `opencode-plugins/` хранит плагины и инструкции по установке; это не
   домен навыков. Секреты, токены, `auth.json` и локальный `service.json`
@@ -43,7 +47,8 @@ opencode-plugins/        плагины и setup OpenCode
 1. **harness** — сначала то, что определяет качество остальных навыков.
 2. **dev** — разработка ПО.
 3. **science** — научная работа.
-4. **reports** — поддержка существующего `pptx-report`; новые отчётные
+4. **integrations** — подключение внешних сред и API.
+5. **reports** — поддержка существующего `pptx-report`; новые отчётные
    навыки — после science или по отдельному решению.
 
 Полный план и очередь: `docs/skills-development-plan.html`.
@@ -327,7 +332,7 @@ Backlog (possible):
 
 ```powershell
 # структура и имена
-Get-ChildItem -Directory dev, sci, harness, reports
+Get-ChildItem -Directory dev, sci, harness, integrations, reports
 
 # демонстрационный отчёт
 cd dev/dev-pr-report-html

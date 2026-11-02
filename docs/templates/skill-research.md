@@ -3,7 +3,7 @@
 | Поле | Значение |
 |---|---|
 | Навык | `<skill-name>` |
-| Домен | `dev` / `sci` / `harness` / `reports` |
+| Домен | `dev` / `sci` / `harness` / `integrations` / `reports` |
 | Приоритет | `P0` / `P1` / `P2` |
 | Автор | `<имя>` |
 | Дата начала | `YYYY-MM-DD` |

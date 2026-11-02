@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "source": "rest",
+  "collectedAt": "2026-11-02T12:00:00.000Z",
+  "window": {
+    "from": "2026-10-19T12:00:00.000Z",
+    "to": "2026-11-02T12:00:00.000Z"
+  },
+  "account": {
+    "id": "101",
+    "name": "Анна Петрова",
+    "nickname": "anna",
+    "role": "admin",
+    "tokenType": "personal",
+    "tokenName": "Пример",
+    "scopes": [
+      "profile:read",
+      "chats:read",
+      "chat_members:read",
+      "messages:read",
+      "messages:create",
+      "search:messages",
+      "users:read"
+    ],
+    "plan": "unknown"
+  },
+  "users": [
+    {
+      "id": "101",
+      "name": "Анна Петрова",
+      "nickname": "anna",
+      "role": "admin",
+      "bot": false,
+      "suspended": false,
+      "lastActivityAt": "2026-11-02T10:00:00.000Z",
+      "timeZone": "Europe/Moscow"
+    },
+    {
+      "id": "102",
+      "name": "Борис Смирнов",
+      "nickname": "boris",
+      "role": "user",
+      "bot": false,
+      "suspended": false,
+      "lastActivityAt": "2026-11-02T10:06:00.000Z",
+      "timeZone": "Europe/Moscow"
+    },
+    {
+      "id": "103",
+      "name": "Вера Ким",
+      "nickname": "vera",
+      "role": "user",
+      "bot": false,
+      "suspended": false,
+      "lastActivityAt": "2026-10-31T09:01:00.000Z",
+      "timeZone": "Asia/Vladivostok"
+    },
+    {
+      "id": "104",
+      "name": "Глеб Орлов",
+      "nickname": "gleb",
+      "role": "user",
+      "bot": false,
+      "suspended": false,
+      "lastActivityAt": "2026-10-25T10:01:00.000Z",
+      "timeZone": "Europe/Moscow"
+    },
+    {
+      "id": "105",
+      "name": "Дарья Волкова",
+      "nickname": "daria",
+      "role": "user",
+      "bot": false,
+      "suspended": false,
+      "lastActivityAt": null,
+      "timeZone": "Europe/Moscow"
+    },
+    {
+      "id": "900",
+      "name": "Релиз-бот",
+      "nickname": "release_bot",
+      "role": "user",
+      "bot": true,
+      "suspended": false,
+      "lastActivityAt": "2026-11-02T07:00:00.000Z",
+      "timeZone": null
+    }
+  ],
+  "chats": [
+    {
+      "id": "1",
+      "name": "Платформа",
+      "channel": false,
+      "personal": false,
+      "public": false,
+      "archived": false,
+      "ownerId": "101",
+      "memberIds": [
+        "101",
+        "102",
+        "103",
+        "104",
+        "105",
+        "900"
+      ],
+      "lastMessageAt": "2026-11-02T09:00:00.000Z",
+      "coverage": {
+        "fetched": 5,
+        "threadsFetched": 1,
+        "truncated": false,
+        "skipped": false,
+        "ok": true,
+        "errors": []
+      },
+      "messages": [
+        {
+          "id": "m1",
+          "chatId": "1",
+          "userId": "101",
+          "content": "API v2 готов на 80%, осталась интеграция с биллингом.",
+          "createdAt": "2026-11-02T09:00:00.000Z",
+          "url": "https://app.pachca.com/chats/1?message=m1",
+          "isThread": false
+        },
+        {
+          "id": "m2",
+          "chatId": "1",
+          "userId": "102",
+          "content": "Проверил staging: все проверки зелёные, можно катить в ночь.",
+          "createdAt": "2026-11-01T12:00:00.000Z",
+          "url": "https://app.pachca.com/chats/1?message=m2",
+          "isThread": false
+        },
+        {
+          "id": "m3",
+          "chatId": "1",
+          "userId": "103",
+          "content": "Жду доступ к прод-базе, без него не могу закрыть миграцию.",
+          "createdAt": "2026-10-29T10:00:00.000Z",
+          "url": "https://app.pachca.com/chats/1?message=m3",
+          "isThread": false
+        },
+        {
+          "id": "m4",
+          "chatId": "1",
+          "userId": "104",
+          "content": "Старый апдейт: документация обновлена.",
+          "createdAt": "2026-10-25T10:00:00.000Z",
+          "url": "https://app.pachca.com/chats/1?message=m4",
+          "isThread": false
+        },
+        {
+          "id": "m5",
+          "chatId": "1",
+          "userId": "900",
+          "content": "Сборка 2.4.0 прошла успешно.",
+          "createdAt": "2026-11-02T07:00:00.000Z",
+          "url": "https://app.pachca.com/chats/1?message=m5",
+          "isThread": false
+        },
+        {
+          "id": "m5t",
+          "chatId": "1",
+          "userId": "102",
+          "content": "В треде: ключ от staging выдали, проверяю доступ.",
+          "createdAt": "2026-11-02T10:20:00.000Z",
+          "url": "https://app.pachca.com/chats/77?message=m5t",
+          "isThread": true,
+          "threadChatId": "77"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Мобильное приложение",
+      "channel": true,
+      "personal": false,
+      "public": false,
+      "archived": false,
+      "ownerId": "102",
+      "memberIds": [
+        "101",
+        "102",
+        "103",
+        "104",
+        "105"
+      ],
+      "lastMessageAt": "2026-11-02T10:05:00.000Z",
+      "coverage": {
+        "fetched": 3,
+        "threadsFetched": 0,
+        "truncated": false,
+        "skipped": false,
+        "ok": true,
+        "errors": []
+      },
+      "messages": [
+        {
+          "id": "m6",
+          "chatId": "2",
+          "userId": "101",
+          "content": "Релиз 3.2 перенесён: нет доступа к staging.",
+          "createdAt": "2026-11-02T10:00:00.000Z",
+          "url": "https://app.pachca.com/chats/2?message=m6",
+          "isThread": false
+        },
+        {
+          "id": "m7",
+          "chatId": "2",
+          "userId": "102",
+          "content": "Блокер: ждём ключ от инфраструктуры, без него тестирование стоит.",
+          "createdAt": "2026-11-02T10:05:00.000Z",
+          "url": "https://app.pachca.com/chats/2?message=m7",
+          "isThread": false
+        },
+        {
+          "id": "m8",
+          "chatId": "2",
+          "userId": "103",
+          "content": "Макеты готовы, ждём API.",
+          "createdAt": "2026-10-31T09:00:00.000Z",
+          "url": "https://app.pachca.com/chats/2?message=m8",
+          "isThread": false
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Дизайн-система",
+      "channel": false,
+      "personal": false,
+      "public": false,
+      "archived": false,
+      "ownerId": "101",
+      "memberIds": [
+        "101",
+        "103",
+        "105"
+      ],
+      "lastMessageAt": "2026-11-02T08:00:00.000Z",
+      "coverage": {
+        "fetched": 1,
+        "threadsFetched": 0,
+        "truncated": false,
+        "skipped": false,
+        "ok": true,
+        "errors": []
+      },
+      "messages": [
+        {
+          "id": "m9",
+          "chatId": "3",
+          "userId": "101",
+          "content": "Компоненты кнопок готовы, осталось согласовать состояния.",
+          "createdAt": "2026-11-02T08:00:00.000Z",
+          "url": "https://app.pachca.com/chats/3?message=m9",
+          "isThread": false
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Личный чат",
+      "channel": false,
+      "personal": true,
+      "public": false,
+      "archived": false,
+      "ownerId": "101",
+      "memberIds": [
+        "101",
+        "102"
+      ],
+      "lastMessageAt": "2026-11-02T11:30:00.000Z",
+      "coverage": {
+        "fetched": 1,
+        "threadsFetched": 0,
+        "truncated": false,
+        "skipped": false,
+        "ok": true,
+        "errors": []
+      },
+      "messages": [
+        {
+          "id": "m10",
+          "chatId": "4",
+          "userId": "102",
+          "content": "Скинь, пожалуйста, ссылку на отчёт.",
+          "createdAt": "2026-11-02T11:30:00.000Z",
+          "url": "https://app.pachca.com/chats/4?message=m10",
+          "isThread": false
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Архив запуска",
+      "channel": false,
+      "personal": false,
+      "public": false,
+      "archived": true,
+      "ownerId": "101",
+      "memberIds": [
+        "101",
+        "102"
+      ],
+      "lastMessageAt": "2026-10-21T09:00:00.000Z",
+      "coverage": {
+        "fetched": 1,
+        "threadsFetched": 0,
+        "truncated": false,
+        "skipped": false,
+        "ok": true,
+        "errors": []
+      },
+      "messages": [
+        {
+          "id": "m11",
+          "chatId": "5",
+          "userId": "101",
+          "content": "Запуск завершён, чат можно архивировать.",
+          "createdAt": "2026-10-21T09:00:00.000Z",
+          "url": "https://app.pachca.com/chats/5?message=m11",
+          "isThread": false
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "chatsAvailable": 5,
+    "chatsSelected": 5,
+    "chatsRead": 5,
+    "chatsFailed": 0,
+    "chatsTruncated": 0,
+    "messages": 11,
+    "threads": 1
+  }
+}
