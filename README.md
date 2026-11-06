@@ -27,6 +27,7 @@ Priority order: **harness → dev → science → integrations → reports**.
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Rigorous PPTX presentations and analytical reports: research talks, project reports and management analytics | `deck.pptx`, PNG previews |
 | [`pachca-report`](integrations/pachca-report/SKILL.md) | `integrations/` | Pachca chats to an interactive HTML report: project progress and blockers, participant activity with >2-day silence, MD exclusions, and permission-checked channel tasks | standalone `report.html`, `.pachca/*.md` |
 | [`sci-literature-news`](reports/sci-literature-news/SKILL.md) | `reports/` | Personal scientific literature digest: saved directions and period, Q1/A*/Q2 search, synthesis, dataset table, criteria and standalone HTML | `profile.md`, `candidates.json`, `analysis.json`, `report.html` |
+| [`ai-market-landscape`](reports/ai-market-landscape/SKILL.md) | `reports/` | AI market dynamics for RF and the world: domains, service spectrum, hardware-software bundles, then share gap and what exists in the world but not in RF | `landscape.md`, `companies.json`, `analysis.json`, `report.html` |
 
 ### Meta-skills
 
@@ -69,6 +70,15 @@ DataCite, separates Q1 journals, A* conferences and Q2 journals with explicit
 ranking evidence, synthesizes themes with DOI citations, lists new datasets and
 explains the inclusion criteria. The HTML report is standalone.
 Example: [`reports/sci-literature-news/examples/example-report.html`](reports/sci-literature-news/examples/example-report.html).
+
+`ai-market-landscape` keeps a market profile in `.ai-market-landscape/landscape.md`,
+collects a company snapshot from open sources (OpenRouter catalog, Habr RSS,
+company sites), curates roles, domains, services and hardware-software bundles,
+then computes two independent cohorts — Russia and the world — and the share gap
+between them. Every metric carries a quality level, every company carries a URL,
+and records that only prove activity stay out of the shares until a human
+verifies them.
+Example: [`reports/ai-market-landscape/examples/example-report.html`](reports/ai-market-landscape/examples/example-report.html).
 
 ## Domains and prefixes
 
@@ -113,6 +123,9 @@ Copy-Item -Recurse .\integrations\pachca-report "$env:USERPROFILE\.config\openco
 
 # Windows: scientific literature news
 Copy-Item -Recurse .\reports\sci-literature-news "$env:USERPROFILE\.config\opencode\skill\sci-literature-news"
+
+# Windows: AI market landscape
+Copy-Item -Recurse .\reports\ai-market-landscape "$env:USERPROFILE\.config\opencode\skill\ai-market-landscape"
 ```
 
 ```bash
@@ -122,6 +135,7 @@ cp -r dev/dev-pr-report-html ~/.config/opencode/skill/
 cp -r reports/pptx-report ~/.config/opencode/skill/
 cp -r integrations/pachca-report ~/.config/opencode/skill/
 cp -r reports/sci-literature-news ~/.config/opencode/skill/
+cp -r reports/ai-market-landscape ~/.config/opencode/skill/
 ```
 
 After installation, verify that the `skill` tool finds the skill. Before
@@ -240,6 +254,12 @@ skills/
 │       ├── references/
 │       ├── scripts/
 │       └── templates/
+│   └── ai-market-landscape/
+│       ├── SKILL.md
+│       ├── examples/
+│       ├── references/
+│       ├── scripts/
+│       └── templates/
 └── LICENSE
 ```
 
@@ -305,7 +325,16 @@ python scripts/build_report.py --example -o examples/example-report.html --stric
 python scripts/check_report.py examples/example-report.html
 python scripts/validate_analysis.py examples/example-candidates.json examples/example-analysis.json --strict
 python scripts/profile.py --file examples/example-profile.md check
+
+# AI market landscape example (network for collect.py; offline self-check after)
+cd ../ai-market-landscape
+python scripts/make_example.py
+python scripts/test_example.py
 ```
+
+`ai-market-landscape` needs network only for `scripts/collect.py` (OpenRouter
+catalog, Habr RSS, site reachability). Analysis, report building and
+`scripts/test_example.py` run offline on the standard library.
 
 Scripts use only the Python 3.9+ standard library. The Pachca plugin tests use
 Node 20+ and a local mock HTTP server.

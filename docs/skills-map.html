@@ -520,6 +520,12 @@
 │       ├── references/
 │       ├── scripts/
 │       └── templates/
+│   └── ai-market-landscape/    <span class="new">← динамика ИИ-рынка РФ и мира</span>
+│       ├── SKILL.md
+│       ├── examples/           <span class="c">← компании с URL, анализ, отчёт</span>
+│       ├── references/         <span class="c">← method, metrics, taxonomy, sources</span>
+│       ├── scripts/            <span class="c">← profile, collect, analyze, build_report</span>
+│       └── templates/
 ├── opencode-plugins/           <span class="c">← плагины и setup OpenCode</span>
 │   ├── md-viewer/
 │   └── pachca/                 <span class="new">← MCP, сбор, HTML, задачи</span>
@@ -575,7 +581,7 @@
   <footer>
     <div class="row">
       <span>opencode-skills · карта библиотеки</span>
-      <span>снимок 2026-11-02 · 11 реализовано · 33 предложено</span>
+      <span>снимок 2026-11-06 · 12 реализовано · 33 предложено</span>
     </div>
   </footer>
 </main>
@@ -612,6 +618,14 @@
       io: "profile.md + OpenAlex/DataCite + SJR/ICORE → candidates.json → analysis.json → report.html",
       links: "../reports/sci-literature-news/SKILL.md",
       metrics: ["Q1", "A*", "Q2", "Datasets", "Themes"]
+    },
+    {
+      id: "ai-market-landscape", name: "/ai-market-landscape", domain: "report", status: "existing", priority: "P1",
+      blocks: ["science", "report"],
+      sum: "Динамика ИИ-рынка отдельно для РФ и мира: доменные области, спектр услуг, программно-аппаратные комплексы, затем разница долей и список того, что есть в мире и отсутствует в РФ.",
+      io: "landscape.md + OpenRouter/Хабр + курируемый реестр → companies.json → analysis.json → report.html",
+      links: "../reports/ai-market-landscape/SKILL.md",
+      metrics: ["AIC", "PSS", "UDI", "UID", "GINI", "GAP"]
     },
     {
       id: "dev-pr-report-html", name: "/dev-pr-report-html", domain: "dev", status: "existing", priority: "core",
