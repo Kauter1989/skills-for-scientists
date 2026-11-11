@@ -1,0 +1,109 @@
+# dsh-profile-example/cordis.patch.yml
+# Пример личного слоя патча профиля dsh: подключение Qwen Cloud (Alibaba Token
+# Plan) через OpenAI-compatible endpoint и модель по умолчанию на этой ветке.
+#
+# Куда класть: $DSH_HOME/profiles/<profile>/cordis.patch.yml
+#   Windows: %USERPROFILE%\.dsh\profiles\<profile>\cordis.patch.yml
+# Файл применяется после всех bundle-слоёв (dsh-base, dsh-web-app, ...), поэтому
+# переопределяет строки интерфейса и модели из состава. Формат — YAML-массив
+# записей загрузчика Cordis.
+#
+# Ключ в файле НЕ хранится: apiKeyEnv — имя credential-ссылки. Значение живёт в
+# env-переменной с тем же именем или в managed-хранилище
+# $DSH_HOME/.credentials.yaml (его пишет страница Settings → Models).
+
+# ── Интерфейс ────────────────────────────────────────────────────────────────
+# completion: api-key убирает шаг входа в DeepSeek: работа идёт через свой ключ.
+- id: ui-chat
+  name: "@deepseek-ai/dsh-client-ui-chat"
+  config:
+    transcriptView: standard
+    performanceUsage: detailed
+- id: ui-settings
+  name: "@deepseek-ai/dsh-client-ui-settings"
+  config:
+    enabled: true
+- id: ui-settings-account
+  name: "@deepseek-ai/dsh-client-ui-settings-account"
+  config:
+    version: 1
+    step: done
+    usage: detailed
+    developerTools: true
+    purpose: null
+    process: standard
+    completion: api-key
+
+# ── Провайдер Qwen Cloud (Alibaba Token Plan, OpenAI-compatible) ─────────────
+# `providers` — словарь: ключ = id маршрута, по нему строится имя credential-
+# ссылки (qwen-token-plan → QWEN_TOKEN_PLAN_API_KEY).
+# Модели перечислены явно: у плана в /models кроме чат-моделей есть картинки,
+# видео и аудио (wan*, qwen-audio-*), и без явного списка они попадут в
+# селектор моделей.
+# Числа (contextWindow, maxTokens) — продолжение настроек исходного профиля,
+# а не гарантия провайдера: проверяйте, что /models и каталог Qwen Cloud
+# отдают то же самое.
+- id: llm-pi-ai
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      qwen-token-plan:
+        displayName: Alibaba Token Plan
+        apiKeyEnv: QWEN_TOKEN_PLAN_API_KEY
+        baseURL: https://token-plan.maas.qwencloudapi.com/compatible-mode/v1
+        models:
+          - id: qwen3.8-max
+            name: Qwen3.8 Max
+            contextWindow: 1000000
+            maxTokens: 131072
+            input:
+              - text
+              - image
+            reasoningEfforts:
+              low: low
+              medium: medium
+              xhigh: xhigh
+          - id: deepseek-v4.1-flash-1017
+            name: DeepSeek V4.1 Flash 1017
+            contextWindow: 1000000
+            maxTokens: 384000
+            input:
+              - text
+              - image
+            reasoningEfforts:
+              low: low
+              high: high
+              max: max
+            compat:
+              supportsStrictMode: true
+              thinkingFormat: qwen
+              supportsDeveloperRole: false
+              supportsStore: false
+              supportsReasoningEffort: true
+          - id: glm-5.2
+            name: GLM-5.2
+            contextWindow: 1000000
+            maxTokens: 131072
+            input:
+              - text
+            reasoningEfforts:
+              high: high
+              max: max
+          - id: glm-5.3
+            name: GLM-5.3
+            contextWindow: 1000000
+            maxTokens: 131072
+            input:
+              - text
+            reasoningEfforts:
+              low: low
+              high: high
+              max: max
+
+# ── Модель по умолчанию для новых сессий ─────────────────────────────────────
+# provider совпадает с ключом в providers выше, model — с id модели.
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: qwen-token-plan
+    model: deepseek-v4.1-flash-1017
