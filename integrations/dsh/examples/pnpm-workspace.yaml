@@ -1,0 +1,9 @@
+# dsh profile workspace settings (pnpm) for out-of-tree profile plugins.
+# dsh creates this file when it initializes a profile; it is copied here only
+# so the example profile directory is complete. Keep it if the profile already
+# has one.
+packages:
+  - .
+
+nodeLinker: hoisted
+autoInstallPeers: false
