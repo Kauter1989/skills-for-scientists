@@ -40,9 +40,11 @@ h2{font-size:25px;line-height:1.15;letter-spacing:-.02em;margin:0}h3{font-size:1
 .project-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
 .project-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .progress{margin:0 0 13px;font-size:14px}
+.prog{margin:0 0 13px;padding-left:18px;font-size:14px}.prog li{margin:4px 0}
 .project-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;border-top:1px solid var(--line);padding-top:12px}
 .blockers,.steps,.evidence{list-style:none;margin:0;padding:0}
 .blockers li{display:flex;gap:7px;align-items:flex-start;margin-bottom:7px;font-size:12.5px}
+.blocker-body{flex:1;min-width:0}
 .severity{flex:0 0 auto;border-radius:4px;padding:1px 5px;font-size:9px;text-transform:uppercase;font-weight:750;background:#eef0f3;color:var(--muted)}
 .severity.high{background:var(--red2);color:var(--red)}.severity.medium{background:var(--amber2);color:var(--amber)}.severity.low{background:var(--green2);color:var(--green)}
 .unverified{display:block;color:var(--red);font-size:10.5px;font-style:normal;margin-top:2px}
@@ -52,6 +54,53 @@ h2{font-size:25px;line-height:1.15;letter-spacing:-.02em;margin:0}h3{font-size:1
 .evidence-wrap{margin-top:12px;border-top:1px solid var(--line);padding-top:9px}.evidence-wrap summary{cursor:pointer;font-size:11.5px;color:var(--teal);font-weight:700}.evidence-wrap summary span{color:var(--muted);font-weight:400}
 .evidence{margin-top:8px}.evidence li{border-left:2px solid var(--line2);padding-left:9px;margin-bottom:8px}.ev-head{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:var(--muted)}.ev-head span{text-align:right}
 blockquote{margin:3px 0 0;font-size:12px;color:#2a313a}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 14px}
+.sum-block{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;margin:0}
+.sum-block h3{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+.sum-wide{grid-column:1/-1}
+.deadlines{list-style:none;margin:0;padding:0}
+.deadlines li{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.deadlines li:last-child{border-bottom:none}
+.due{font-size:10.5px;font-weight:750;border-radius:6px;padding:2px 8px;white-space:nowrap;background:#eef0f3;color:var(--muted)}
+.deadlines li.today .due{background:var(--red2);color:var(--red)}
+.deadlines li.tomorrow .due{background:var(--amber2);color:var(--amber)}
+.due-time{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.deadlines li>div{flex:1;min-width:200px;font-size:13px}
+.proj-tag{display:inline-block;font-size:10px;font-weight:750;border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-right:6px;color:var(--muted);white-space:nowrap}
+.risk-list,.hl{list-style:none;margin:0;padding:0}
+.risk-list li,.hl li{margin:0 0 10px;font-size:13px}
+.risk-list li>div{margin-top:3px}
+.hl li>div{margin-top:3px}
+.sum-text{margin:0 0 12px}.sum-text summary{cursor:pointer;font-size:12px;color:var(--teal);font-weight:700}.sum-text p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.act-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+.act-kpi{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+.act-kpi b{display:block;font-size:24px;letter-spacing:-.02em}
+.act-kpi span{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:750}
+.act-item{border-top-color:var(--teal)}
+.act-meta{margin:0 0 8px;font-size:11.5px;color:var(--muted)}
+.act-fields p{margin:6px 0 0;font-size:13px}
+.act-quotes{margin-top:8px}
+.quote{display:inline-block;font-size:10.5px;border:1px solid var(--line);border-radius:999px;padding:1px 7px;margin:2px 4px 0 0;text-decoration:none;color:var(--muted)}
+.quote:hover{color:var(--ink);border-color:var(--line2)}
+.draft-box{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.draft-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.draft-h{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:750}
+.chan{font-size:11.5px;color:var(--muted)}.chan b{color:var(--ink)}
+textarea.draft-edit{width:100%;min-height:84px;resize:vertical;font:13px/1.5 var(--sans);padding:8px 10px;border:1px solid var(--line2);border-radius:7px;background:#fff;color:var(--ink)}
+textarea.draft-edit:focus{outline:2px solid var(--teal);outline-offset:-1px}
+.send-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.send-btn{font:600 12.5px var(--sans);padding:6px 16px;border-radius:999px;border:1px solid var(--teal);background:var(--teal2);color:var(--teal);cursor:pointer}
+.send-btn:hover:not(:disabled){background:var(--teal);color:#fff}
+.send-btn:disabled{opacity:.55;cursor:not-allowed;border-color:var(--line2);background:#eef0f3;color:var(--muted)}
+.btn-plain{font:12.5px var(--sans);padding:6px 16px;border-radius:999px;border:1px solid var(--line2);background:#fff;color:var(--ink);cursor:pointer}
+.send-hint{font-size:10.5px;color:var(--muted)}
+details.draft-details{margin-top:8px}
+details.draft-details>summary{cursor:pointer;font-size:11.5px;font-weight:700;color:var(--teal)}
+details.draft-details .draft-box{margin-top:8px}
+dialog#send-dialog{border:1px solid var(--line2);border-radius:14px;background:var(--card);color:var(--ink);padding:18px 20px;max-width:640px;width:calc(100% - 40px)}
+dialog#send-dialog::backdrop{background:rgba(21,26,33,.45)}
+dialog#send-dialog h3{margin:0 0 6px}
+dialog#send-dialog textarea{width:100%;min-height:140px;resize:vertical;font:13px/1.5 var(--sans);padding:8px 10px;border:1px solid var(--line2);border-radius:7px;background:var(--paper);color:var(--ink);margin:8px 0}
 .activity-summary{display:flex;gap:9px;flex-wrap:wrap;padding:14px 22px 0;color:var(--muted);font-size:11.5px}.activity-summary b{color:var(--ink)}
 .toolbar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;padding:14px 22px 6px}
 .field{display:flex;flex-direction:column;gap:4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
@@ -82,15 +131,15 @@ blockquote{margin:3px 0 0;font-size:12px;color:#2a313a}
 .warnings{margin:0;padding-left:18px}.warnings li{color:var(--amber);font-size:12px;margin-bottom:5px}
 .footer{padding:12px 0 40px;color:var(--muted);font-size:11.5px}.footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4px;padding:1px 4px}
-@media(max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.projects{grid-template-columns:1fr}.method{grid-template-columns:1fr}}
-@media(max-width:620px){.wrap{padding:0 14px}.kpis{grid-template-columns:repeat(2,1fr)}.project-grid{grid-template-columns:1fr}.hero{padding-top:28px}.section-head{padding:16px}.section-body{padding:16px}.chart{padding:8px 16px 16px}.toolbar{padding:12px 16px 4px}.field input{min-width:100%}.field{flex:1 1 100%}}
-@media print{@page{size:A4;margin:12mm}body{background:#fff;font-size:9.5pt}.nav,.toolbar{display:none}.wrap{max-width:none;padding:0}.section,.project,.person{break-inside:avoid;box-shadow:none}.kpis{grid-template-columns:repeat(3,1fr)}a{color:#000;text-decoration:none}.hero{padding-top:0}}
+@media(max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.projects{grid-template-columns:1fr}.method{grid-template-columns:1fr}.sum-grid{grid-template-columns:1fr}.act-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.wrap{padding:0 14px}.kpis{grid-template-columns:repeat(2,1fr)}.project-grid{grid-template-columns:1fr}.hero{padding-top:28px}.section-head{padding:16px}.section-body{padding:16px}.chart{padding:8px 16px 16px}.toolbar{padding:12px 16px 4px}.field input{min-width:100%}.field{flex:1 1 100%}.act-kpis{grid-template-columns:repeat(2,1fr)}}
+@media print{@page{size:A4;margin:12mm}body{background:#fff;font-size:9.5pt}.nav,.toolbar,.send-row,dialog#send-dialog{display:none}.wrap{max-width:none;padding:0}.section,.project,.person,.draft-box{break-inside:avoid;box-shadow:none}.kpis{grid-template-columns:repeat(3,1fr)}.act-kpis{grid-template-columns:repeat(4,1fr)}a{color:#000;text-decoration:none}.hero{padding-top:0}}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">К содержанию</a>
 <header class="hero"><div class="wrap">
-  <div class="topline"><span class="brand">Pachca · workspace report</span><span class="stamp">сформировано 02 нояб. 2026 г., 13:33 · Pachca REST API</span></div>
+  <div class="topline"><span class="brand">Pachca · workspace report</span><span class="stamp">сформировано 19 нояб. 2026 г., 05:42 · Pachca REST API</span></div>
   <h1>Pachca · рабочие чаты, 2 недели</h1>
   <p class="lede">Что сдвинулось в проектах, где блокеры и кто перестал писать. Все числа собраны из сообщений, доступных токену; прогресс и блокеры подтверждены цитатами или помечены как неподтверждённые.</p>
   <div class="chips">
@@ -99,19 +148,84 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
     <span class="chip">Сообщений: <b>12</b></span>
     <span class="chip">Качество анализа: <b>medium</b></span>
     <span class="chip">Источник: <b>Pachca REST API</b></span>
+    <span class="chip">Отправка: <b>outbox, с подтверждением</b></span>
   </div>
   <div class="kpis"><div class="kpi"><span>Сообщений</span><b>12</b><small>в новом окне</small></div><div class="kpi"><span>Чатов прочитано</span><b>5/5</b><small>0 без новых сообщений</small></div><div class="kpi"><span>Участников</span><b>4</b><small>2 молчат &gt; 2 дн.</small></div><div class="kpi"><span>Проектов</span><b>5</b><small>1 с блокерами, 1 в риске</small></div><div class="kpi"><span>Задач</span><b>2</b><small>сохранено с preflight</small></div><div class="kpi"><span>Доказательства</span><b>4/5</b><small>проектов с цитатами</small></div></div>
 </div></header>
 <nav class="nav" aria-label="Разделы отчёта"><div class="wrap">
-  <a href="#projects">Проекты</a><a href="#activity">Активность</a><a href="#tasks">Задачи</a><a href="#method">Методика</a>
+  <a href="#summary">Сводка</a><a href="#actions">Личные сообщения</a><a href="#projects">Проекты</a><a href="#activity">Активность</a><a href="#tasks">Задачи</a><a href="#method">Методика</a>
   <span class="spacer"></span><span>19 окт. 2026 г. — 02 нояб. 2026 г.</span>
 </div></nav>
 <main id="main" class="wrap">
   
-  <section id="projects" class="section">
-    <div class="section-head"><div><p class="eyebrow">01 · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">1 проект(ов) с блокерами, 1 в риске, 1 без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
+  <section id="summary" class="section">
+    <div class="section-head"><div><p class="eyebrow">01 · Сводка</p><h2>Сводка по всем проектам</h2></div><p class="section-note">Сроки подсвечены относительно даты сбора snapshot (UTC): «сегодня» и «завтра». Риски отсортированы от высоких к низким.</p></div>
+    <div class="section-body"><div class="sum-grid"><section class="sum-block sum-wide"><h3>Ближайшие сроки</h3><ol class="deadlines"><li class="today"><span class="due">02.11 · сегодня</span><span class="due-time">18:00</span><div>Окно релиза API v2 после проверки staging <span class="proj-tag">Платформа</span></div></li><li class="tomorrow"><span class="due">03.11 · завтра</span><span class="due-time">12:00</span><div>Пересогласовать дату релиза 3.2 <span class="proj-tag">Мобильное приложение</span></div></li><li class=""><span class="due">06.11 · пятница</span><div>Согласовать состояния кнопок <span class="proj-tag">Дизайн-система</span></div></li></ol></section><section class="sum-block"><h3>Блокеры и риски</h3><ul class="risk-list"><li><span class="severity high">высокая</span> <span class="proj-tag">Мобильное приложение</span><div>Нет ключа от инфраструктуры для staging — тестирование релиза 3.2 стоит.</div></li><li><span class="severity medium">средняя</span> <span class="proj-tag">Дизайн-система</span><div>Состояния кнопок не согласованы и зависят от API мобильного приложения.</div></li><li><span class="severity low">низкая</span> <span class="proj-tag">Платформа</span><div>Интеграция с биллингом не закрыта.</div></li></ul></section><section class="sum-block"><h3>Главное за окно</h3><ul class="hl"><li><span class="proj-tag">Платформа</span><div>API v2 готов на 80%, staging проверен, все проверки зелёные.</div></li><li><span class="proj-tag">Дизайн-система</span><div>Компоненты кнопок готовы.</div></li></ul></section><section class="sum-block sum-wide"><h3>Внешние зависимости (люди вне чатов и инфраструктура)</h3><ul class="hl"><li><span class="proj-tag">Мобильное приложение</span><div>Ключ от инфраструктуры выдаёт команда вне чата: запрос отправлен, ответа нет.</div></li></ul></section></div><details class="sum-text"><summary>Текстовая версия сводки</summary><p>Два проекта движутся, один заблокирован инфраструктурным доступом. Основной риск — staging-ключ, он влияет и на мобильный релиз, и на дизайн-систему.</p></details></div>
+  </section>
+  <section id="actions" class="section">
+    <div class="section-head"><div><p class="eyebrow">02 · Личные сообщения</p><h2>Личные сообщения: что ждут от вас — Анна Петрова</h2></div><p class="section-note">Учтены обращения с упоминанием @Анна Петрова, запросы в личных чатах и исходящие запросы без ответа за окно. Обращений к вам: 2; ваших открытых запросов: 1.</p></div>
     <div class="section-body">
-      <div class="callout"><b>Сводка по всем проектам</b><p>Два проекта движутся, один заблокирован инфраструктурным доступом. Основной риск — staging-ключ, он влияет и на мобильный релиз, и на дизайн-систему.</p></div>
+      <div class="act-kpis"><div class="act-kpi"><b>2</b><span>ждут вашего ответа</span></div><div class="act-kpi"><b>0</b><span>ждут решения или аппрува</span></div><div class="act-kpi"><b>1</b><span>решения по проектам</span></div><div class="act-kpi"><b>0</b><span>процессные риски</span></div></div>
+      <div class="projects"><article class="project act-item">
+      <div class="project-head">
+        <div><p class="eyebrow">Личное действие</p><h3>A-1 · ответ на обращение</h3></div>
+        <div class="project-badges"><span class="badge bad">P0</span></div>
+      </div>
+      <p class="act-meta">Мобильное приложение · ждёт 1 день</p>
+      <div class="act-fields">
+        <p><b>Кто:</b> Борис Смирнов · <b>с</b> 2026-11-01</p>
+        <p><b>Что ждут:</b> Выдать ключ от staging или назвать точный срок выдачи.</p>
+        <p><b>Почему сейчас:</b> Без ключа тестирование релиза 3.2 стоит, дата релиза переносится второй раз.</p>
+        <p><b>Что сделать:</b> Подтвердить выдачу ключа сегодня или назначить ответственного и срок.</p>
+      </div>
+      <div class="draft-box">
+      <div class="draft-head"><span class="draft-h">Черновик сообщения · редактируемый</span><span class="chan">Канал: <b>Мобильное приложение</b> · #2</span></div>
+      <textarea class="draft-edit" rows="4" spellcheck="false">Борис, ключ от staging выдадим сегодня до 18:00. Если не успеем — напишу точный срок отдельно. Тестирование пока не начинаем, чтобы не ловить ложные падения.</textarea>
+      <div class="send-row"><button type="button" class="send-btn" data-chat="2" data-chan="Мобильное приложение" data-ref="A-1">Отправить</button><span class="send-hint">очередь .pachca/outbox/ → ваше подтверждение → pachca_send_message</span></div>
+    </div>
+      <div class="act-quotes"><a class="quote" href="https://app.pachca.com/chats/2?message=m7">m7</a><a class="quote" href="https://app.pachca.com/chats/2?message=m6">m6</a></div>
+    </article><article class="project act-item">
+      <div class="project-head">
+        <div><p class="eyebrow">Личное действие</p><h3>A-2 · ответ на обращение</h3></div>
+        <div class="project-badges"><span class="badge warn">P1</span></div>
+      </div>
+      <p class="act-meta">личный чат (Борис Смирнов) · новая точка</p>
+      <div class="act-fields">
+        <p><b>Кто:</b> Борис Смирнов · <b>с</b> 2026-11-02</p>
+        <p><b>Что ждут:</b> Прислать ссылку на отчёт.</p>
+        <p><b>Почему сейчас:</b> Прямой запрос в личном чате, ответа пока нет.</p>
+        <p><b>Что сделать:</b> Отправить ссылку на отчёт или сказать, когда он будет готов.</p>
+      </div>
+      <div class="draft-box">
+      <div class="draft-head"><span class="draft-h">Черновик сообщения · редактируемый</span><span class="chan">Канал: <b>Личный чат · Борис Смирнов</b> · #4</span></div>
+      <textarea class="draft-edit" rows="4" spellcheck="false">Борис, ссылка на отчёт: [ссылка]. Если нужна выгрузка по конкретному проекту — скажи, подготовлю отдельно.</textarea>
+      <div class="send-row"><button type="button" class="send-btn" data-chat="4" data-chan="Личный чат · Борис Смирнов" data-ref="A-2">Отправить</button><span class="send-hint">очередь .pachca/outbox/ → ваше подтверждение → pachca_send_message</span></div>
+    </div>
+      <div class="act-quotes"><a class="quote" href="https://app.pachca.com/chats/4?message=m10">m10</a></div>
+    </article><article class="project act-item">
+      <div class="project-head">
+        <div><p class="eyebrow">Личное действие</p><h3>A-3 · решение</h3></div>
+        <div class="project-badges"><span class="badge warn">P1</span></div>
+      </div>
+      <p class="act-meta">Дизайн-система · ждёт 2 дня</p>
+      <div class="act-fields">
+        <p><b>Кто:</b> Вера Ким · <b>с</b> 2026-10-31</p>
+        <p><b>Что ждут:</b> Согласовать состояния кнопок.</p>
+        <p><b>Почему сейчас:</b> Компоненты готовы, но без согласования состояний дизайн-систему нельзя релизить.</p>
+        <p><b>Что сделать:</b> Назначить ревью состояний и зафиксировать решение в документе.</p>
+      </div>
+      <div class="draft-box">
+      <div class="draft-head"><span class="draft-h">Черновик сообщения · редактируемый</span><span class="chan">Канал: <b>Дизайн-система</b> · #3</span></div>
+      <textarea class="draft-edit" rows="4" spellcheck="false">Вера, состояния кнопок смотрим в четверг. Пришли, пожалуйста, таблицу вариантов до среды, чтобы ревью не растянулось.</textarea>
+      <div class="send-row"><button type="button" class="send-btn" data-chat="3" data-chan="Дизайн-система" data-ref="A-3">Отправить</button><span class="send-hint">очередь .pachca/outbox/ → ваше подтверждение → pachca_send_message</span></div>
+    </div>
+      <div class="act-quotes"><a class="quote" href="https://app.pachca.com/chats/3?message=m9">m9</a></div>
+    </article></div>
+    </div>
+  </section>
+  <section id="projects" class="section">
+    <div class="section-head"><div><p class="eyebrow">03 · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">1 проект(ов) с блокерами, 1 в риске, 1 без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
+    <div class="section-body">
       <div class="projects"><article class="project" data-status="on_track">
     <div class="project-head">
       <div>
@@ -120,7 +234,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
       </div>
       <div class="project-badges"><span class="badge ok">В графике</span><span class="badge quiet">уверенность: высокая</span></div>
     </div>
-    <p class="progress">API v2 готов примерно на 80%; осталась интеграция с биллингом. Staging проверен, релиз можно планировать.</p>
+    <ul class="prog"><li>API v2 готов примерно на 80%.</li><li>Staging проверен: все проверки зелёные, релиз можно планировать.</li><li>Осталась интеграция с биллингом.</li></ul>
     <div class="project-grid">
       <div>
         <h4>Блокеры</h4>
@@ -144,11 +258,15 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
       </div>
       <div class="project-badges"><span class="badge bad">Блокер</span><span class="badge quiet">уверенность: высокая</span></div>
     </div>
-    <p class="progress">Релиз 3.2 перенесён: команда ждёт ключ от инфраструктуры, тестирование приостановлено.</p>
+    <ul class="prog"><li>Релиз 3.2 перенесён.</li><li>Тестирование приостановлено до выдачи ключа от инфраструктуры.</li><li>Макеты готовы, команда ждёт API.</li></ul>
     <div class="project-grid">
       <div>
         <h4>Блокеры</h4>
-        <ul class="blockers"><li><span class="severity high">high</span><span>Нет ключа от инфраструктуры для staging</span></li></ul>
+        <ul class="blockers"><li><span class="severity high">high</span><div class="blocker-body"><span>Нет ключа от инфраструктуры для staging</span><details class="draft-details"><summary>Черновик сообщения → канал: Мобильное приложение</summary><div class="draft-box">
+      <div class="draft-head"><span class="draft-h">Черновик сообщения · редактируемый</span><span class="chan">Канал: <b>Мобильное приложение</b> · #2</span></div>
+      <textarea class="draft-edit" rows="4" spellcheck="false">Коллеги, релиз 3.2 стоит без ключа от staging. Просьба выдать ключ сегодня или назвать точный срок. Как только получим — перезапустим тестирование и пересогласуем дату релиза.</textarea>
+      <div class="send-row"><button type="button" class="send-btn" data-chat="2" data-chan="Мобильное приложение" data-ref="blocker:Мобильное приложение:1">Отправить</button><span class="send-hint">очередь .pachca/outbox/ → ваше подтверждение → pachca_send_message</span></div>
+    </div></details></div></li></ul>
       </div>
       <div>
         <h4>Следующие шаги</h4>
@@ -168,7 +286,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
       </div>
       <div class="project-badges"><span class="badge warn">Риск</span><span class="badge quiet">уверенность: средняя</span></div>
     </div>
-    <p class="progress">Компоненты кнопок готовы, но состояния не согласованы; решение зависит от API мобильного приложения.</p>
+    <ul class="prog"><li>Компоненты кнопок готовы.</li><li>Состояния не согласованы; решение зависит от API мобильного приложения.</li></ul>
     <div class="project-grid">
       <div>
         <h4>Блокеры</h4>
@@ -192,7 +310,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
       </div>
       <div class="project-badges"><span class="badge ok">В графике</span><span class="badge quiet">уверенность: высокая</span></div>
     </div>
-    <p class="progress">Запуск завершён, чат архивирован.</p>
+    <ul class="prog"><li>Запуск завершён, чат архивирован.</li></ul>
     <div class="project-grid">
       <div>
         <h4>Блокеры</h4>
@@ -237,7 +355,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
   </section>
   <section id="activity" class="section">
     <div class="section-head">
-      <div><p class="eyebrow">02 · Люди</p><h2>Активность участников</h2></div>
+      <div><p class="eyebrow">04 · Люди</p><h2>Активность участников</h2></div>
       <p class="section-note">Считаются сообщения в новом окне. Молчание — календарные дни с последнего сообщения; порог 2 дн.</p>
     </div>
     <div class="activity-summary">
@@ -346,7 +464,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
           </details>
   </section>
   <section id="tasks" class="section">
-    <div class="section-head"><div><p class="eyebrow">03 · Автоматизация</p><h2>Сохранённые задачи</h2></div><p class="section-note">Задача сохраняется только после проверки скоупов, роли, тарифа и доступа к каналу. Перед запуском проверка повторяется.</p></div>
+    <div class="section-head"><div><p class="eyebrow">05 · Автоматизация</p><h2>Сохранённые задачи</h2></div><p class="section-note">Задача сохраняется только после проверки скоупов, роли, тарифа и доступа к каналу. Перед запуском проверка повторяется.</p></div>
     <div class="section-body"><div class="table-wrap"><table class="tasks">
     <thead><tr><th>Задача</th><th>Канал</th><th>Тип</th><th>Действия</th><th>Проверка прав</th><th>Последний запуск</th></tr></thead>
     <tbody><tr>
@@ -367,7 +485,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
   </table></div></div>
   </section>
   <section id="method" class="section">
-    <div class="section-head"><div><p class="eyebrow">04 · Методика</p><h2>Как читать и чего здесь нет</h2></div><p class="section-note">Измерение отделено от интерпретации.</p></div>
+    <div class="section-head"><div><p class="eyebrow">06 · Методика</p><h2>Как читать и чего здесь нет</h2></div><p class="section-note">Измерение отделено от интерпретации.</p></div>
     <div class="section-body method">
       <div>
         <div class="quality">
@@ -377,6 +495,8 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
           <li><b>Сообщения.</b> Уникальные ID сообщений в окне, включая треды; боты не попадают в диаграмму участников.</li>
           <li><b>Молчание.</b> Календарные дни между последним сообщением участника и концом окна. «Более двух дней» — настраиваемый порог, не научный закон.</li>
           <li><b>Прогресс и блокеры.</b> Смысловой анализ новых сообщений. Вывод без ID-цитаты помечается как неподтверждённый.</li>
+          <li><b>Черновики сообщений.</b> Текст черновика — суждение модели; он редактируется перед отправкой, канал назначения подписан у каждого черновика.</li>
+          <li><b>Кнопки «Отправить».</b> активны — есть скоуп messages:create.</li>
           <li><b>Прочерк.</b> В блокерах «—» означает «новых блокеров не найдено», а не «блокеров не существует».</li>
           <li><b>Активность ≠ продуктивность.</b> Число сообщений — сигнал, а не оценка человека. Отчёт не ранжирует людей.</li>
         </ul>
@@ -388,6 +508,8 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
           <li>Чаты: 5 прочитано, 0 без новых сообщений, 0 с ошибками, 0 обрезано лимитом.</li>
           <li>Треды: 1 найдено; сообщения треда привязаны к родительскому чату.</li>
           <li>Личные переписки: 1; архивные: 1.</li>
+          <li>Скоупы токена: profile:read, chats:read, chat_members:read, messages:read, messages:create, search:messages, users:read.</li>
+          <li><b>Механизм отправки (outbox).</b> Автономный HTML не хранит токен и не делает сетевых запросов. Активная кнопка ставит сообщение в очередь <code>.pachca/outbox/</code> со статусом <code>pending_confirmation</code> (File System Access API; если браузер не поддерживает — скачивается JSON, который нужно положить в outbox). Отправку выполняет плагин/агент через <code>pachca_send_message</code> только после отдельного подтверждения пользователя, с preflight скоупов и роли в чате; статус меняется на <code>sent</code> или <code>rejected</code>. Автоматически ничего не отправляется.</li>
           <li>Доступ определяется токеном и ролью. Закрытые чаты вне членства не читаются.</li>
           <li>Исключения влияют только на диаграмму; данные проектов сохраняются.</li>
         </ul>
@@ -395,8 +517,16 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
     </div>
   </section>
 </main>
-<footer class="footer"><div class="wrap"><span>opencode-pachca · автономный отчёт, без внешних запросов</span><span>02 нояб. 2026 г., 13:33</span></div></footer>
-<script id="report-data" type="application/json">{"schemaVersion":1,"generatedAt":"2026-11-02T13:33:25.619Z","asOf":"2026-11-02T12:00:00.000Z","title":"Pachca · рабочие чаты, 2 недели","window":{"from":"2026-10-19T12:00:00.000Z","to":"2026-11-02T12:00:00.000Z"},"source":"rest","stats":{"messages":12,"chatsRead":5,"chatsAvailable":5,"participants":4,"inactive":2,"projects":5,"blocked":1,"withBlockers":1,"atRisk":1,"verifiedProjects":4,"tasks":2},"analysisQuality":"medium"}</script>
+<dialog id="send-dialog" aria-labelledby="sd-title">
+  <h3 id="sd-title">Отправка сообщения — очередь outbox</h3>
+  <p class="chan" id="sd-chan"></p>
+  <textarea id="sd-text" rows="7" spellcheck="false"></textarea>
+  <p class="hint">Сообщение попадёт в <code>.pachca/outbox/</code> со статусом <code>pending_confirmation</code>. Ничего не отправляется автоматически: агент/плагин покажет очередь и отправит через <code>pachca_send_message</code> только после вашего отдельного подтверждения, с проверкой скоупов и роли в чате. При первом использовании браузер попросит выбрать папку outbox.</p>
+  <div class="send-row"><button type="button" id="sd-confirm" class="send-btn">В очередь на отправку</button><button type="button" id="sd-copy" class="btn-plain">Скопировать текст</button><button type="button" id="sd-cancel" class="btn-plain">Отмена</button></div>
+  <p class="hint" id="sd-status" role="status"></p>
+</dialog>
+<footer class="footer"><div class="wrap"><span>opencode-pachca · автономный отчёт, без внешних запросов</span><span>19 нояб. 2026 г., 05:42</span></div></footer>
+<script id="report-data" type="application/json">{"schemaVersion":1,"formVersion":2,"generatedAt":"2026-11-19T05:42:27.313Z","asOf":"2026-11-02T12:00:00.000Z","title":"Pachca · рабочие чаты, 2 недели","window":{"from":"2026-10-19T12:00:00.000Z","to":"2026-11-02T12:00:00.000Z"},"source":"rest","sendEnabled":true,"sendMechanism":"outbox","actionsPresent":true,"stats":{"messages":12,"chatsRead":5,"chatsAvailable":5,"participants":4,"inactive":2,"projects":5,"blocked":1,"withBlockers":1,"atRisk":1,"verifiedProjects":4,"tasks":2},"analysisQuality":"medium"}</script>
 <script>
 (function(){
   "use strict";
@@ -472,6 +602,63 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
   }
   [search,chat,sort,onlyInactive].forEach(function(el){if(el){el.addEventListener("input",render);el.addEventListener("change",render)}});
   render();
+})();
+</script>
+<script>
+(function(){
+  var SEND_ENABLED=true;
+  var dlg=document.getElementById('send-dialog');if(!dlg)return;
+  var chanEl=document.getElementById('sd-chan'),textEl=document.getElementById('sd-text'),statusEl=document.getElementById('sd-status');
+  var curChat=null,curChan='',curRef='';
+  function closeDlg(){if(typeof dlg.close==='function'){dlg.close();}else{dlg.removeAttribute('open');}}
+  document.querySelectorAll('.send-btn[data-chat]').forEach(function(b){
+    if(b.disabled||!SEND_ENABLED)return;
+    b.addEventListener('click',function(){
+      var box=b.closest('.draft-box');var ta=box?box.querySelector('textarea'):null;
+      curChat=b.getAttribute('data-chat');curChan=b.getAttribute('data-chan');curRef=b.getAttribute('data-ref')||'';
+      chanEl.textContent='Канал: '+curChan+' · #'+curChat;
+      textEl.value=ta?ta.value:'';statusEl.textContent='';
+      if(typeof dlg.showModal==='function'){dlg.showModal();}else{dlg.setAttribute('open','');}
+    });
+  });
+  function copyText(t){
+    if(navigator.clipboard&&navigator.clipboard.writeText){return navigator.clipboard.writeText(t);}
+    return new Promise(function(res,rej){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){ok=false;}document.body.removeChild(ta);ok?res():rej(new Error('copy failed'));});
+  }
+  function idb(){return new Promise(function(res,rej){var r=indexedDB.open('pachca-outbox',1);r.onupgradeneeded=function(){r.result.createObjectStore('handles');};r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error||new Error('idb'));};});}
+  function getStoredDir(){return idb().then(function(db){return new Promise(function(res,rej){var rq=db.transaction('handles','readonly').objectStore('handles').get('dir');rq.onsuccess=function(){res(rq.result||null);};rq.onerror=function(){rej(rq.error);};});});}
+  function storeDir(h){return idb().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('handles','readwrite').objectStore('handles').put(h,'dir');tx.onsuccess=function(){res();};tx.onerror=function(){rej(tx.error);};});});}
+  function ensureDir(){return getStoredDir().then(function(h){
+    if(h){return h.queryPermission({mode:'readwrite'}).then(function(p){if(p==='granted')return h;return h.requestPermission({mode:'readwrite'}).then(function(p2){if(p2==='granted')return h;throw new Error('нет доступа к папке');});});}
+    if(!window.showDirectoryPicker)throw new Error('File System Access API недоступен');
+    return window.showDirectoryPicker({mode:'readwrite',id:'pachca-outbox'}).then(function(nh){return storeDir(nh).then(function(){return nh;});});
+  });}
+  function queueMessage(payload){
+    var name='pachca-outbox-'+payload.chatId+'-'+Date.now()+'.json';
+    var content=JSON.stringify(payload,null,2);
+    return ensureDir().then(function(dir){
+      return dir.getFileHandle(name,{create:true}).then(function(fh){return fh.createWritable();}).then(function(w){return w.write(content).then(function(){return w.close();});}).then(function(){return {via:'outbox',name:name};});
+    }).catch(function(err){
+      var blob=new Blob([content],{type:'application/json'});var url=URL.createObjectURL(blob);
+      var aEl=document.createElement('a');aEl.href=url;aEl.download=name;document.body.appendChild(aEl);aEl.click();document.body.removeChild(aEl);
+      setTimeout(function(){URL.revokeObjectURL(url);},5000);
+      return {via:'download',name:name,reason:(err&&err.message)||String(err)};
+    });
+  }
+  document.getElementById('sd-confirm').addEventListener('click',function(){
+    var t=textEl.value;
+    if(!t.trim()){statusEl.textContent='Пустой черновик — впишите текст сообщения.';return;}
+    var payload={schemaVersion:1,kind:'pachca-outbox-message',id:'ob-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),queuedAt:new Date().toISOString(),chatId:curChat,channel:curChan,text:t,source:{report:document.title,ref:curRef},status:'pending_confirmation',sendPolicy:'confirm_then_send'};
+    statusEl.textContent='Записываю в очередь…';
+    queueMessage(payload).then(function(r){
+      if(r.via==='outbox'){statusEl.textContent='Добавлено в .pachca/outbox/'+r.name+'. Отправит агент/плагин после вашего отдельного подтверждения.';}
+      else{statusEl.textContent='Запись в папку недоступна ('+r.reason+'). Файл '+r.name+' скачан — положите его в .pachca/outbox/ и передайте агенту.';}
+    }).catch(function(e){statusEl.textContent='Ошибка очереди: '+((e&&e.message)||e);});
+  });
+  document.getElementById('sd-copy').addEventListener('click',function(){
+    copyText(textEl.value).then(function(){statusEl.textContent='Текст скопирован в буфер обмена.';}).catch(function(){statusEl.textContent='Не удалось скопировать — выделите текст вручную.';});
+  });
+  document.getElementById('sd-cancel').addEventListener('click',closeDlg);
 })();
 </script>
 </body>

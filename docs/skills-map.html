@@ -624,8 +624,8 @@
     {
       id: "pachca-report", name: "/pachca-report", domain: "integrations", status: "existing", priority: "P1",
       blocks: ["report", "audit"],
-      sum: "Чаты Пачки в интерактивном автономном HTML: прогресс и блокеры проектов с цитатами, активность участников и молчащие > 2 дней, MD-исключения и задачи по каналам с preflight прав.",
-      io: "Pachca MCP/REST → snapshot + analysis → HTML + .pachca/*.md",
+      sum: "Чаты Пачки в интерактивном автономном HTML (форма v2): структурированная сводка, личные сообщения, прогресс и блокеры проектов с цитатами и редактируемыми черновиками (кнопка отправки через outbox, гейт по messages:create), активность участников и молчащие > 2 дней, MD-исключения и задачи по каналам с preflight прав.",
+      io: "Pachca MCP/REST → snapshot + analysis + actions → HTML + .pachca/*.md + outbox/",
       links: "../integrations/pachca-report/SKILL.md",
       metrics: ["Messages", "Inactive > 2d", "Blocked projects", "Evidence coverage"]
     },

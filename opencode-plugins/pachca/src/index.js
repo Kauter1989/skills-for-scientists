@@ -96,6 +96,12 @@ async function loadAnalysisFor(ctx, input = {}) {
   return JSON.parse(await readFile(path, "utf8"));
 }
 
+async function loadActionsFor(ctx, input = {}) {
+  if (input.actions && typeof input.actions === "object") return input.actions;
+  if (!input.actionsPath) return null;
+  return JSON.parse(await readFile(resolveFrom(ctx, input.actionsPath), "utf8"));
+}
+
 async function mcpSummary(ctx, name) {
   try {
     const list = await ctx.mcp.list();
@@ -461,12 +467,14 @@ export default Plugin.define({
       editor.add({
         name: "report",
         description:
-          "Render a standalone interactive HTML report from a Pachca snapshot and an optional evidence-backed analysis. Validates message citations and activity.",
+          "Render a standalone interactive HTML report (form v2) from a Pachca snapshot, an optional evidence-backed analysis and an optional personal-messages panel (actions). Validates message citations and activity; message drafts get scope-gated send buttons that queue to .pachca/outbox/ — nothing is sent automatically.",
         input: toolSchema({
           snapshot: { type: "object", additionalProperties: true },
           snapshotPath: string,
           analysis: { type: "object", additionalProperties: true },
           analysisPath: string,
+          actions: { type: "object", additionalProperties: true },
+          actionsPath: string,
           output: string,
           title: string,
           inactivityDays: { type: "number", minimum: 0, maximum: 365 },
@@ -495,9 +503,11 @@ export default Plugin.define({
               loadTasks(paths),
             ]);
             if (analysis && !input.analysisPath) await saveAnalysis(paths, analysis);
+            const actions = await loadActionsFor(ctx, input);
             const model = buildReportModel({
               snapshot,
               analysis,
+              actions,
               exclusions,
               tasks,
               projectsMapping,
@@ -532,9 +542,11 @@ export default Plugin.define({
                 excluded: model.activity.stats.excluded,
                 tasks: model.tasks.length,
                 analysisQuality: model.analysis.quality,
+                personalActions: model.actions?.items?.length || 0,
+                sendEnabled: Boolean(model.sendEnabled),
               },
               warnings: model.analysis.warnings,
-              next: "Откройте HTML двойным щелчком. Внешних запросов нет.",
+              next: "Откройте HTML двойным щелчком. Внешних запросов нет. Черновики отправляются только через очередь .pachca/outbox/ после отдельного подтверждения пользователя.",
             });
           } catch (error) {
             return errorResult(error);

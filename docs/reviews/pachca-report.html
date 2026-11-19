@@ -90,7 +90,7 @@
   <span class="brand">Skill review</span>
   <nav aria-label="Разделы ревью">
     <a href="#problem">Проблема</a><a href="#github">GitHub</a><a href="#science">Наука</a>
-    <a href="#design">Дизайн</a><a href="#metrics">Метрики</a><a href="#sources">Источники</a><a href="#decision">Решение</a>
+    <a href="#design">Дизайн</a><a href="#metrics">Метрики</a><a href="#sources">Источники</a><a href="#decision">Решение</a><a href="#update-v22">Обновление v2.2</a>
   </nav>
 </div></div>
 <main class="wrap">
@@ -104,6 +104,7 @@
     <span class="chip">Автор: <b>OpenCode agent</b></span>
     <span class="chip">Дата: <b>2026-11-02</b></span>
     <span class="chip">Источники: <b>17</b></span>
+    <span class="chip">Обновление: <b>2026-11-19 · форма v2.2</b></span>
     <span class="status approved">approved</span>
   </div>
   <div class="callout">
@@ -277,10 +278,66 @@
     <div>rejected</div>
     <div>draft</div>
   </div>
-  <p style="margin-top:12px;color:var(--muted);font-size:12px">Решение: approved. Основание: пользователь запросил разработку навыка и плагина 2026-11-02; рамки зафиксированы в этом файле и research ledger. Комментарий: реализация должна сохранить evidence-first, MD-состояние и preflight прав.</p>
+  <p style="margin-top:12px;color:var(--muted);font-size:12px">Решение: approved. Основание: пользователь запросил разработку навыка и плагина 2026-11-02; рамки зафиксированы в этом файле и research ledger. Комментарий: реализация должна сохранить evidence-first, MD-состояние и preflight прав. Обновление формы v2.2 утверждено пользователем 2026-11-19 (см. раздел 10).</p>
 </div></section>
 
-<footer><div class="row"><span>opencode-skills · skill review</span><span>pachca-report · 2026-11-02</span></div></footer>
+<section id="update-v22"><div class="sec-head"><span class="n">10</span><h2>Обновление формы v2.2 (2026-11-19)</h2><p>утверждено пользователем в сессии</p></div><div class="body">
+  <div class="callout">
+    <b>Запрос решения</b>
+    <p>Утвердить новую форму HTML-отчёта и механизм отправки: структурированная сводка, блок личных сообщений первым после сводки, редактируемые черновики с указанием канала и кнопкой «Отправить» у каждого блокера и каждого личного действия; отправка через очередь <code>.pachca/outbox/</code> с отдельным подтверждением пользователя.</p>
+  </div>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">План: что и где меняется</h3>
+  <table><thead><tr><th>Что</th><th>Где</th><th>Артефакты</th></tr></thead><tbody>
+    <tr><td>Форма v2.2: сводка «сроки → риски → главное → зависимости»; личные сообщения первым блоком; прогресс проектов буллитами (<code>progressPoints</code>); черновик под каждым блокером в спойлере с каналом и кнопкой</td><td><code>references/report-schema.md</code>, плагин <code>src/report.js</code>, <code>src/analysis.js</code></td><td>HTML-контракт v2, <code>report-data.formVersion: 2</code></td></tr>
+    <tr><td>Черновики сообщений: <code>blockers[].draft</code>, панель личных действий <code>actions-*.json</code> (owner, basis, items с draft/evidence)</td><td><code>references/report-schema.md</code>, <code>SKILL.md</code> шаг 5, фикстуры плагина</td><td>расширенная схема analysis, примеры</td></tr>
+    <tr><td>Механизм отправки outbox: кнопка активна только при <code>messages:create</code>; JSON в <code>.pachca/outbox/</code> (File System Access API, фолбэк — скачивание); отправка агентом/плагином через <code>pachca_send_message</code> после отдельного подтверждения и preflight прав</td><td><code>references/outbox.md</code> (новый), <code>references/security.md</code>, <code>references/tasks.md</code>, <code>src/report.js</code></td><td>схема файла очереди, правила обработки, <code>outbox/README.md</code> в состоянии</td></tr>
+    <tr><td>Правила переноса: блокеры предыдущего среза без цитат в окне — <code>confidence: low</code> + пометка; открытые запросы переносятся в панель действий с пометкой «предыдущий срез»; окно настраивается (в сессии 7 дней); алиас токена <code>PACHKA_TOKEN</code></td><td><code>SKILL.md</code>, <code>references/report-schema.md</code></td><td>правила честности и типовые ошибки</td></tr>
+    <tr><td>Проверки: <code>check_report.py</code> — контроль формы v2 (сводка, черновики, каналы, состояние кнопок по скоупам, outbox-диалог); <code>validate_analysis.py</code> — новые поля</td><td><code>scripts/</code>, тесты плагина</td><td>зелёные валидаторы на примере</td></tr>
+  </tbody></table>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Альтернативы механизма отправки</h3>
+  <table><thead><tr><th>Вариант</th><th>Плюсы</th><th>Цена</th><th>Решение</th></tr></thead><tbody>
+    <tr><td>Копировать черновик + открыть чат в веб-Пачке</td><td>Просто, полностью автономно</td><td>Отправка вручную, не programmable</td><td>Отвергнуто пользователем</td></tr>
+    <tr><td>Очередь outbox для плагина</td><td>HTML автономен и без токена; отправка проверяема и подтверждаема; преflight прав</td><td>Не мгновенно; нужен агент/плагин для обработки</td><td><b>Выбрано пользователем 2026-11-19</b></td></tr>
+    <tr><td>Локальный сервис-отправщик</td><td>Один клик</td><td>Сервер с токеном; HTML не автономен</td><td>Отвергнуто: нарушает инварианты</td></tr>
+  </tbody></table>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Как проверяется</h3>
+  <ol>
+    <li>Тесты плагина: <code>run-tests.mjs</code>, <code>api.test.mjs</code>, <code>plugin.test.mjs</code>, <code>build-example.mjs</code> — зелёные.</li>
+    <li>Пример воспроизводится: <code>example-report.html</code> содержит форму v2.2; <code>check_report.py</code> и <code>validate_analysis.py</code> зелёные.</li>
+    <li>Кнопки в примере неактивны (read-only скоупы); юнит-тест с <code>messages:create</code> — активны.</li>
+    <li>В HTML нет внешних запросов, токена и неэкранированного текста; outbox-файлы без секретов.</li>
+  </ol>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Источники обновления (дата обращения 2026-11-19)</h3>
+  <ol>
+    <li><span class="mono">https://developer.mozilla.org/en-US/docs/Web/API/File_System_API</span> — File System Access API: handles, <code>showDirectoryPicker</code>, <code>FileSystemWritableFileStream</code>, сериализация handles в IndexedDB; secure context.</li>
+    <li><span class="mono">https://wicg.github.io/file-system-access/</span> — спецификация File System Access API (WICG).</li>
+    <li><span class="mono">https://dev.pachca.com/guides/permissions</span> — скоуп <code>messages:create</code> и роли для отправки (источник 15 ledger).</li>
+    <li>Требования пользователя и утверждённая форма v2.2 — сессия 2026-11-18/19, эталонная реализация <code>.pachca/build_report.py</code> (рабочее состояние, не артефакт навыка).</li>
+  </ol>
+  <p>Научная часть: новых методов нет; структурирование дашборда опирается на уже изученные Dashboard Design Patterns (2022) и «What Do We Talk About When We Talk About Dashboards?» (2018). Waiver не требуется.</p>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Верификация (2026-11-19)</h3>
+  <ul>
+    <li>Тесты плагина: <code>run-tests.mjs</code> 18/18, <code>api.test.mjs</code> 2/2 (локальный mock, без внешней сети), <code>plugin.test.mjs</code> 1/1 — exit 0.</li>
+    <li><code>build-example.mjs</code> воспроизводит эталон: 16/18 артефактов байт-identical, 2 HTML отличаются только штампами времени генерации (легитимно при каждом запуске). Прогон выполнен на байт-копии плагина в writable-области из-за ограничения оболочки (см. ниже); размещённые артефакты сверены.</li>
+    <li><code>check_report.py</code> на примере: form v2 (summary, drafts, outbox), внешних запросов нет; <code>validate_analysis.py</code>: 4/4 проекта с цитатами.</li>
+    <li>Инструмент <code>pachca.report</code> принимает <code>actions</code>/<code>actionsPath</code> и возвращает <code>personalActions</code>, <code>sendEnabled</code>.</li>
+  </ul>
+  <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:16px 0 7px">Известные ограничения</h3>
+  <ul>
+    <li>Обработка outbox-очереди реализована как процедура агента (SKILL.md шаг 9, references/outbox.md); отдельный инструмент плагина <code>pachca.outbox</code> не реализован — возможное развитие.</li>
+    <li>Оболочка сессии работает с низким уровнем целостности и не может писать в <code>skills/**</code> (каталоги созданы host-процессом со средним уровнем). Права Windows исправлены и проверены (3 каталога, откат в <code>.acl-recovery</code>); прямой запуск <code>build-example.mjs</code> из оболочки требует сессию с полным доступом. Артефакты размещены и сверены через write-инструменты.</li>
+    <li>Рабочая директория не является git-репозиторием: PR Gate выполняется после инициализации репозитория/указания remote владельцем.</li>
+  </ul>
+  <div class="decision">
+    <div class="approved">approved</div>
+    <div>revise</div>
+    <div>rejected</div>
+    <div>draft</div>
+  </div>
+  <p style="margin-top:12px;color:var(--muted);font-size:12px">Решение по обновлению: approved. Основание: пользователь утвердил форму v2.2 и выбрал механизм outbox 2026-11-19 («Утверждаю, обновляй скилл»). Ограничение: рабочая директория сессии не является git-репозиторием — PR Gate выполняется после инициализации репозитория/указания remote владельцем.</p>
+</div></section>
+
+<footer><div class="row"><span>opencode-skills · skill review</span><span>pachca-report · 2026-11-02 · обновление формы v2.2 2026-11-19</span></div></footer>
 </main>
 </body>
 </html>

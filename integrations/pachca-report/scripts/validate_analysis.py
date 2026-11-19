@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -97,6 +98,8 @@ def main(argv: list[str] | None = None) -> int:
             severity = blocker.get("severity", "medium")
             if severity not in SEVERITIES:
                 errors.append(f"{blocker_label}: severity={severity!r}")
+            if "draft" in blocker and not isinstance(blocker["draft"], str):
+                errors.append(f"{blocker_label}: draft должен быть строкой")
             evidence = blocker.get("evidenceMessageIds", [])
             if not isinstance(evidence, list) or not evidence:
                 message = f"{blocker_label}: нет evidenceMessageIds"
@@ -105,6 +108,11 @@ def main(argv: list[str] | None = None) -> int:
             for message_id in evidence:
                 if str(message_id) not in ids_by_chat[chat_id]:
                     errors.append(f"{blocker_label}: сообщение {message_id} не найдено в чате {chat_id}")
+
+        points = project.get("progressPoints")
+        if points is not None:
+            if not isinstance(points, list) or any(not isinstance(t, str) or not t.strip() for t in points):
+                errors.append(f"{label}: progressPoints должен быть массивом непустых строк")
 
         evidence = project.get("evidenceMessageIds", [])
         if not isinstance(evidence, list) or not evidence:
@@ -118,6 +126,46 @@ def main(argv: list[str] | None = None) -> int:
                 errors.append(f"{label}: сообщение {message_id} не найдено в чате {chat_id}")
         if found_all:
             verified += 1
+
+    cross = analysis.get("crossProject")
+    if cross is not None:
+        if not isinstance(cross, dict):
+            errors.append("crossProject должен быть объектом")
+        else:
+            if "summary" in cross and not isinstance(cross["summary"], str):
+                errors.append("crossProject.summary должен быть строкой")
+            for key in ("highlights", "external"):
+                items = cross.get(key)
+                if items is None:
+                    continue
+                if not isinstance(items, list):
+                    errors.append(f"crossProject.{key} должен быть массивом")
+                    continue
+                for i, item in enumerate(items, start=1):
+                    if not isinstance(item, dict) or not str(item.get("text") or "").strip():
+                        errors.append(f"crossProject.{key}[{i}]: нужен объект с непустым text")
+            risks = cross.get("risks")
+            if risks is not None:
+                if not isinstance(risks, list):
+                    errors.append("crossProject.risks должен быть массивом")
+                else:
+                    for i, item in enumerate(risks, start=1):
+                        if not isinstance(item, dict) or not str(item.get("text") or "").strip():
+                            errors.append(f"crossProject.risks[{i}]: нужен объект с непустым text")
+                        elif item.get("severity", "medium") not in SEVERITIES:
+                            errors.append(f"crossProject.risks[{i}]: severity={item.get('severity')!r}")
+            deadlines = cross.get("deadlines")
+            if deadlines is not None:
+                if not isinstance(deadlines, list):
+                    errors.append("crossProject.deadlines должен быть массивом")
+                else:
+                    for i, item in enumerate(deadlines, start=1):
+                        if not isinstance(item, dict) or not str(item.get("what") or "").strip():
+                            errors.append(f"crossProject.deadlines[{i}]: нужен объект с непустым what")
+                            continue
+                        date = str(item.get("date") or "")
+                        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
+                            errors.append(f"crossProject.deadlines[{i}]: date должен быть YYYY-MM-DD")
 
     missing = set(chats) - seen
     if missing:
