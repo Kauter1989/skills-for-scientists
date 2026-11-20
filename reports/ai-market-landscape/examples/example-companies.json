@@ -1,0 +1,3778 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-11-06",
+  "cohorts": {
+    "RF": {
+      "label": "Российская Федерация",
+      "registry": "ЕГРЮЛ / ФИПС",
+      "source": "collect.py:openrouter"
+    },
+    "WORLD": {
+      "label": "Мир (без РФ)",
+      "registry": "открытые каталоги",
+      "source": "collect.py:openrouter"
+    }
+  },
+  "sources": [
+    {
+      "id": "company_site",
+      "url": "https://example.com/company",
+      "retrievedAt": "2026-11-06",
+      "kind": "company_site",
+      "status": "ok"
+    },
+    {
+      "id": "habr",
+      "url": "https://habr.com",
+      "retrievedAt": "2026-11-06",
+      "kind": "news",
+      "status": "ok"
+    },
+    {
+      "id": "openrouter",
+      "url": "https://openrouter.ai/api/v1/models",
+      "retrievedAt": "2026-11-06",
+      "kind": "catalog",
+      "status": "ok"
+    },
+    {
+      "id": "habr",
+      "url": "https://habr.com/ru/rss/search/",
+      "retrievedAt": "2026-11-06",
+      "kind": "news",
+      "status": "ok"
+    },
+    {
+      "id": "openrouter",
+      "url": "https://openrouter.ai/api/v1/models",
+      "retrievedAt": "2026-11-06",
+      "kind": "catalog",
+      "status": "ok"
+    },
+    {
+      "id": "habr",
+      "url": "https://habr.com/ru/rss/search/",
+      "retrievedAt": "2026-11-06",
+      "kind": "news",
+      "status": "ok"
+    }
+  ],
+  "companies": [
+    {
+      "id": "sber",
+      "name": "Сбер",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://sber.ru",
+      "roles": [
+        "developer",
+        "integrator"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing",
+        "integration"
+      ],
+      "pak": "none",
+      "delivery": null,
+      "evidence": [
+        {
+          "url": "https://sber.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://habr.com/ru/rss/search/?q=%D0%A1%D0%B1%D0%B5%D1%80%20GigaChat&target_type=posts&fl=ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "news",
+          "note": "публикует GigaChat"
+        },
+        {
+          "url": "https://sber.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://sber.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "домен не подтверждён: сервисы GigaChat не классифицированы по осям отчёта"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "yandex",
+      "name": "Яндекс",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": 1997,
+      "site": "https://yandex.ru",
+      "roles": [
+        "developer",
+        "integrator"
+      ],
+      "domains": [
+        "media",
+        "mobility"
+      ],
+      "services": [
+        "development",
+        "licensing",
+        "integration"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "evidence": [
+        {
+          "url": "https://yandex.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://yandex.cloud",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "облачная линия"
+        },
+        {
+          "url": "https://habr.com/ru/rss/search/?q=%D0%AF%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%20YandexGPT&target_type=posts&fl=ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://yandex.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://yandex.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "домен и услуги выведены из публичной линейки продуктов"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "sbercloud",
+      "name": "SberCloud",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://sbercloud.ru",
+      "roles": [
+        "integrator"
+      ],
+      "domains": [],
+      "services": [
+        "integration",
+        "mlops",
+        "support"
+      ],
+      "pak": "none",
+      "delivery": "saas",
+      "evidence": [
+        {
+          "url": "https://sbercloud.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://sbercloud.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://sbercloud.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "роль интегратор облачных ИИ-сервисов выведена из категории платформы"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "vk",
+      "name": "VK",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://vk.company",
+      "roles": [
+        "developer",
+        "integrator"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing",
+        "integration"
+      ],
+      "pak": "none",
+      "delivery": null,
+      "evidence": [
+        {
+          "url": "https://vk.company",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://vk.company",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://vk.company",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "конкретные ИИ-продукты не сопоставлены с осью услуг"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "kandinsky",
+      "name": "Кандинский (Kandinsky)",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://kandinsky.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "licensing",
+        "development"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "evidence": [
+        {
+          "url": "https://kandinsky.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "генеративное изображение и видео"
+        },
+        {
+          "url": "https://kandinsky.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://kandinsky.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "поле «компания» описывает продуктовую линию, а не юридическое лицо"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "visionlabs",
+      "name": "VisionLabs",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://visionlabs.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "security"
+      ],
+      "services": [
+        "development",
+        "licensing",
+        "support"
+      ],
+      "pak": "ai_component",
+      "delivery": "on_prem",
+      "evidence": [
+        {
+          "url": "https://visionlabs.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "компьютерное зрение и биометрия"
+        },
+        {
+          "url": "https://visionlabs.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://visionlabs.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "ПАК-компонент выведен из характера биометрических терминалов"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "croc",
+      "name": "КРОК",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://croc.ru",
+      "roles": [
+        "integrator"
+      ],
+      "domains": [],
+      "services": [
+        "consulting",
+        "integration",
+        "support",
+        "training"
+      ],
+      "pak": "ai_component",
+      "delivery": null,
+      "evidence": [
+        {
+          "url": "https://croc.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://croc.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://croc.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "интегратор: разработка собственных моделей не подтверждена"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "lanit",
+      "name": "ЛАНИТ",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://lanit.ru",
+      "roles": [
+        "integrator"
+      ],
+      "domains": [],
+      "services": [
+        "consulting",
+        "integration",
+        "support",
+        "training"
+      ],
+      "pak": "none",
+      "delivery": null,
+      "evidence": [
+        {
+          "url": "https://lanit.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://lanit.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://lanit.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "класс ПАК для интегратора не подтверждён"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "rt-solar",
+      "name": "РТ-Солар (Solar)",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://rt-solar.ru",
+      "roles": [
+        "developer",
+        "integrator"
+      ],
+      "domains": [
+        "security"
+      ],
+      "services": [
+        "development",
+        "integration",
+        "support"
+      ],
+      "pak": "ai_component",
+      "delivery": "on_prem",
+      "evidence": [
+        {
+          "url": "https://rt-solar.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "ИИ в кибербезопасности"
+        },
+        {
+          "url": "https://rt-solar.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://rt-solar.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "принадлежность ИИ-функций продуктам подтверждена только описанием линейки"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "iqmen",
+      "name": "IQMen",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://iqmen.ru",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "education",
+        "public"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "saas",
+      "evidence": [
+        {
+          "url": "https://iqmen.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "аналитика данных в образовании"
+        },
+        {
+          "url": "https://iqmen.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://iqmen.ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "использование ИИ в продукте не подтверждено отдельным источником"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "speechpro",
+      "name": "SpeechPro / ЦРТ",
+      "country": "RU",
+      "cohort": "RF",
+      "founded": null,
+      "site": "https://speechpro.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "security",
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing",
+        "support"
+      ],
+      "pak": "ai_component",
+      "delivery": "on_prem",
+      "evidence": [
+        {
+          "url": "https://speechpro.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "распознавание речи и биометрия"
+        },
+        {
+          "url": "https://speechpro.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://speechpro.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "поставка в составе ПАК выведена из интеграции с терминалами"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "country": "US",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.anthropic.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "evidence": [
+        {
+          "url": "https://www.anthropic.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "модели Anthropic доступны в каталоге"
+        },
+        {
+          "url": "https://www.anthropic.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://www.anthropic.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "домен применения моделей не подтверждён каталогом"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "deepmind",
+      "name": "Google DeepMind",
+      "country": "US",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://deepmind.google",
+      "roles": [
+        "developer",
+        "integrator"
+      ],
+      "domains": [
+        "med",
+        "education"
+      ],
+      "services": [
+        "development",
+        "licensing",
+        "integration"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "evidence": [
+        {
+          "url": "https://deepmind.google",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "модели Gemini и исследования применения"
+        },
+        {
+          "url": "https://deepmind.google",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://deepmind.google",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "домены применения выведены из публичных исследовательских программ"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "meta-ai",
+      "name": "Meta AI",
+      "country": "US",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://ai.meta.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "evidence": [
+        {
+          "url": "https://ai.meta.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://ai.meta.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://ai.meta.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "открытые веса моделей подтверждены, остальные поля нет"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "mistral-ai",
+      "name": "Mistral AI",
+      "country": "FR",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://mistral.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "on_prem",
+      "evidence": [
+        {
+          "url": "https://mistral.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://mistral.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://mistral.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "поставка on_prem выведена из стратегии компании"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "cohere",
+      "name": "Cohere",
+      "country": "CA",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://cohere.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "on_prem",
+      "evidence": [
+        {
+          "url": "https://cohere.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site"
+        },
+        {
+          "url": "https://cohere.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        },
+        {
+          "url": "https://cohere.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "manual curator",
+      "quality": "estimated",
+      "caveats": [
+        "поля выведены из описания продуктовой линейки"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "aionlabs--unverified",
+      "name": "AionLabs",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 6,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "6 моделей вендора AionLabs"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "amazon--unverified",
+      "name": "Amazon",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://aws.amazon.com/bedrock",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 5,
+      "firstModelYear": 2024,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "5 моделей вендора Amazon"
+        },
+        {
+          "url": "https://aws.amazon.com/bedrock",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://aws.amazon.com/bedrock",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "anthropic--unverified",
+      "name": "Anthropic",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.anthropic.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 34,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "34 моделей вендора Anthropic"
+        },
+        {
+          "url": "https://www.anthropic.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.anthropic.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "bytedance--unverified",
+      "name": "ByteDance",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.bytedance.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 7,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "7 моделей вендора ByteDance"
+        },
+        {
+          "url": "https://www.bytedance.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.bytedance.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "aliases": [
+        "ByteDance Seed"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "cohere--unverified",
+      "name": "Cohere",
+      "country": "CA",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://cohere.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 6,
+      "firstModelYear": 2024,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "6 моделей вендора Cohere"
+        },
+        {
+          "url": "https://cohere.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://cohere.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "deepseek--unverified",
+      "name": "DeepSeek",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.deepseek.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 18,
+      "firstModelYear": 2024,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "18 моделей вендора DeepSeek"
+        },
+        {
+          "url": "https://www.deepseek.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.deepseek.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "dots-studio--unverified",
+      "name": "Dots Studio",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Dots Studio"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "elorian--unverified",
+      "name": "Elorian",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Elorian"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "fireworks--unverified",
+      "name": "Fireworks",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Fireworks"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "google--unverified",
+      "name": "Google",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://deepmind.google",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media",
+        "mobility"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 45,
+      "firstModelYear": 2024,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "45 моделей вендора Google"
+        },
+        {
+          "url": "https://deepmind.google",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://deepmind.google",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "ibm--unverified",
+      "name": "IBM",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.ibm.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора IBM"
+        },
+        {
+          "url": "https://www.ibm.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.ibm.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "inception-ai--unverified",
+      "name": "Inception",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.inceptionai.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "fin"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 3,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "3 моделей вендора Inception"
+        },
+        {
+          "url": "https://www.inceptionai.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.inceptionai.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "inference-net--unverified",
+      "name": "Inference.net",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Inference.net"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "liquidai--unverified",
+      "name": "LiquidAI",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 3,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "3 моделей вендора LiquidAI"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "mancer--unverified",
+      "name": "Mancer",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2023,
+      "lastModelYear": 2023,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Mancer"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "meituan--unverified",
+      "name": "Meituan",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.meituan.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Meituan"
+        },
+        {
+          "url": "https://www.meituan.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.meituan.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "meta--unverified",
+      "name": "Meta",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://ai.meta.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 16,
+      "firstModelYear": 2024,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "16 моделей вендора Meta"
+        },
+        {
+          "url": "https://ai.meta.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://ai.meta.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "microsoft--unverified",
+      "name": "Microsoft",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://azure.microsoft.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2025,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Microsoft"
+        },
+        {
+          "url": "https://azure.microsoft.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://azure.microsoft.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "minimax--unverified",
+      "name": "MiniMax",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.minimaxi.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "security",
+        "media",
+        "mobility"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 5,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "5 моделей вендора MiniMax"
+        },
+        {
+          "url": "https://www.minimaxi.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.minimaxi.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "mistral-ai--unverified",
+      "name": "Mistral",
+      "country": "FR",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://mistral.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "med",
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 19,
+      "firstModelYear": 2024,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "19 моделей вендора Mistral"
+        },
+        {
+          "url": "https://mistral.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://mistral.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "moondream--unverified",
+      "name": "Moondream",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Moondream"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "moonshot-ai--unverified",
+      "name": "MoonshotAI",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.moonshot.cn",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 10,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "10 моделей вендора MoonshotAI"
+        },
+        {
+          "url": "https://www.moonshot.cn",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.moonshot.cn",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "morph--unverified",
+      "name": "Morph",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2025,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Morph"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "nvidia--unverified",
+      "name": "NVIDIA",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.nvidia.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "fin",
+        "security",
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 11,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "11 моделей вендора NVIDIA"
+        },
+        {
+          "url": "https://www.nvidia.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.nvidia.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "nex-agi--unverified",
+      "name": "Nex AGI",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Nex AGI"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "nous--unverified",
+      "name": "Nous",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2025,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Nous"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "openai--unverified",
+      "name": "OpenAI",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://openai.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 103,
+      "firstModelYear": 2023,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "103 моделей вендора OpenAI"
+        },
+        {
+          "url": "https://openai.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://openai.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "http:403"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "http:403"
+    },
+    {
+      "id": "openrouter--unverified",
+      "name": "OpenRouter",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 7,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "7 моделей вендора OpenRouter"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "aliases": [
+        "openrouter"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "particle-ai--unverified",
+      "name": "Particle AI",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Particle AI"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "perceptron--unverified",
+      "name": "Perceptron",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Perceptron"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "perplexity--unverified",
+      "name": "Perplexity",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.perplexity.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "fin",
+        "mobility"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 5,
+      "firstModelYear": 2025,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "5 моделей вендора Perplexity"
+        },
+        {
+          "url": "https://www.perplexity.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.perplexity.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "http:403"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "http:403"
+    },
+    {
+      "id": "prismml--unverified",
+      "name": "PrismML",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора PrismML"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "alibaba-qwen--unverified",
+      "name": "Qwen",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://qwen.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 40,
+      "firstModelYear": 2024,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "40 моделей вендора Qwen"
+        },
+        {
+          "url": "https://qwen.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://qwen.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "recursive--unverified",
+      "name": "Recursive",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Recursive"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "reflection--unverified",
+      "name": "Reflection",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://reflection.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Reflection"
+        },
+        {
+          "url": "https://reflection.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://reflection.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "relace--unverified",
+      "name": "Relace",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2025,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Relace"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "sakana-ai--unverified",
+      "name": "Sakana",
+      "country": "JP",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://sakana.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 4,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "4 моделей вендора Sakana"
+        },
+        {
+          "url": "https://sakana.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://sakana.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "sao10k--unverified",
+      "name": "Sao10K",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2024,
+      "lastModelYear": 2024,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Sao10K"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "scaledown--unverified",
+      "name": "ScaleDown",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "mobility"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора ScaleDown"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "spacexai--unverified",
+      "name": "SpaceXAI",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 10,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "10 моделей вендора SpaceXAI"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "stepfun--unverified",
+      "name": "StepFun",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.stepfun.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 3,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "3 моделей вендора StepFun"
+        },
+        {
+          "url": "https://www.stepfun.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.stepfun.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "tencent--unverified",
+      "name": "Tencent",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.tencent.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 8,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "8 моделей вендора Tencent"
+        },
+        {
+          "url": "https://www.tencent.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.tencent.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "thedrummer--unverified",
+      "name": "TheDrummer",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "fin"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 3,
+      "firstModelYear": 2024,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "3 моделей вендора TheDrummer"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "thinking-machines--unverified",
+      "name": "Thinking Machines",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://thinkingmachines.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Thinking Machines"
+        },
+        {
+          "url": "https://thinkingmachines.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://thinkingmachines.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "typesafe--unverified",
+      "name": "TypeSafe",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора TypeSafe"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "upstage--unverified",
+      "name": "Upstage",
+      "country": "KR",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.upstage.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора Upstage"
+        },
+        {
+          "url": "https://www.upstage.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.upstage.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "venice--unverified",
+      "name": "Venice",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "fin"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2025,
+      "lastModelYear": 2025,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Venice"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "writer--unverified",
+      "name": "Writer",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://writer.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора Writer"
+        },
+        {
+          "url": "https://writer.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://writer.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "xiaomi--unverified",
+      "name": "Xiaomi",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.mi.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 5,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "5 моделей вендора Xiaomi"
+        },
+        {
+          "url": "https://www.mi.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.mi.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "xingchen--unverified",
+      "name": "XingChen",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора XingChen"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "zhipu--unverified",
+      "name": "Z.ai",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://z.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 21,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "21 моделей вендора Z.ai"
+        },
+        {
+          "url": "https://z.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://z.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "anthracite-org--unverified",
+      "name": "anthracite-org",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "fin"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2024,
+      "lastModelYear": 2024,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора anthracite-org"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "gryphe--unverified",
+      "name": "gryphe",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "fin"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2023,
+      "lastModelYear": 2023,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора gryphe"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "ant-group--unverified",
+      "name": "inclusionAI",
+      "country": "CN",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://www.antgroup.com",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 4,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "4 моделей вендора inclusionAI"
+        },
+        {
+          "url": "https://www.antgroup.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://www.antgroup.com",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "mistralai--unverified",
+      "name": "mistralai",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2024,
+      "lastModelYear": 2024,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора mistralai"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "qwen--unverified",
+      "name": "qwen",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2024,
+      "lastModelYear": 2024,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора qwen"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "rekaai--unverified",
+      "name": "rekaai",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [
+        "media"
+      ],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 2,
+      "firstModelYear": 2025,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "2 моделей вендора rekaai"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "ricursiveai--unverified",
+      "name": "ricursiveai",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора ricursiveai"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "stealth--unverified",
+      "name": "stealth",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора stealth"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "unbiased--unverified",
+      "name": "unbiased",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 3,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "3 моделей вендора unbiased"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "aliases": [
+        "~unbiased"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "undi95--unverified",
+      "name": "undi95",
+      "country": null,
+      "countrySource": "missing",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": null,
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2023,
+      "lastModelYear": 2023,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора undi95"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "xai--unverified",
+      "name": "xAI",
+      "country": "US",
+      "countrySource": "expert",
+      "cohort": "WORLD",
+      "founded": null,
+      "site": "https://x.ai",
+      "roles": [
+        "developer"
+      ],
+      "domains": [],
+      "services": [
+        "development",
+        "licensing"
+      ],
+      "pak": "none",
+      "delivery": "api",
+      "models": 1,
+      "firstModelYear": 2026,
+      "lastModelYear": 2026,
+      "evidence": [
+        {
+          "url": "https://openrouter.ai/api/v1/models",
+          "retrievedAt": "2026-11-06",
+          "kind": "catalog",
+          "note": "1 моделей вендора xAI"
+        },
+        {
+          "url": "https://x.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "company_site",
+          "note": "сайт провайдера"
+        },
+        {
+          "url": "https://x.ai",
+          "retrievedAt": "2026-11-06",
+          "kind": "site_check",
+          "note": "ok:200"
+        }
+      ],
+      "source": "collect.py:openrouter",
+      "quality": "estimated",
+      "needsReview": false,
+      "caveats": [
+        "роль developer выведена из факта публикации модели",
+        "домен применения каталогом не подтверждается; пустой домен означает missing"
+      ],
+      "siteStatus": "ok:200"
+    },
+    {
+      "id": "gigachat--habr",
+      "name": "GigaChat Сбер",
+      "country": "RU",
+      "cohort": "RF",
+      "site": null,
+      "roles": [],
+      "domains": [],
+      "services": [],
+      "pak": "none",
+      "mentions": 20,
+      "titles": [
+        "«Сбер» предупредил о мошенниках, фейковых Telegram-каналах и ботах, якобы, предоставляющих доступ к нейросети GigaChat",
+        "Wylsacom представил распаковку российской нейросети GigaChat от «Сбера»",
+        "«Сбер» открыл доступ к сервису GigaChat для всех пользователей"
+      ],
+      "evidence": [
+        {
+          "url": "https://habr.com/ru/rss/search/?q=GigaChat%20%D0%A1%D0%B1%D0%B5%D1%80&target_type=posts&fl=ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "news",
+          "note": "20 публикаций"
+        },
+        {
+          "url": "https://habr.com/ru/news/733036/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=733036",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/news/732900/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=732900",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/news/758984/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=758984",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        }
+      ],
+      "source": "collect.py:habr",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "публикации подтверждают активность, а не роль developer/integrator"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "yandexgpt--habr",
+      "name": "YandexGPT",
+      "country": "RU",
+      "cohort": "RF",
+      "site": null,
+      "roles": [],
+      "domains": [],
+      "services": [],
+      "pak": "none",
+      "mentions": 20,
+      "titles": [
+        "ИИ-протокол приема уже работает. Почему не везде и что это даст ДМС",
+        "Yandex Cloud рассказал об итогах закрытого тестирования YandexGPT",
+        "Яндекс представил третье поколение больших языковых моделей YandexGPT"
+      ],
+      "evidence": [
+        {
+          "url": "https://habr.com/ru/rss/search/?q=YandexGPT&target_type=posts&fl=ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "news",
+          "note": "20 публикаций"
+        },
+        {
+          "url": "https://habr.com/ru/articles/1103082/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=1103082",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/news/763406/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=763406",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/companies/yandex/news/803271/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=803271",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        }
+      ],
+      "source": "collect.py:habr",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "публикации подтверждают активность, а не роль developer/integrator"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "cotype--habr",
+      "name": "Cotype МТС",
+      "country": "RU",
+      "cohort": "RF",
+      "site": null,
+      "roles": [],
+      "domains": [],
+      "services": [],
+      "pak": "none",
+      "mentions": 17,
+      "titles": [
+        "МТС вложила 1 млрд рублей в развитие своих языковых моделей",
+        "МТС выпустит нейросетевую модель с открытым кодом и возможностью донастройки под бизнес-задачи",
+        "ИИ-агенты: хайп или новый стандарт рынка. Обзор исследования от МТС"
+      ],
+      "evidence": [
+        {
+          "url": "https://habr.com/ru/rss/search/?q=Cotype%20%D0%9C%D0%A2%D0%A1&target_type=posts&fl=ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "news",
+          "note": "17 публикаций"
+        },
+        {
+          "url": "https://habr.com/ru/news/916042/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=916042",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/news/861478/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=861478",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/companies/ru_mts/articles/965622/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=965622",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        }
+      ],
+      "source": "collect.py:habr",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "публикации подтверждают активность, а не роль developer/integrator"
+      ],
+      "siteStatus": "missing"
+    },
+    {
+      "id": "q-178d6636--habr",
+      "name": "Тинькофф ИИ",
+      "country": "RU",
+      "cohort": "RF",
+      "site": null,
+      "roles": [],
+      "domains": [],
+      "services": [],
+      "pak": "none",
+      "mentions": 20,
+      "titles": [
+        "«Тинькофф» представил «вселенную» из шести ИИ-ассистентов",
+        "От простого ИТ-ландшафта к единой платформе разработки: эволюция ИТ в Тинькофф",
+        "Как получать стипендию Тинькофф, зная лишь ChatGPT?"
+      ],
+      "evidence": [
+        {
+          "url": "https://habr.com/ru/rss/search/?q=%D0%A2%D0%B8%D0%BD%D1%8C%D0%BA%D0%BE%D1%84%D1%84%20%D0%98%D0%98&target_type=posts&fl=ru",
+          "retrievedAt": "2026-11-06",
+          "kind": "news",
+          "note": "20 публикаций"
+        },
+        {
+          "url": "https://habr.com/ru/news/810089/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=810089",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/companies/tbank/articles/809039/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=809039",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        },
+        {
+          "url": "https://habr.com/ru/articles/728452/?utm_source=habrahabr&amp;utm_medium=rss&amp;utm_campaign=728452",
+          "retrievedAt": "2026-11-06",
+          "kind": "news"
+        }
+      ],
+      "source": "collect.py:habr",
+      "quality": "estimated",
+      "needsReview": true,
+      "caveats": [
+        "публикации подтверждают активность, а не роль developer/integrator"
+      ],
+      "siteStatus": "missing"
+    }
+  ],
+  "warnings": [
+    "снимок собран из двух источников: OpenRouter (мир) и RSS Хабра (сигналы РФ)",
+    "курируемые записи РФ и мира добавлены из ручного реестра примера",
+    "OpenRouter подтверждает публикацию модели, но не роль компании на рынке",
+    "когорта РФ этим источником не покрывается и остаётся missing до курируемого реестра",
+    "поиск по публикациям не является реестром; записи с needsReview не участвуют в долях до проверки",
+    "проверка сайтов: недоступно 2 из 82; недоступность сайта не означает отсутствие компании"
+  ]
+}

@@ -1,0 +1,864 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-11-06",
+  "generatedFrom": "2026-11-06",
+  "taxonomy": {
+    "roles": [
+      "developer",
+      "integrator"
+    ],
+    "domains": [
+      "med",
+      "fin",
+      "industrial",
+      "security",
+      "education",
+      "media",
+      "agro",
+      "public",
+      "mobility"
+    ],
+    "services": [
+      "consulting",
+      "integration",
+      "development",
+      "licensing",
+      "mlops",
+      "data_services",
+      "support",
+      "training",
+      "hardware"
+    ],
+    "pak": [
+      "none",
+      "ai_component",
+      "ai_system",
+      "ai_software_package"
+    ],
+    "delivery": [
+      "api",
+      "on_prem",
+      "saas",
+      "pak",
+      "none"
+    ]
+  },
+  "thresholds": {
+    "gapMinCohort": 10,
+    "gapMinGlobal": 3
+  },
+  "cohorts": {
+    "RF": {
+      "cohort": "RF",
+      "companies": 11,
+      "verified": 11,
+      "needsReview": 4,
+      "metrics": [
+        {
+          "id": "AIC",
+          "value": 11,
+          "unit": "компаний",
+          "quality": "measured",
+          "note": "активные компании когорты на дату снимка; ещё 4 записей ждут проверки",
+          "evidence": []
+        },
+        {
+          "id": "PSS",
+          "value": 36.4,
+          "unit": "%",
+          "quality": "derived",
+          "note": "доля компаний с ПАК (4 из 11)",
+          "evidence": []
+        },
+        {
+          "id": "UDI",
+          "value": 45.5,
+          "unit": "%",
+          "quality": "derived",
+          "note": "покрыто 5 доменов из 9",
+          "evidence": []
+        },
+        {
+          "id": "UID",
+          "value": 63.6,
+          "unit": "%",
+          "quality": "derived",
+          "note": "покрыто 7 услуг из 9; 0 записей из 11 собраны автоматически, их услуги — значение по умолчанию сборщика, а не подтверждённый факт",
+          "evidence": []
+        },
+        {
+          "id": "GINI",
+          "value": 0.033,
+          "unit": "коеф.",
+          "quality": "derived",
+          "note": "концентрация ролей внутри когорты",
+          "evidence": []
+        },
+        {
+          "id": "FOUNDED_COV",
+          "value": 9.1,
+          "unit": "%",
+          "quality": "derived",
+          "note": "год основания известен у 1 из 11; без него динамика не считается",
+          "evidence": []
+        }
+      ],
+      "pending": [
+        {
+          "id": "gigachat--habr",
+          "name": "GigaChat Сбер",
+          "quality": "estimated"
+        },
+        {
+          "id": "yandexgpt--habr",
+          "name": "YandexGPT",
+          "quality": "estimated"
+        },
+        {
+          "id": "cotype--habr",
+          "name": "Cotype МТС",
+          "quality": "estimated"
+        },
+        {
+          "id": "q-178d6636--habr",
+          "name": "Тинькофф ИИ",
+          "quality": "estimated"
+        }
+      ],
+      "pendingBySource": {
+        "collect.py:habr": 4
+      },
+      "roles": {
+        "developer": 8,
+        "integrator": 7
+      },
+      "domains": {
+        "med": {
+          "count": 0,
+          "share": 0.0
+        },
+        "fin": {
+          "count": 0,
+          "share": 0.0
+        },
+        "industrial": {
+          "count": 0,
+          "share": 0.0
+        },
+        "security": {
+          "count": 3,
+          "share": 27.3
+        },
+        "education": {
+          "count": 1,
+          "share": 9.1
+        },
+        "media": {
+          "count": 4,
+          "share": 36.4
+        },
+        "agro": {
+          "count": 0,
+          "share": 0.0
+        },
+        "public": {
+          "count": 1,
+          "share": 9.1
+        },
+        "mobility": {
+          "count": 1,
+          "share": 9.1
+        }
+      },
+      "services": {
+        "consulting": {
+          "count": 2,
+          "share": 18.2
+        },
+        "integration": {
+          "count": 7,
+          "share": 63.6
+        },
+        "development": {
+          "count": 8,
+          "share": 72.7
+        },
+        "licensing": {
+          "count": 7,
+          "share": 63.6
+        },
+        "mlops": {
+          "count": 1,
+          "share": 9.1
+        },
+        "data_services": {
+          "count": 0,
+          "share": 0.0
+        },
+        "support": {
+          "count": 6,
+          "share": 54.5
+        },
+        "training": {
+          "count": 2,
+          "share": 18.2
+        },
+        "hardware": {
+          "count": 0,
+          "share": 0.0
+        }
+      },
+      "pak": {
+        "none": {
+          "count": 7,
+          "share": 63.6
+        },
+        "ai_component": {
+          "count": 4,
+          "share": 36.4
+        },
+        "ai_system": {
+          "count": 0,
+          "share": 0.0
+        },
+        "ai_software_package": {
+          "count": 0,
+          "share": 0.0
+        }
+      },
+      "countries": {
+        "RU": 11
+      },
+      "foundedByYear": {
+        "1997": 1
+      },
+      "quality": {
+        "estimated": 11
+      },
+      "autoCollected": 0,
+      "curated": 11,
+      "undated": 10
+    },
+    "WORLD": {
+      "cohort": "WORLD",
+      "companies": 34,
+      "verified": 34,
+      "needsReview": 33,
+      "metrics": [
+        {
+          "id": "AIC",
+          "value": 34,
+          "unit": "компаний",
+          "quality": "measured",
+          "note": "активные компании когорты на дату снимка; ещё 33 записей ждут проверки",
+          "evidence": []
+        },
+        {
+          "id": "PSS",
+          "value": 0.0,
+          "unit": "%",
+          "quality": "derived",
+          "note": "доля компаний с ПАК (0 из 34)",
+          "evidence": []
+        },
+        {
+          "id": "UDI",
+          "value": 17.6,
+          "unit": "%",
+          "quality": "derived",
+          "note": "покрыто 6 доменов из 9",
+          "evidence": []
+        },
+        {
+          "id": "UID",
+          "value": 8.8,
+          "unit": "%",
+          "quality": "derived",
+          "note": "покрыто 3 услуг из 9; 29 записей из 34 собраны автоматически, их услуги — значение по умолчанию сборщика, а не подтверждённый факт",
+          "evidence": []
+        },
+        {
+          "id": "GINI",
+          "value": 0.471,
+          "unit": "коеф.",
+          "quality": "derived",
+          "note": "концентрация ролей внутри когорты",
+          "evidence": []
+        },
+        {
+          "id": "FOUNDED_COV",
+          "value": 0.0,
+          "unit": "%",
+          "quality": "derived",
+          "note": "год основания известен у 0 из 34; без него динамика не считается",
+          "evidence": []
+        }
+      ],
+      "pending": [
+        {
+          "id": "aionlabs--unverified",
+          "name": "AionLabs",
+          "quality": "estimated"
+        },
+        {
+          "id": "dots-studio--unverified",
+          "name": "Dots Studio",
+          "quality": "estimated"
+        },
+        {
+          "id": "elorian--unverified",
+          "name": "Elorian",
+          "quality": "estimated"
+        },
+        {
+          "id": "fireworks--unverified",
+          "name": "Fireworks",
+          "quality": "estimated"
+        },
+        {
+          "id": "inference-net--unverified",
+          "name": "Inference.net",
+          "quality": "estimated"
+        },
+        {
+          "id": "liquidai--unverified",
+          "name": "LiquidAI",
+          "quality": "estimated"
+        },
+        {
+          "id": "mancer--unverified",
+          "name": "Mancer",
+          "quality": "estimated"
+        },
+        {
+          "id": "moondream--unverified",
+          "name": "Moondream",
+          "quality": "estimated"
+        },
+        {
+          "id": "morph--unverified",
+          "name": "Morph",
+          "quality": "estimated"
+        },
+        {
+          "id": "nex-agi--unverified",
+          "name": "Nex AGI",
+          "quality": "estimated"
+        },
+        {
+          "id": "nous--unverified",
+          "name": "Nous",
+          "quality": "estimated"
+        },
+        {
+          "id": "openrouter--unverified",
+          "name": "OpenRouter",
+          "quality": "estimated"
+        },
+        {
+          "id": "particle-ai--unverified",
+          "name": "Particle AI",
+          "quality": "estimated"
+        },
+        {
+          "id": "perceptron--unverified",
+          "name": "Perceptron",
+          "quality": "estimated"
+        },
+        {
+          "id": "prismml--unverified",
+          "name": "PrismML",
+          "quality": "estimated"
+        },
+        {
+          "id": "recursive--unverified",
+          "name": "Recursive",
+          "quality": "estimated"
+        },
+        {
+          "id": "relace--unverified",
+          "name": "Relace",
+          "quality": "estimated"
+        },
+        {
+          "id": "sao10k--unverified",
+          "name": "Sao10K",
+          "quality": "estimated"
+        },
+        {
+          "id": "scaledown--unverified",
+          "name": "ScaleDown",
+          "quality": "estimated"
+        },
+        {
+          "id": "spacexai--unverified",
+          "name": "SpaceXAI",
+          "quality": "estimated"
+        },
+        {
+          "id": "thedrummer--unverified",
+          "name": "TheDrummer",
+          "quality": "estimated"
+        },
+        {
+          "id": "typesafe--unverified",
+          "name": "TypeSafe",
+          "quality": "estimated"
+        },
+        {
+          "id": "venice--unverified",
+          "name": "Venice",
+          "quality": "estimated"
+        },
+        {
+          "id": "xingchen--unverified",
+          "name": "XingChen",
+          "quality": "estimated"
+        },
+        {
+          "id": "anthracite-org--unverified",
+          "name": "anthracite-org",
+          "quality": "estimated"
+        },
+        {
+          "id": "gryphe--unverified",
+          "name": "gryphe",
+          "quality": "estimated"
+        },
+        {
+          "id": "mistralai--unverified",
+          "name": "mistralai",
+          "quality": "estimated"
+        },
+        {
+          "id": "qwen--unverified",
+          "name": "qwen",
+          "quality": "estimated"
+        },
+        {
+          "id": "rekaai--unverified",
+          "name": "rekaai",
+          "quality": "estimated"
+        },
+        {
+          "id": "ricursiveai--unverified",
+          "name": "ricursiveai",
+          "quality": "estimated"
+        },
+        {
+          "id": "stealth--unverified",
+          "name": "stealth",
+          "quality": "estimated"
+        },
+        {
+          "id": "unbiased--unverified",
+          "name": "unbiased",
+          "quality": "estimated"
+        },
+        {
+          "id": "undi95--unverified",
+          "name": "undi95",
+          "quality": "estimated"
+        }
+      ],
+      "pendingBySource": {
+        "collect.py:openrouter": 33
+      },
+      "roles": {
+        "developer": 34,
+        "integrator": 1
+      },
+      "domains": {
+        "med": {
+          "count": 2,
+          "share": 5.9
+        },
+        "fin": {
+          "count": 3,
+          "share": 8.8
+        },
+        "industrial": {
+          "count": 0,
+          "share": 0.0
+        },
+        "security": {
+          "count": 2,
+          "share": 5.9
+        },
+        "education": {
+          "count": 1,
+          "share": 2.9
+        },
+        "media": {
+          "count": 11,
+          "share": 32.4
+        },
+        "agro": {
+          "count": 0,
+          "share": 0.0
+        },
+        "public": {
+          "count": 0,
+          "share": 0.0
+        },
+        "mobility": {
+          "count": 3,
+          "share": 8.8
+        }
+      },
+      "services": {
+        "consulting": {
+          "count": 0,
+          "share": 0.0
+        },
+        "integration": {
+          "count": 1,
+          "share": 2.9
+        },
+        "development": {
+          "count": 34,
+          "share": 100.0
+        },
+        "licensing": {
+          "count": 34,
+          "share": 100.0
+        },
+        "mlops": {
+          "count": 0,
+          "share": 0.0
+        },
+        "data_services": {
+          "count": 0,
+          "share": 0.0
+        },
+        "support": {
+          "count": 0,
+          "share": 0.0
+        },
+        "training": {
+          "count": 0,
+          "share": 0.0
+        },
+        "hardware": {
+          "count": 0,
+          "share": 0.0
+        }
+      },
+      "pak": {
+        "none": {
+          "count": 34,
+          "share": 100.0
+        },
+        "ai_component": {
+          "count": 0,
+          "share": 0.0
+        },
+        "ai_system": {
+          "count": 0,
+          "share": 0.0
+        },
+        "ai_software_package": {
+          "count": 0,
+          "share": 0.0
+        }
+      },
+      "countries": {
+        "US": 17,
+        "CN": 11,
+        "FR": 2,
+        "CA": 2,
+        "JP": 1,
+        "KR": 1
+      },
+      "foundedByYear": {},
+      "quality": {
+        "estimated": 34
+      },
+      "autoCollected": 29,
+      "curated": 5,
+      "undated": 34
+    }
+  },
+  "growth": {
+    "RF": {
+      "id": "DD_YEAR",
+      "value": null,
+      "unit": "компаний/год",
+      "quality": "missing",
+      "note": "ряд по годам основания короче трёх точек или когорта меньше порога",
+      "evidence": []
+    },
+    "WORLD": {
+      "id": "DD_YEAR",
+      "value": null,
+      "unit": "компаний/год",
+      "quality": "missing",
+      "note": "ряд по годам основания короче трёх точек или когорта меньше порога",
+      "evidence": []
+    }
+  },
+  "gaps": [
+    {
+      "axis": "services",
+      "key": "licensing",
+      "rfCount": 7,
+      "rfShare": 63.6,
+      "worldCount": 34,
+      "worldShare": 100.0,
+      "gapShare": 36.4,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "development",
+      "rfCount": 8,
+      "rfShare": 72.7,
+      "worldCount": 34,
+      "worldShare": 100.0,
+      "gapShare": 27.3,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "fin",
+      "rfCount": 0,
+      "rfShare": 0.0,
+      "worldCount": 3,
+      "worldShare": 8.8,
+      "gapShare": 8.8,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": true
+    },
+    {
+      "axis": "domains",
+      "key": "med",
+      "rfCount": 0,
+      "rfShare": 0.0,
+      "worldCount": 2,
+      "worldShare": 5.9,
+      "gapShare": 5.9,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "industrial",
+      "rfCount": 0,
+      "rfShare": 0.0,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": 0,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "agro",
+      "rfCount": 0,
+      "rfShare": 0.0,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": 0,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "data_services",
+      "rfCount": 0,
+      "rfShare": 0.0,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": 0,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "hardware",
+      "rfCount": 0,
+      "rfShare": 0.0,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": 0,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "mobility",
+      "rfCount": 1,
+      "rfShare": 9.1,
+      "worldCount": 3,
+      "worldShare": 8.8,
+      "gapShare": -0.3,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "media",
+      "rfCount": 4,
+      "rfShare": 36.4,
+      "worldCount": 11,
+      "worldShare": 32.4,
+      "gapShare": -4.0,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "education",
+      "rfCount": 1,
+      "rfShare": 9.1,
+      "worldCount": 1,
+      "worldShare": 2.9,
+      "gapShare": -6.2,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "public",
+      "rfCount": 1,
+      "rfShare": 9.1,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": -9.1,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "mlops",
+      "rfCount": 1,
+      "rfShare": 9.1,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": -9.1,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "consulting",
+      "rfCount": 2,
+      "rfShare": 18.2,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": -18.2,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "training",
+      "rfCount": 2,
+      "rfShare": 18.2,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": -18.2,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "domains",
+      "key": "security",
+      "rfCount": 3,
+      "rfShare": 27.3,
+      "worldCount": 2,
+      "worldShare": 5.9,
+      "gapShare": -21.4,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "support",
+      "rfCount": 6,
+      "rfShare": 54.5,
+      "worldCount": 0,
+      "worldShare": 0.0,
+      "gapShare": -54.5,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    },
+    {
+      "axis": "services",
+      "key": "integration",
+      "rfCount": 7,
+      "rfShare": 63.6,
+      "worldCount": 1,
+      "worldShare": 2.9,
+      "gapShare": -60.7,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": false
+    }
+  ],
+  "roleGap": [],
+  "missingInRf": [
+    {
+      "axis": "domains",
+      "key": "fin",
+      "rfCount": 0,
+      "rfShare": 0.0,
+      "worldCount": 3,
+      "worldShare": 8.8,
+      "gapShare": 8.8,
+      "gapQuality": "derived",
+      "note": "разница долей (мир минус РФ), не разница компаний",
+      "missingInRf": true
+    }
+  ],
+  "caveats": [
+    "снимок собран из двух источников: OpenRouter (мир) и RSS Хабра (сигналы РФ)",
+    "курируемые записи РФ и мира добавлены из ручного реестра примера",
+    "OpenRouter подтверждает публикацию модели, но не роль компании на рынке",
+    "когорта РФ этим источником не покрывается и остаётся missing до курируемого реестра",
+    "поиск по публикациям не является реестром; записи с needsReview не участвуют в долях до проверки",
+    "проверка сайтов: недоступно 2 из 82; недоступность сайта не означает отсутствие компании"
+  ],
+  "changes": {
+    "from": null,
+    "to": "2026-11-06",
+    "note": "один снимок: динамика между снимками недоступна, помечена missing",
+    "newCompanies": [],
+    "droppedCompanies": []
+  },
+  "profile": {
+    "Profile": {
+      "Name": "ИИ-рынок РФ и мир",
+      "Created at": "2026-11-06",
+      "Last confirmed": "2026-11-06"
+    },
+    "Cohorts": {},
+    "Taxonomy": {},
+    "Preferences": {
+      "Period": "2022-2026",
+      "Cohort focus": "RF; WORLD",
+      "Sources": "openrouter; company_site",
+      "Gap threshold": "0 in RF and 3 or more in WORLD",
+      "Report language": "ru"
+    }
+  }
+}
