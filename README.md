@@ -1,4 +1,4 @@
-# opencode-skills
+# skills-for-scientists
 
 A personal skill library for OpenCode: software development, research and
 reporting. Each skill is a separate directory with `SKILL.md` and, when
@@ -152,7 +152,7 @@ Secrets, `auth.json` and a local `service.json` are not part of the repository.
 ## Structure
 
 ```
-skills/
+skills-for-scientists/
 ├── AGENTS.md                  mandatory development rules
 ├── docs/
 │   ├── skills-map.html        skill and process-block map
