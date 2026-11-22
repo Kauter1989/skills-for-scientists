@@ -101,7 +101,7 @@ npm install   # or: bun install
 {
   "$schema": "https://opencode.ai/config.json",
   "plugins": [
-    "C:/Users/<user>/opencode-skills/skills/opencode-plugins/pachca"
+    "C:/Users/<user>/skills-for-scientists/opencode-plugins/pachca"
   ]
 }
 ```

@@ -23,8 +23,8 @@
 ## Быстрый старт: Markdown-панель
 
 ```bash
-git clone https://github.com/Kauter1989/opencode-skills.git
-cd opencode-skills/skills/opencode-plugins/md-viewer
+git clone https://github.com/Kauter1989/skills-for-scientists.git
+cd skills-for-scientists/opencode-plugins/md-viewer
 
 bun install
 bun run build

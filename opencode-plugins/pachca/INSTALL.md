@@ -16,8 +16,8 @@ OpenCode Desktop или сервер с поддержкой плагинов; N
 ## 2. Клонировать репозиторий
 
 ```bash
-git clone https://github.com/Kauter1989/opencode-skills.git
-cd opencode-skills/skills/opencode-plugins/pachca
+git clone https://github.com/Kauter1989/skills-for-scientists.git
+cd skills-for-scientists/opencode-plugins/pachca
 ```
 
 ## 3. Установить зависимость
@@ -43,7 +43,7 @@ bun install
 {
   "$schema": "https://opencode.ai/config.json",
   "plugins": [
-    "C:/Users/<user>/opencode-skills/skills/opencode-plugins/pachca"
+    "C:/Users/<user>/skills-for-scientists/opencode-plugins/pachca"
   ]
 }
 ```

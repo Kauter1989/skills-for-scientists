@@ -16,8 +16,8 @@
 ## 2. Клонирование
 
 ```bash
-git clone https://github.com/Kauter1989/opencode-skills.git
-cd opencode-skills/skills/opencode-plugins/md-viewer
+git clone https://github.com/Kauter1989/skills-for-scientists.git
+cd skills-for-scientists/opencode-plugins/md-viewer
 ```
 
 Дальше команды даны от каталога `md-viewer`.
@@ -81,7 +81,7 @@ cp -r . "$oc/plugins/opencode-md-panel"
 ```jsonc
 {
   "plugins": [
-    "C:/Users/<user>/opencode-skills/skills/opencode-plugins/md-viewer"
+    "C:/Users/<user>/skills-for-scientists/opencode-plugins/md-viewer"
   ]
 }
 ```

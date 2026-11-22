@@ -132,7 +132,7 @@ Copy-Item -Recurse .\integrations\pachca-report "$env:USERPROFILE\.config\openco
 
 # плагин: путь к каталогу, а не к файлу
 # ~/.config/opencode/opencode.json
-# "plugins": ["C:/path/to/opencode-skills/skills/opencode-plugins/pachca"]
+# "plugins": ["C:/path/to/skills-for-scientists/opencode-plugins/pachca"]
 ```
 
 Плагин сам добавит MCP-сервер `pachca`, если его ещё нет. Для OAuth откройте
