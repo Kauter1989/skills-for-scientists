@@ -80,7 +80,7 @@ Models**, карточка провайдера, поле ключа. Интер
 ### 3. Скопировать файлы профиля
 
 ```powershell
-$src = 'E:\projects\opencode-skills\skills\integrations\dsh\examples'
+$src = 'C:\path\to\skills-for-scientists\integrations\dsh\examples'
 $dst = Join-Path $env:USERPROFILE ".dsh\profiles\$env:DSH_PROFILE"
 # если DSH_PROFILE пуст: $dst = Join-Path $env:USERPROFILE '.dsh\profiles\desktop'
 

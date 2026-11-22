@@ -74,6 +74,7 @@ def main(argv: list[str] | None = None) -> int:
         text,
         re.I | re.S,
     )
+    payload = None
     if not match:
         errors.append("не найден JSON #report-data")
     else:
@@ -81,14 +82,18 @@ def main(argv: list[str] | None = None) -> int:
             payload = json.loads(match.group(1))
             if not isinstance(payload, dict):
                 errors.append("#report-data должен быть объектом")
+                payload = None
             elif payload.get("schemaVersion") != 1:
                 errors.append("#report-data.schemaVersion должен быть 1")
         except json.JSONDecodeError as exc:
             errors.append(f"#report-data не JSON: {exc}")
 
+    if payload is not None and payload.get("formVersion") == 2:
+        errors.extend(check_form_v2(text, payload))
+
     if 'data-by-chat=' not in text:
         errors.append("нет data-by-chat у участников: фильтр по чату не работает")
-    if 'class="person' not in text:
+    if not re.search(r'class=["\']person', text):
         errors.append("нет строк участников")
 
     if errors:
@@ -99,8 +104,53 @@ def main(argv: list[str] | None = None) -> int:
     size_kb = args.html.stat().st_size / 1024
     print(f"ok: {args.html} ({size_kb:.1f} KiB)")
     print(f"blocks: {', '.join('#' + item for item in REQUIRED_IDS)}")
+    if payload is not None and payload.get("formVersion") == 2:
+        print("form: v2 (summary, drafts, outbox)")
     print("external requests: none")
     return 0
+
+
+def check_form_v2(text: str, payload: dict) -> list[str]:
+    """Контракт формы v2: сводка, черновики с каналом, гейт кнопок, outbox."""
+    errors: list[str] = []
+    if not re.search(r'id=["\']summary["\']', text):
+        errors.append("форма v2: нет блока #summary")
+    actions_present = bool(payload.get("actionsPresent"))
+    if actions_present and not re.search(r'id=["\']actions["\']', text):
+        errors.append("форма v2: нет блока личных сообщений #actions")
+    if payload.get("sendMechanism") != "outbox":
+        errors.append("форма v2: sendMechanism должен быть outbox")
+    if not re.search(r'<dialog[^>]*id=["\']send-dialog["\']', text):
+        errors.append("форма v2: нет диалога отправки #send-dialog")
+    for button_id in ("sd-confirm", "sd-copy", "sd-cancel"):
+        if f'id="{button_id}"' not in text and f"id='{button_id}'" not in text:
+            errors.append(f"форма v2: нет кнопки диалога #{button_id}")
+
+    send_buttons = [
+        tag
+        for tag in re.findall(r"<button\b[^>]*>", text)
+        if "send-btn" in tag and "data-chat=" in tag
+    ]
+    has_draft_sources = actions_present or bool(payload.get("stats", {}).get("withBlockers"))
+    if has_draft_sources:
+        if not re.search(r'class=["\']draft-box["\']', text):
+            errors.append("форма v2: нет окон черновиков draft-box")
+        if not re.search(r'class=["\']draft-edit["\']', text):
+            errors.append("форма v2: нет редактируемых черновиков textarea.draft-edit")
+        if not re.search(r'class=["\']chan["\']', text) or "Канал:" not in text:
+            errors.append("форма v2: черновики без метки канала")
+        if not send_buttons:
+            errors.append("форма v2: нет кнопок отправки у черновиков")
+    send_enabled = bool(payload.get("sendEnabled"))
+    for tag in send_buttons:
+        disabled = "disabled" in tag
+        if send_enabled and disabled:
+            errors.append("форма v2: кнопка неактивна при sendEnabled=true")
+            break
+        if not send_enabled and not disabled:
+            errors.append("форма v2: кнопка активна без скоупа messages:create")
+            break
+    return errors
 
 
 if __name__ == "__main__":

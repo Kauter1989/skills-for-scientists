@@ -80,13 +80,30 @@
       "project": "Платформа",
       "status": "on_track",
       "progress": "API v2 готов на 80%; осталась интеграция с биллингом.",
-      "blockers": [],
+      "progressPoints": [
+        "API v2 готов на 80%.",
+        "Осталась интеграция с биллингом."
+      ],
+      "blockers": [
+        {
+          "text": "Нет доступа к staging для интеграции с биллингом.",
+          "severity": "high",
+          "evidenceMessageIds": ["m2"],
+          "draft": "Коллеги, для интеграции с биллингом нужен доступ к staging. Кто может выдать до [дата]? Без него мердж в develop стоит."
+        }
+      ],
       "nextSteps": ["Закрыть интеграцию с биллингом"],
       "confidence": "high",
-      "evidenceMessageIds": ["m1"]
+      "evidenceMessageIds": ["m1", "m2"]
     }
   ],
-  "crossProject": { "summary": "Один проект заблокирован доступом к staging." },
+  "crossProject": {
+    "summary": "Один проект заблокирован доступом к staging.",
+    "highlights": [{ "project": "Платформа", "text": "API v2 готов на 80%." }],
+    "risks": [{ "project": "Платформа", "severity": "high", "text": "Нет доступа к staging." }],
+    "deadlines": [{ "date": "2026-11-04", "when": "завтра", "time": "12:00", "what": "Интеграция с биллингом", "project": "Платформа" }],
+    "external": [{ "project": "Платформа", "text": "Доступ к staging — администратор, запрос от 01.11" }]
+  },
   "notes": "Личные чаты не анализировались."
 }
 ```
@@ -97,12 +114,18 @@
 |---|---|---|
 | `status` | `on_track`, `at_risk`, `blocked`, `unknown` | состояние проекта |
 | `progress` | строка | что изменилось, с опорой на сообщения |
-| `blockers` | массив | `{ text, severity, evidenceMessageIds }` |
+| `progressPoints` | массив строк (опц.) | прогресс буллитами для формы v2; фолбэк — `progress` |
+| `blockers` | массив | `{ text, severity, evidenceMessageIds, draft? }` |
 | `blockers[].severity` | `low`, `medium`, `high` | серьёзность |
+| `blockers[].draft` | строка (опц.) | черновик сообщения по блокеру; канал — чат проекта |
 | `nextSteps` | массив строк | следующий шаг |
 | `confidence` | `high`, `medium`, `low` | уверенность вывода |
 | `evidenceMessageIds` | массив ID | цитаты прогресса |
-| `crossProject.summary` | строка | сводка по всем проектам |
+| `crossProject.summary` | строка | текстовая сводка (фолбэк и версия под кат) |
+| `crossProject.highlights` | массив `{project,text}` (опц.) | главное за окно |
+| `crossProject.risks` | массив `{project,severity,text}` (опц.) | блокеры и риски сводки |
+| `crossProject.deadlines` | массив `{date,when,time?,what,project}` (опц.) | ближайшие сроки; `date` — ISO `YYYY-MM-DD` |
+| `crossProject.external` | массив `{project,text}` (опц.) | внешние зависимости |
 
 Правила:
 
@@ -116,7 +139,56 @@
    пропускается с предупреждением.
 6. Личные чаты по умолчанию не считаются проектами.
 7. Прогресс — не пересказ всей переписки. Одно-два предложения: изменение,
-   решение, риск.
+   решение, риск; в форме v2 — 2–4 буллита `progressPoints`.
+8. Блокер предыдущего среза, не закрытый в текущем окне, переносится с
+   пометкой «предыдущий срез»; без цитаты в окне — `confidence: low` и
+   «без подтверждённой цитаты». Выдумывать закрытие нельзя.
+9. `draft` — суждение модели, а не факт: черновик редактируется пользователем
+   и отправляется только через outbox с подтверждением (`outbox.md`).
+   Черновик не должен содержать секретов и оценок людей.
+10. Сводка формы v2 структурирована: порядок блоков «сроки → риски → главное
+    → зависимости»; тексты — тезисы, а не абзацы.
+
+## 2a. Панель личных сообщений (actions)
+
+Опциональный вход `.pachca/analyses/actions-*.json` (дата соответствует
+analysis). Модель собирает обращения к владельцу аккаунта: упоминания,
+`@all`, запросы в личных чатах, собственные открытые запросы. Открытые
+запросы предыдущего среза переносятся с пометкой «предыдущий срез».
+
+```json
+{
+  "schemaVersion": 1,
+  "owner": { "id": "101", "name": "Анна Петрова", "aliases": ["Аня"], "role": "admin" },
+  "basis": "чаты с активностью в окне; что учтено",
+  "addressedToYou": 2,
+  "yourOpenAsks": 1,
+  "items": [
+    {
+      "id": "A-1",
+      "kind": "reply",
+      "priority": "P0",
+      "waiting": "2 дня",
+      "chat": "Платформа",
+      "chatId": "1",
+      "from": "Пётр Сидоров",
+      "since": "2026-11-01",
+      "ask": "что ждут",
+      "why": "почему сейчас",
+      "action": "что сделать",
+      "draft": "текст черновика ответа",
+      "evidence": "m1,m2"
+    }
+  ]
+}
+```
+
+- `kind`: `reply`, `approval`, `answer_request`, `followup`, `decision`,
+  `project`, `process`; `priority`: `P0`, `P1`, `P2`.
+- `evidence` — строка ID через запятую; в HTML остаются только ID,
+  существующие в snapshot.
+- `draft` редактируется в отчёте; канал назначения — `chatId` карточки.
+- Панель не анализирует личные чаты как проекты; она учитывает обращения.
 
 ## 3. Активность
 
@@ -155,7 +227,7 @@ inactive(u) = last(u) = null OR daysSilent(u) > inactivityDays
 
 ## 5. HTML-контракт
 
-Обязательные элементы:
+Обязательные элементы (все формы):
 
 - `id="projects"` — карточки проектов;
 - `id="activity"` — диаграмма и фильтры;
@@ -166,13 +238,38 @@ inactive(u) = last(u) = null OR daysSilent(u) > inactivityDays
 - `.inactive` и `.long-silence` — визуальное выделение;
 - панель «Исключены из диаграммы».
 
-Запрещено:
+Форма v2 (`report-data.formVersion: 2`) дополнительно:
+
+- `id="summary"` — структурированная сводка: блоки «Ближайшие сроки» →
+  «Блокеры и риски» → «Главное за окно» → «Внешние зависимости»; сроки
+  «сегодня»/«завтра» подсвечены относительно даты сбора; текстовая версия
+  сводки — под кат; название проекта в тезисах — отдельной строкой над
+  текстом (блочный разделитель), не в одну строку с ним;
+- `id="actions"` — панель личных сообщений, первая секция после сводки
+  (если передан actions-вход);
+- порядок секций: summary → actions → projects → activity → tasks → method;
+- прогресс проекта — буллиты `progressPoints` (фолбэк — абзац);
+- под каждым блокером и каждым личным действием — `div.draft-box`:
+  редактируемый `textarea.draft-edit`, метка канала `span.chan`
+  («Канал: <b>имя</b> · #id»; личный чат — «Личный чат»), кнопка
+  `button.send-btn` с `data-chat`, `data-chan`, `data-ref`;
+- кнопка `disabled` с причиной, если нет `messages:create`; активна иначе;
+- `dialog#send-dialog` с кнопками `sd-confirm`, `sd-copy`, `sd-cancel` и
+  outbox-JS (см. `outbox.md`); ничего не отправляется автоматически;
+- черновики блокеров в карточках проектов свёрнуты в
+  `details.draft-details` с каналом в заголовке;
+- `report-data` содержит `formVersion: 2`, `sendEnabled`,
+  `sendMechanism: "outbox"`, `actionsPresent`.
+
+Запрещено (все формы):
 
 - `<script src=...>`, `<link rel="stylesheet">`, `@import`, CDN;
 - `fetch(`, `XMLHttpRequest`, WebSocket;
 - внешние шрифты и картинки;
 - неэкранированный пользовательский текст;
-- `href="javascript:..."`.
+- `href="javascript:..."`;
+- токен и иные секреты в любом артефакте;
+- автоматическая отправка сообщений из HTML.
 
 Данные вставляются в атрибуты и JSON с экранированием `<`, `>`, `&`,
 кавычек и `</script>`. Ссылки на сообщения разрешены только на
@@ -196,3 +293,5 @@ inactive(u) = last(u) = null OR daysSilent(u) > inactivityDays
 - “Archetypes of delay” (2020), DOI `10.1016/j.infsof.2020.106435`.
 - Dashboard Design Patterns (2022), DOI `10.1109/TVCG.2022.3209448`.
 - MCP Authorization 2025-11-25.
+- File System API (MDN) и File System Access (WICG) — доступно 2026-11-19,
+  см. `outbox.md` и addendum research ledger от 2026-11-19.

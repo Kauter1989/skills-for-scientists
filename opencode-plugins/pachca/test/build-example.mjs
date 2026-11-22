@@ -13,6 +13,7 @@ const skillRoot = join(repoRoot, "integrations", "pachca-report");
 
 const snapshot = JSON.parse(await readFile(join(here, "fixtures", "snapshot.json"), "utf8"));
 const analysis = JSON.parse(await readFile(join(here, "fixtures", "analysis.json"), "utf8"));
+const actions = JSON.parse(await readFile(join(here, "fixtures", "actions.json"), "utf8"));
 const exclusions = [
   {
     userId: "104",
@@ -72,6 +73,7 @@ const tasks = [
 const model = buildReportModel({
   snapshot,
   analysis,
+  actions,
   exclusions,
   tasks,
   projectsMapping,
@@ -84,12 +86,14 @@ const writes = [
   [join(pluginRoot, "examples", "example-report.html"), html],
   [join(pluginRoot, "examples", "example-snapshot.json"), `${JSON.stringify(snapshot, null, 2)}\n`],
   [join(pluginRoot, "examples", "example-analysis.json"), `${JSON.stringify(analysis, null, 2)}\n`],
+  [join(pluginRoot, "examples", "example-actions.json"), `${JSON.stringify(actions, null, 2)}\n`],
   [join(pluginRoot, "examples", "example-exclusions.md"), renderExclusions(exclusions)],
   [join(pluginRoot, "examples", "example-projects.md"), renderProjects(projectsMapping)],
   [join(pluginRoot, "examples", "example-tasks.md"), renderTasks(tasks)],
   [join(skillRoot, "examples", "example-report.html"), html],
   [join(skillRoot, "examples", "example-snapshot.json"), `${JSON.stringify(snapshot, null, 2)}\n`],
   [join(skillRoot, "examples", "example-analysis.json"), `${JSON.stringify(analysis, null, 2)}\n`],
+  [join(skillRoot, "examples", "example-actions.json"), `${JSON.stringify(actions, null, 2)}\n`],
   [join(skillRoot, "examples", "example-exclusions.md"), renderExclusions(exclusions)],
   [join(skillRoot, "examples", "example-projects.md"), renderProjects(projectsMapping)],
   [join(skillRoot, "examples", "example-tasks.md"), renderTasks(tasks)],
@@ -116,4 +120,7 @@ console.log(`example report: ${join(skillRoot, "examples", "example-report.html"
 console.log(`bytes: ${Buffer.byteLength(html, "utf8")}`);
 console.log(
   `stats: ${model.projects.length} projects, ${model.activity.stats.visible} participants, ${model.activity.stats.inactive} inactive`,
+);
+console.log(
+  `form v2.2: sendEnabled=${model.sendEnabled}, actions=${model.actions ? model.actions.items.length : 0} items`,
 );

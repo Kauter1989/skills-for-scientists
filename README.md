@@ -1,4 +1,4 @@
-# opencode-skills
+# skills-for-scientists
 
 A personal skill library for OpenCode: software development, research and
 reporting. Each skill is a separate directory with `SKILL.md` and, when
@@ -25,7 +25,7 @@ Priority order: **harness → dev → science → integrations → reports**.
 | [`dev-bug-processing`](dev/dev-bug-processing/SKILL.md) | `dev/` | Meta-skill: survey, choose a debugging approach and generate `dev-bug-process` with reproducibility invariants | `.opencode/bug-processing.yml`, `dev-bug-process` |
 | [`dev-pr-report-html`](dev/dev-pr-report-html/SKILL.md) | `dev/` | HTML report for feature or milestone changes: six agent-development metrics, evidence and decisions | standalone `report.html` |
 | [`pptx-report`](reports/pptx-report/SKILL.md) | `reports/` | Rigorous PPTX presentations and analytical reports: research talks, project reports and management analytics | `deck.pptx`, PNG previews |
-| [`pachca-report`](integrations/pachca-report/SKILL.md) | `integrations/` | Pachca chats to an interactive HTML report: project progress and blockers, participant activity with >2-day silence, MD exclusions, and permission-checked channel tasks | standalone `report.html`, `.pachca/*.md` |
+| [`pachca-report`](integrations/pachca-report/SKILL.md) | `integrations/` | Pachca chats to an interactive HTML report (form v2): structured summary, personal-messages panel, project progress and blockers with editable message drafts and scope-gated send buttons (outbox queue), participant activity with >2-day silence, MD exclusions, and permission-checked channel tasks | standalone `report.html`, `.pachca/*.md`, `.pachca/outbox/` |
 | [`sci-literature-news`](reports/sci-literature-news/SKILL.md) | `reports/` | Personal scientific literature digest: saved directions and period, Q1/A*/Q2 search, synthesis, dataset table, criteria and standalone HTML | `profile.md`, `candidates.json`, `analysis.json`, `report.html` |
 
 ### Meta-skills
@@ -57,10 +57,17 @@ Example: [`dev/dev-pr-report-html/examples/example-report.html`](dev/dev-pr-repo
 
 `pachca-report` connects to Pachca through the official MCP server or REST,
 collects all chats where the user is a member, and writes an interactive
-standalone HTML report. Project progress and blockers must cite message IDs;
-participants silent for more than two days are highlighted; exclusions and
-saved channel tasks live in human-editable Markdown. Saved tasks are refused
-until scopes, role, plan and chat access pass a preflight.
+standalone HTML report (form v2). The summary is structured (deadlines, risks,
+highlights, external dependencies); a personal-messages panel comes first
+after it. Project progress and blockers must cite message IDs; every blocker
+and personal action carries an editable message draft with its target channel
+and a send button that is active only with the `messages:create` scope.
+Sending never happens from the HTML: drafts go to the `.pachca/outbox/` queue
+and are sent by the plugin/agent via `pachca_send_message` after an explicit
+per-message confirmation and a rights preflight. Participants silent for more
+than two days are highlighted; exclusions and saved channel tasks live in
+human-editable Markdown. Saved tasks are refused until scopes, role, plan and
+chat access pass a preflight.
 Example: [`integrations/pachca-report/examples/example-report.html`](integrations/pachca-report/examples/example-report.html).
 
 `sci-literature-news` keeps a scientific profile, research directions and a
@@ -145,7 +152,7 @@ Secrets, `auth.json` and a local `service.json` are not part of the repository.
 ## Structure
 
 ```
-skills/
+skills-for-scientists/
 ├── AGENTS.md                  mandatory development rules
 ├── docs/
 │   ├── skills-map.html        skill and process-block map

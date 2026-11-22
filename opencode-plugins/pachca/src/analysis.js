@@ -263,6 +263,7 @@ export function validateAnalysis(analysis, snapshot, projectsMapping = []) {
         severity: SEVERITIES.includes(blocker.severity) ? blocker.severity : "medium",
         evidenceMessageIds: ids,
         verified: ids.length > 0 && missing.length === 0,
+        draft: asString(blocker.draft ?? ""),
       };
     });
     const unverifiedBlockers = blockers.filter((item) => item.text && !item.verified).length;
@@ -277,6 +278,7 @@ export function validateAnalysis(analysis, snapshot, projectsMapping = []) {
         chat.name,
       status,
       progress: progress || "Нет данных о прогрессе",
+      progressPoints: asArray(raw.progressPoints).map((item) => asString(item).trim()).filter(Boolean),
       blockers,
       nextSteps: asArray(raw.nextSteps).map((item) => asString(item).trim()).filter(Boolean),
       evidenceMessageIds: evidenceIds,
@@ -321,6 +323,7 @@ function unknownProject(chat, mapping) {
     project: mapping.get(chat.id)?.project || chat.name,
     status: "unknown",
     progress: "Нет анализа новых сообщений",
+    progressPoints: [],
     blockers: [],
     nextSteps: [],
     evidenceMessageIds: [],
@@ -345,12 +348,60 @@ export function evidenceForProject(project, limit = 8) {
   }));
 }
 
+/**
+ * Normalize the optional personal-actions panel (form v2.2).
+ * Evidence strings are filtered against every message ID in the snapshot
+ * (any chat); items are sorted by priority, replies first within a priority.
+ * Returns null when no panel is supplied, keeping older callers compatible.
+ */
+function normalizeActionsPanel(actions, snapshot) {
+  if (!actions || typeof actions !== "object" || !Array.isArray(actions.items)) return null;
+  const allIds = new Set(snapshot.chats.flatMap((chat) => chat.messages.map((message) => message.id)));
+  const owner = actions.owner && typeof actions.owner === "object" ? actions.owner : {};
+  const items = actions.items.map((item) => ({
+    id: asString(item.id),
+    kind: asString(item.kind || "reply"),
+    priority: asString(item.priority || "P2"),
+    waiting: asString(item.waiting ?? ""),
+    chat: asString(item.chat ?? ""),
+    chatId: String(item.chatId ?? ""),
+    from: asString(item.from ?? ""),
+    since: asString(item.since ?? ""),
+    ask: asString(item.ask ?? ""),
+    why: asString(item.why ?? ""),
+    action: asString(item.action ?? ""),
+    draft: asString(item.draft ?? ""),
+    ev: asString(item.evidence ?? "")
+      .split(",")
+      .map((id) => id.trim())
+      .filter((id) => id && allIds.has(id)),
+  }));
+  items.sort(
+    (a, b) =>
+      a.priority.localeCompare(b.priority) ||
+      (a.kind === "reply" ? 0 : 1) - (b.kind === "reply" ? 0 : 1),
+  );
+  return {
+    owner: {
+      id: String(owner.id ?? ""),
+      name: asString(owner.name || "Пользователь"),
+      aliases: asArray(owner.aliases).map(String),
+      role: asString(owner.role ?? ""),
+    },
+    basis: asString(actions.basis ?? ""),
+    addressedToYou: asNumber(actions.addressedToYou, 0),
+    yourOpenAsks: asNumber(actions.yourOpenAsks, 0),
+    items,
+  };
+}
+
 export function buildReportModel({
   snapshot: rawSnapshot,
   analysis,
   exclusions = [],
   tasks = [],
   projectsMapping = [],
+  actions = null,
   inactivityDays = 2,
   includeBots = false,
   title = "Pachca · отчёт по рабочим чатам",
@@ -392,6 +443,8 @@ export function buildReportModel({
     activity,
     projects,
     projectStats,
+    actions: normalizeActionsPanel(actions, snapshot),
+    sendEnabled: asArray(snapshot.account?.scopes).includes("messages:create"),
     analysis: {
       quality: validated.quality,
       warnings: validated.warnings,

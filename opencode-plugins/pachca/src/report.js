@@ -1,11 +1,19 @@
 /**
- * Standalone HTML report renderer.
+ * Standalone HTML report renderer — form v2.2.
  *
  * Invariants:
- * - no external CSS, JS, fonts, images or network requests;
+ * - no external CSS, JS, fonts, images or network requests (no fetch/XHR/WebSocket);
  * - every user-controlled string is escaped;
  * - numbers are computed before rendering, not in the model prompt;
- * - excluded participants are absent from the chart but visible in a panel.
+ * - excluded participants are absent from the chart but visible in a panel;
+ * - the HTML never stores a token: an enabled «Отправить» button only queues a
+ *   message into .pachca/outbox/ (File System Access API, download fallback);
+ *   the plugin/agent sends it via pachca_send_message after a separate user
+ *   confirmation and a scope/role preflight.
+ *
+ * Section order: summary → personal actions (optional) → projects → activity →
+ * tasks → method. Draft boxes sit under every blocker and every personal
+ * action item; buttons are disabled unless the token has messages:create.
  */
 
 import {
@@ -17,6 +25,7 @@ import {
   escapeJson,
   formatDate,
   formatDay,
+  parseDate,
   truncate,
 } from "./util.js";
 
@@ -31,6 +40,19 @@ const CONFIDENCE = {
   high: "высокая",
   medium: "средняя",
   low: "низкая",
+};
+
+const SEV_LABEL = { high: "высокая", medium: "средняя", low: "низкая" };
+const SEV_ORDER = { high: 0, medium: 1, low: 2 };
+
+const KIND_LABEL = {
+  reply: "ответ на обращение",
+  approval: "аппрув",
+  answer_request: "ваш запрос без ответа",
+  followup: "без ответа",
+  decision: "решение",
+  project: "движение по проекту",
+  process: "процесс",
 };
 
 function safeUrl(value) {
@@ -52,6 +74,35 @@ function pct(part, total) {
   return Math.max(0, Math.min(100, Math.round((part / total) * 100)));
 }
 
+function utcDay(value) {
+  const date = parseDate(value);
+  return date ? date.toISOString().slice(0, 10) : null;
+}
+
+function channelLabel(snapshot, chatId, hint = "") {
+  const chat = snapshot.chats.find((item) => item.id === String(chatId));
+  if (chat?.personal) {
+    const person = asString(hint).replace(/личный чат/gi, "").replace(/[()]/g, "").trim();
+    return person ? `Личный чат · ${person}` : "Личный чат";
+  }
+  return chat?.name || asString(hint) || `чат ${chatId}`;
+}
+
+function draftBox(snapshot, { chatId, text, hint = "", ref }, sendEnabled) {
+  const chan = channelLabel(snapshot, chatId, hint);
+  const attrs = sendEnabled
+    ? ""
+    : ` disabled title="Токен только на чтение: нет скоупа messages:create"`;
+  const sendHint = sendEnabled
+    ? "очередь .pachca/outbox/ → ваше подтверждение → pachca_send_message"
+    : "недоступно: токен только на чтение (нет messages:create)";
+  return `<div class="draft-box">
+      <div class="draft-head"><span class="draft-h">Черновик сообщения · редактируемый</span><span class="chan">Канал: <b>${escapeHtml(chan)}</b> · #${escapeHtml(chatId)}</span></div>
+      <textarea class="draft-edit" rows="4" spellcheck="false">${escapeHtml(text)}</textarea>
+      <div class="send-row"><button type="button" class="send-btn" data-chat="${escapeHtml(chatId)}" data-chan="${escapeHtml(chan)}" data-ref="${escapeHtml(ref)}"${attrs}>Отправить</button><span class="send-hint">${escapeHtml(sendHint)}</span></div>
+    </div>`;
+}
+
 function renderEvidence(project) {
   const evidence = asArray(project.evidence);
   if (!evidence.length) {
@@ -68,10 +119,30 @@ function renderEvidence(project) {
     .join("")}</ul>`;
 }
 
-function renderProject(project) {
+function renderProject(project, snapshot, sendEnabled) {
   const blockers = asArray(project.blockers);
   const nextSteps = asArray(project.nextSteps);
+  const points = asArray(project.progressPoints);
   const kicker = project.chatName && project.chatName !== project.project ? project.chatName : "Проект";
+  const progressHtml = points.length
+    ? `<ul class="prog">${points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul>`
+    : `<p class="progress">${escapeHtml(project.progress)}</p>`;
+  const blockersHtml = blockers.length
+    ? `<ul class="blockers">${blockers
+        .map(
+          (blocker, index) =>
+            `<li><span class="severity ${escapeHtml(blocker.severity)}">${escapeHtml(blocker.severity)}</span><div class="blocker-body"><span>${escapeHtml(blocker.text || "Без описания")}</span>${blocker.verified ? "" : `<em class="unverified">без подтверждённой цитаты</em>`}<details class="draft-details"><summary>Черновик сообщения → канал: ${escapeHtml(channelLabel(snapshot, project.chatId))}</summary>${draftBox(
+              snapshot,
+              {
+                chatId: project.chatId,
+                text: asString(blocker.draft ?? ""),
+                ref: `blocker:${project.project}:${index + 1}`,
+              },
+              sendEnabled,
+            )}</details></div></li>`,
+        )
+        .join("")}</ul>`
+    : `<p class="empty">—</p>`;
   return `<article class="project" data-status="${escapeHtml(project.status)}">
     <div class="project-head">
       <div>
@@ -80,20 +151,11 @@ function renderProject(project) {
       </div>
       <div class="project-badges">${statusBadge(project.status)}${confidenceBadge(project.confidence)}</div>
     </div>
-    <p class="progress">${escapeHtml(project.progress)}</p>
+    ${progressHtml}
     <div class="project-grid">
       <div>
         <h4>Блокеры</h4>
-        ${
-          blockers.length
-            ? `<ul class="blockers">${blockers
-                .map(
-                  (blocker) =>
-                    `<li><span class="severity ${escapeHtml(blocker.severity)}">${escapeHtml(blocker.severity)}</span><span>${escapeHtml(blocker.text || "Без описания")}</span>${blocker.verified ? "" : `<em class="unverified">без подтверждённой цитаты</em>`}</li>`,
-                )
-                .join("")}</ul>`
-            : `<p class="empty">—</p>`
-        }
+        ${blockersHtml}
       </div>
       <div>
         <h4>Следующие шаги</h4>
@@ -110,6 +172,127 @@ function renderProject(project) {
       ${renderEvidence(project)}
     </details>
   </article>`;
+}
+
+function renderSummary(model, num) {
+  const cp = model.analysis?.crossProject || {};
+  const deadlines = asArray(cp.deadlines);
+  const risks = asArray(cp.risks);
+  const highlights = asArray(cp.highlights);
+  const external = asArray(cp.external);
+  const structured = Boolean(deadlines.length || risks.length || highlights.length || external.length);
+  const today = utcDay(model.snapshot.collectedAt);
+  const collectedDate = parseDate(model.snapshot.collectedAt);
+  const tomorrow = collectedDate ? utcDay(new Date(collectedDate.getTime() + 86_400_000)) : null;
+  let body = "";
+  if (structured) {
+    body += `<div class="sum-grid">`;
+    if (deadlines.length) {
+      body += `<section class="sum-block sum-wide"><h3>Ближайшие сроки</h3><ol class="deadlines">${deadlines
+        .map((item) => {
+          const date = asString(item.date);
+          const when = asString(item.when);
+          const cls = date
+            ? date === today
+              ? "today"
+              : date === tomorrow
+                ? "tomorrow"
+                : ""
+            : when === "сегодня"
+              ? "today"
+              : when === "завтра"
+                ? "tomorrow"
+                : "";
+          const dateLabel = /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date.slice(8, 10)}.${date.slice(5, 7)}` : date;
+          const due = [dateLabel, when].filter(Boolean).join(" · ");
+          const time = item.time ? `<span class="due-time">${escapeHtml(item.time)}</span>` : "";
+          return `<li class="${cls}"><span class="due">${escapeHtml(due)}</span>${time}<div>${escapeHtml(item.what || "")} <span class="proj-tag">${escapeHtml(item.project || "")}</span></div></li>`;
+        })
+        .join("")}</ol></section>`;
+    }
+    if (risks.length) {
+      const sorted = [...risks].sort(
+        (a, b) => (SEV_ORDER[a.severity] ?? 1) - (SEV_ORDER[b.severity] ?? 1),
+      );
+      body += `<section class="sum-block"><h3>Блокеры и риски</h3><ul class="risk-list">${sorted
+        .map((risk) => {
+          const sev = SEV_ORDER[risk.severity] != null ? risk.severity : "medium";
+          return `<li><span class="severity ${escapeHtml(sev)}">${escapeHtml(SEV_LABEL[sev])}</span> <span class="proj-tag">${escapeHtml(risk.project || "")}</span><div>${escapeHtml(risk.text || "")}</div></li>`;
+        })
+        .join("")}</ul></section>`;
+    }
+    if (highlights.length) {
+      body += `<section class="sum-block"><h3>Главное за окно</h3><ul class="hl">${highlights
+        .map((item) => `<li><span class="proj-tag">${escapeHtml(item.project || "")}</span><div>${escapeHtml(item.text || "")}</div></li>`)
+        .join("")}</ul></section>`;
+    }
+    if (external.length) {
+      body += `<section class="sum-block sum-wide"><h3>Внешние зависимости (люди вне чатов и инфраструктура)</h3><ul class="hl">${external
+        .map((item) => `<li><span class="proj-tag">${escapeHtml(item.project || "")}</span><div>${escapeHtml(item.text || "")}</div></li>`)
+        .join("")}</ul></section>`;
+    }
+    body += `</div>`;
+    if (cp.summary) {
+      body += `<details class="sum-text"><summary>Текстовая версия сводки</summary><p>${escapeHtml(cp.summary)}</p></details>`;
+    }
+  } else if (cp.summary) {
+    body += `<div class="callout"><b>Сводка по всем проектам</b><p>${escapeHtml(cp.summary)}</p></div>`;
+  } else {
+    body += `<p class="empty">Сводка не заполнена: структурированных полей crossProject нет.</p>`;
+  }
+  return `<section id="summary" class="section">
+    <div class="section-head"><div><p class="eyebrow">${num} · Сводка</p><h2>Сводка по всем проектам</h2></div><p class="section-note">Сроки подсвечены относительно даты сбора snapshot (UTC): «сегодня» и «завтра». Риски отсортированы от высоких к низким.</p></div>
+    <div class="section-body">${body}</div>
+  </section>`;
+}
+
+function renderActions(model, num) {
+  const actions = model.actions;
+  const snapshot = model.snapshot;
+  const sendEnabled = model.sendEnabled === true;
+  const items = asArray(actions.items);
+  const count = (kinds) => items.filter((item) => kinds.includes(item.kind)).length;
+  const kpis = [
+    [count(["reply"]), "ждут вашего ответа"],
+    [count(["approval", "answer_request"]), "ждут решения или аппрува"],
+    [count(["decision", "project"]), "решения по проектам"],
+    [count(["process"]), "процессные риски"],
+  ];
+  const cards = items
+    .map((item) => {
+      const pri = /^P[0-2]$/i.test(item.priority) ? item.priority.toUpperCase() : "P2";
+      const priClass = pri === "P0" ? "bad" : pri === "P1" ? "warn" : "muted";
+      const waiting = item.waiting && item.waiting !== "—" ? `ждёт ${item.waiting}` : "новая точка";
+      const quotes = asArray(item.ev)
+        .map(
+          (id) =>
+            `<a class="quote" href="https://app.pachca.com/chats/${encodeURIComponent(item.chatId)}?message=${encodeURIComponent(id)}">${escapeHtml(id)}</a>`,
+        )
+        .join("");
+      return `<article class="project act-item">
+      <div class="project-head">
+        <div><p class="eyebrow">Личное действие</p><h3>${escapeHtml(item.id)} · ${escapeHtml(KIND_LABEL[item.kind] || item.kind)}</h3></div>
+        <div class="project-badges"><span class="badge ${priClass}">${escapeHtml(pri)}</span></div>
+      </div>
+      <p class="act-meta">${escapeHtml(item.chat)} · ${escapeHtml(waiting)}</p>
+      <div class="act-fields">
+        <p><b>Кто:</b> ${escapeHtml(item.from)} · <b>с</b> ${escapeHtml(item.since)}</p>
+        <p><b>Что ждут:</b> ${escapeHtml(item.ask)}</p>
+        <p><b>Почему сейчас:</b> ${escapeHtml(item.why)}</p>
+        <p><b>Что сделать:</b> ${escapeHtml(item.action)}</p>
+      </div>
+      ${draftBox(snapshot, { chatId: item.chatId, text: item.draft, hint: item.chat, ref: item.id }, sendEnabled)}
+      ${quotes ? `<div class="act-quotes">${quotes}</div>` : ""}
+    </article>`;
+    })
+    .join("");
+  return `<section id="actions" class="section">
+    <div class="section-head"><div><p class="eyebrow">${num} · Личные сообщения</p><h2>Личные сообщения: что ждут от вас — ${escapeHtml(actions.owner.name)}</h2></div><p class="section-note">${escapeHtml(actions.basis)} Обращений к вам: ${asNumber(actions.addressedToYou, 0)}; ваших открытых запросов: ${asNumber(actions.yourOpenAsks, 0)}.</p></div>
+    <div class="section-body">
+      <div class="act-kpis">${kpis.map(([value, label]) => `<div class="act-kpi"><b>${value}</b><span>${escapeHtml(label)}</span></div>`).join("")}</div>
+      <div class="projects">${cards || `<p class="empty">Личных действий в окне нет.</p>`}</div>
+    </div>
+  </section>`;
 }
 
 function personRow(person, maxCount, threshold, excluded = false) {
@@ -144,7 +327,7 @@ function personRow(person, maxCount, threshold, excluded = false) {
   </div>`;
 }
 
-function renderActivity(activity, snapshot) {
+function renderActivity(activity, snapshot, num) {
   const visible = asArray(activity.visible);
   const maxCount = visible.reduce((max, item) => Math.max(max, item.count), 0);
   const chatOptions = snapshot.chats
@@ -159,7 +342,7 @@ function renderActivity(activity, snapshot) {
     .join("");
   return `<section id="activity" class="section">
     <div class="section-head">
-      <div><p class="eyebrow">02 · Люди</p><h2>Активность участников</h2></div>
+      <div><p class="eyebrow">${num} · Люди</p><h2>Активность участников</h2></div>
       <p class="section-note">Считаются сообщения в новом окне. Молчание — календарные дни с последнего сообщения; порог ${activity.inactivityDays} дн.</p>
     </div>
     <div class="activity-summary">
@@ -209,6 +392,77 @@ function renderTasks(tasks) {
   </table></div>`;
 }
 
+function sendDialog() {
+  return `<dialog id="send-dialog" aria-labelledby="sd-title">
+  <h3 id="sd-title">Отправка сообщения — очередь outbox</h3>
+  <p class="chan" id="sd-chan"></p>
+  <textarea id="sd-text" rows="7" spellcheck="false"></textarea>
+  <p class="hint">Сообщение попадёт в <code>.pachca/outbox/</code> со статусом <code>pending_confirmation</code>. Ничего не отправляется автоматически: агент/плагин покажет очередь и отправит через <code>pachca_send_message</code> только после вашего отдельного подтверждения, с проверкой скоупов и роли в чате. При первом использовании браузер попросит выбрать папку outbox.</p>
+  <div class="send-row"><button type="button" id="sd-confirm" class="send-btn">В очередь на отправку</button><button type="button" id="sd-copy" class="btn-plain">Скопировать текст</button><button type="button" id="sd-cancel" class="btn-plain">Отмена</button></div>
+  <p class="hint" id="sd-status" role="status"></p>
+</dialog>`;
+}
+
+function outboxScript(sendEnabled) {
+  return `<script>
+(function(){
+  var SEND_ENABLED=${sendEnabled ? "true" : "false"};
+  var dlg=document.getElementById('send-dialog');if(!dlg)return;
+  var chanEl=document.getElementById('sd-chan'),textEl=document.getElementById('sd-text'),statusEl=document.getElementById('sd-status');
+  var curChat=null,curChan='',curRef='';
+  function closeDlg(){if(typeof dlg.close==='function'){dlg.close();}else{dlg.removeAttribute('open');}}
+  document.querySelectorAll('.send-btn[data-chat]').forEach(function(b){
+    if(b.disabled||!SEND_ENABLED)return;
+    b.addEventListener('click',function(){
+      var box=b.closest('.draft-box');var ta=box?box.querySelector('textarea'):null;
+      curChat=b.getAttribute('data-chat');curChan=b.getAttribute('data-chan');curRef=b.getAttribute('data-ref')||'';
+      chanEl.textContent='Канал: '+curChan+' · #'+curChat;
+      textEl.value=ta?ta.value:'';statusEl.textContent='';
+      if(typeof dlg.showModal==='function'){dlg.showModal();}else{dlg.setAttribute('open','');}
+    });
+  });
+  function copyText(t){
+    if(navigator.clipboard&&navigator.clipboard.writeText){return navigator.clipboard.writeText(t);}
+    return new Promise(function(res,rej){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){ok=false;}document.body.removeChild(ta);ok?res():rej(new Error('copy failed'));});
+  }
+  function idb(){return new Promise(function(res,rej){var r=indexedDB.open('pachca-outbox',1);r.onupgradeneeded=function(){r.result.createObjectStore('handles');};r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error||new Error('idb'));};});}
+  function getStoredDir(){return idb().then(function(db){return new Promise(function(res,rej){var rq=db.transaction('handles','readonly').objectStore('handles').get('dir');rq.onsuccess=function(){res(rq.result||null);};rq.onerror=function(){rej(rq.error);};});});}
+  function storeDir(h){return idb().then(function(db){return new Promise(function(res,rej){var tx=db.transaction('handles','readwrite').objectStore('handles').put(h,'dir');tx.onsuccess=function(){res();};tx.onerror=function(){rej(tx.error);};});});}
+  function ensureDir(){return getStoredDir().then(function(h){
+    if(h){return h.queryPermission({mode:'readwrite'}).then(function(p){if(p==='granted')return h;return h.requestPermission({mode:'readwrite'}).then(function(p2){if(p2==='granted')return h;throw new Error('нет доступа к папке');});});}
+    if(!window.showDirectoryPicker)throw new Error('File System Access API недоступен');
+    return window.showDirectoryPicker({mode:'readwrite',id:'pachca-outbox'}).then(function(nh){return storeDir(nh).then(function(){return nh;});});
+  });}
+  function queueMessage(payload){
+    var name='pachca-outbox-'+payload.chatId+'-'+Date.now()+'.json';
+    var content=JSON.stringify(payload,null,2);
+    return ensureDir().then(function(dir){
+      return dir.getFileHandle(name,{create:true}).then(function(fh){return fh.createWritable();}).then(function(w){return w.write(content).then(function(){return w.close();});}).then(function(){return {via:'outbox',name:name};});
+    }).catch(function(err){
+      var blob=new Blob([content],{type:'application/json'});var url=URL.createObjectURL(blob);
+      var aEl=document.createElement('a');aEl.href=url;aEl.download=name;document.body.appendChild(aEl);aEl.click();document.body.removeChild(aEl);
+      setTimeout(function(){URL.revokeObjectURL(url);},5000);
+      return {via:'download',name:name,reason:(err&&err.message)||String(err)};
+    });
+  }
+  document.getElementById('sd-confirm').addEventListener('click',function(){
+    var t=textEl.value;
+    if(!t.trim()){statusEl.textContent='Пустой черновик — впишите текст сообщения.';return;}
+    var payload={schemaVersion:1,kind:'pachca-outbox-message',id:'ob-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),queuedAt:new Date().toISOString(),chatId:curChat,channel:curChan,text:t,source:{report:document.title,ref:curRef},status:'pending_confirmation',sendPolicy:'confirm_then_send'};
+    statusEl.textContent='Записываю в очередь…';
+    queueMessage(payload).then(function(r){
+      if(r.via==='outbox'){statusEl.textContent='Добавлено в .pachca/outbox/'+r.name+'. Отправит агент/плагин после вашего отдельного подтверждения.';}
+      else{statusEl.textContent='Запись в папку недоступна ('+r.reason+'). Файл '+r.name+' скачан — положите его в .pachca/outbox/ и передайте агенту.';}
+    }).catch(function(e){statusEl.textContent='Ошибка очереди: '+((e&&e.message)||e);});
+  });
+  document.getElementById('sd-copy').addEventListener('click',function(){
+    copyText(textEl.value).then(function(){statusEl.textContent='Текст скопирован в буфер обмена.';}).catch(function(){statusEl.textContent='Не удалось скопировать — выделите текст вручную.';});
+  });
+  document.getElementById('sd-cancel').addEventListener('click',closeDlg);
+})();
+</script>`;
+}
+
 export function renderReport(model) {
   const snapshot = model.snapshot;
   const activity = model.activity;
@@ -216,6 +470,16 @@ export function renderReport(model) {
   const stats = model.projectStats;
   const coverage = model.coverage;
   const analysisQuality = model.analysis?.quality || "missing";
+  const sendEnabled = model.sendEnabled === true;
+  const hasActions = Boolean(model.actions);
+  const num = {
+    summary: "01",
+    actions: "02",
+    projects: hasActions ? "03" : "02",
+    activity: hasActions ? "04" : "03",
+    tasks: hasActions ? "05" : "04",
+    method: hasActions ? "06" : "05",
+  };
   const maxCount = activity.visible.reduce((max, item) => Math.max(max, item.count), 0);
   const kpi = [
     ["Сообщений", coverage.messages, "в новом окне"],
@@ -242,11 +506,15 @@ export function renderReport(model) {
   ];
   const summaryJson = {
     schemaVersion: 1,
+    formVersion: 2,
     generatedAt: model.generatedAt,
     asOf: snapshot.collectedAt,
     title: model.title,
     window,
     source: snapshot.source,
+    sendEnabled,
+    sendMechanism: "outbox",
+    actionsPresent: hasActions,
     stats: {
       messages: coverage.messages,
       chatsRead: coverage.chatsRead,
@@ -305,9 +573,11 @@ h2{font-size:25px;line-height:1.15;letter-spacing:-.02em;margin:0}h3{font-size:1
 .project-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
 .project-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .progress{margin:0 0 13px;font-size:14px}
+.prog{margin:0 0 13px;padding-left:18px;font-size:14px}.prog li{margin:4px 0}
 .project-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;border-top:1px solid var(--line);padding-top:12px}
 .blockers,.steps,.evidence{list-style:none;margin:0;padding:0}
 .blockers li{display:flex;gap:7px;align-items:flex-start;margin-bottom:7px;font-size:12.5px}
+.blocker-body{flex:1;min-width:0}
 .severity{flex:0 0 auto;border-radius:4px;padding:1px 5px;font-size:9px;text-transform:uppercase;font-weight:750;background:#eef0f3;color:var(--muted)}
 .severity.high{background:var(--red2);color:var(--red)}.severity.medium{background:var(--amber2);color:var(--amber)}.severity.low{background:var(--green2);color:var(--green)}
 .unverified{display:block;color:var(--red);font-size:10.5px;font-style:normal;margin-top:2px}
@@ -317,6 +587,53 @@ h2{font-size:25px;line-height:1.15;letter-spacing:-.02em;margin:0}h3{font-size:1
 .evidence-wrap{margin-top:12px;border-top:1px solid var(--line);padding-top:9px}.evidence-wrap summary{cursor:pointer;font-size:11.5px;color:var(--teal);font-weight:700}.evidence-wrap summary span{color:var(--muted);font-weight:400}
 .evidence{margin-top:8px}.evidence li{border-left:2px solid var(--line2);padding-left:9px;margin-bottom:8px}.ev-head{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:var(--muted)}.ev-head span{text-align:right}
 blockquote{margin:3px 0 0;font-size:12px;color:#2a313a}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 14px}
+.sum-block{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;margin:0}
+.sum-block h3{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+.sum-wide{grid-column:1/-1}
+.deadlines{list-style:none;margin:0;padding:0}
+.deadlines li{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.deadlines li:last-child{border-bottom:none}
+.due{font-size:10.5px;font-weight:750;border-radius:6px;padding:2px 8px;white-space:nowrap;background:#eef0f3;color:var(--muted)}
+.deadlines li.today .due{background:var(--red2);color:var(--red)}
+.deadlines li.tomorrow .due{background:var(--amber2);color:var(--amber)}
+.due-time{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.deadlines li>div{flex:1;min-width:200px;font-size:13px}
+.proj-tag{display:inline-block;font-size:10px;font-weight:750;border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-right:6px;color:var(--muted);white-space:nowrap}
+.risk-list,.hl{list-style:none;margin:0;padding:0}
+.risk-list li,.hl li{margin:0 0 10px;font-size:13px}
+.risk-list li>div{margin-top:3px}
+.hl li>div{margin-top:3px}
+.sum-text{margin:0 0 12px}.sum-text summary{cursor:pointer;font-size:12px;color:var(--teal);font-weight:700}.sum-text p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.act-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+.act-kpi{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+.act-kpi b{display:block;font-size:24px;letter-spacing:-.02em}
+.act-kpi span{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:750}
+.act-item{border-top-color:var(--teal)}
+.act-meta{margin:0 0 8px;font-size:11.5px;color:var(--muted)}
+.act-fields p{margin:6px 0 0;font-size:13px}
+.act-quotes{margin-top:8px}
+.quote{display:inline-block;font-size:10.5px;border:1px solid var(--line);border-radius:999px;padding:1px 7px;margin:2px 4px 0 0;text-decoration:none;color:var(--muted)}
+.quote:hover{color:var(--ink);border-color:var(--line2)}
+.draft-box{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.draft-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.draft-h{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:750}
+.chan{font-size:11.5px;color:var(--muted)}.chan b{color:var(--ink)}
+textarea.draft-edit{width:100%;min-height:84px;resize:vertical;font:13px/1.5 var(--sans);padding:8px 10px;border:1px solid var(--line2);border-radius:7px;background:#fff;color:var(--ink)}
+textarea.draft-edit:focus{outline:2px solid var(--teal);outline-offset:-1px}
+.send-row{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.send-btn{font:600 12.5px var(--sans);padding:6px 16px;border-radius:999px;border:1px solid var(--teal);background:var(--teal2);color:var(--teal);cursor:pointer}
+.send-btn:hover:not(:disabled){background:var(--teal);color:#fff}
+.send-btn:disabled{opacity:.55;cursor:not-allowed;border-color:var(--line2);background:#eef0f3;color:var(--muted)}
+.btn-plain{font:12.5px var(--sans);padding:6px 16px;border-radius:999px;border:1px solid var(--line2);background:#fff;color:var(--ink);cursor:pointer}
+.send-hint{font-size:10.5px;color:var(--muted)}
+details.draft-details{margin-top:8px}
+details.draft-details>summary{cursor:pointer;font-size:11.5px;font-weight:700;color:var(--teal)}
+details.draft-details .draft-box{margin-top:8px}
+dialog#send-dialog{border:1px solid var(--line2);border-radius:14px;background:var(--card);color:var(--ink);padding:18px 20px;max-width:640px;width:calc(100% - 40px)}
+dialog#send-dialog::backdrop{background:rgba(21,26,33,.45)}
+dialog#send-dialog h3{margin:0 0 6px}
+dialog#send-dialog textarea{width:100%;min-height:140px;resize:vertical;font:13px/1.5 var(--sans);padding:8px 10px;border:1px solid var(--line2);border-radius:7px;background:var(--paper);color:var(--ink);margin:8px 0}
 .activity-summary{display:flex;gap:9px;flex-wrap:wrap;padding:14px 22px 0;color:var(--muted);font-size:11.5px}.activity-summary b{color:var(--ink)}
 .toolbar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;padding:14px 22px 6px}
 .field{display:flex;flex-direction:column;gap:4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
@@ -347,9 +664,9 @@ blockquote{margin:3px 0 0;font-size:12px;color:#2a313a}
 .warnings{margin:0;padding-left:18px}.warnings li{color:var(--amber);font-size:12px;margin-bottom:5px}
 .footer{padding:12px 0 40px;color:var(--muted);font-size:11.5px}.footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4px;padding:1px 4px}
-@media(max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.projects{grid-template-columns:1fr}.method{grid-template-columns:1fr}}
-@media(max-width:620px){.wrap{padding:0 14px}.kpis{grid-template-columns:repeat(2,1fr)}.project-grid{grid-template-columns:1fr}.hero{padding-top:28px}.section-head{padding:16px}.section-body{padding:16px}.chart{padding:8px 16px 16px}.toolbar{padding:12px 16px 4px}.field input{min-width:100%}.field{flex:1 1 100%}}
-@media print{@page{size:A4;margin:12mm}body{background:#fff;font-size:9.5pt}.nav,.toolbar{display:none}.wrap{max-width:none;padding:0}.section,.project,.person{break-inside:avoid;box-shadow:none}.kpis{grid-template-columns:repeat(3,1fr)}a{color:#000;text-decoration:none}.hero{padding-top:0}}
+@media(max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.projects{grid-template-columns:1fr}.method{grid-template-columns:1fr}.sum-grid{grid-template-columns:1fr}.act-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.wrap{padding:0 14px}.kpis{grid-template-columns:repeat(2,1fr)}.project-grid{grid-template-columns:1fr}.hero{padding-top:28px}.section-head{padding:16px}.section-body{padding:16px}.chart{padding:8px 16px 16px}.toolbar{padding:12px 16px 4px}.field input{min-width:100%}.field{flex:1 1 100%}.act-kpis{grid-template-columns:repeat(2,1fr)}}
+@media print{@page{size:A4;margin:12mm}body{background:#fff;font-size:9.5pt}.nav,.toolbar,.send-row,dialog#send-dialog{display:none}.wrap{max-width:none;padding:0}.section,.project,.person,.draft-box{break-inside:avoid;box-shadow:none}.kpis{grid-template-columns:repeat(3,1fr)}.act-kpis{grid-template-columns:repeat(4,1fr)}a{color:#000;text-decoration:none}.hero{padding-top:0}}
 </style>
 </head>
 <body>
@@ -364,29 +681,31 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
     <span class="chip">Сообщений: <b>${coverage.messages}</b></span>
     <span class="chip">Качество анализа: <b>${escapeHtml(analysisQuality)}</b></span>
     <span class="chip">Источник: <b>${escapeHtml(sourceLabel)}</b></span>
+    <span class="chip">Отправка: <b>${sendEnabled ? "outbox, с подтверждением" : "только чтение"}</b></span>
   </div>
   <div class="kpis">${kpi.map(([label, value, note]) => `<div class="kpi"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b><small>${escapeHtml(note)}</small></div>`).join("")}</div>
 </div></header>
 <nav class="nav" aria-label="Разделы отчёта"><div class="wrap">
-  <a href="#projects">Проекты</a><a href="#activity">Активность</a><a href="#tasks">Задачи</a><a href="#method">Методика</a>
+  <a href="#summary">Сводка</a>${hasActions ? `<a href="#actions">Личные сообщения</a>` : ""}<a href="#projects">Проекты</a><a href="#activity">Активность</a><a href="#tasks">Задачи</a><a href="#method">Методика</a>
   <span class="spacer"></span><span>${escapeHtml(period)}</span>
 </div></nav>
 <main id="main" class="wrap">
   ${warningItems.length ? `<div class="callout"><b>Что требует внимания</b><ul class="warnings">${warningItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>` : ""}
+  ${renderSummary(model, num.summary)}
+  ${hasActions ? renderActions(model, num.actions) : ""}
   <section id="projects" class="section">
-    <div class="section-head"><div><p class="eyebrow">01 · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">${stats.withBlockers} проект(ов) с блокерами, ${stats.atRisk} в риске, ${stats.unknown} без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
+    <div class="section-head"><div><p class="eyebrow">${num.projects} · Смысл</p><h2>Прогресс и блокеры по проектам</h2></div><p class="section-note">${stats.withBlockers} проект(ов) с блокерами, ${stats.atRisk} в риске, ${stats.unknown} без анализа. Прочерк в блокерах означает, что новых блокеров не найдено.</p></div>
     <div class="section-body">
-      ${model.analysis?.crossProject?.summary ? `<div class="callout"><b>Сводка по всем проектам</b><p>${escapeHtml(model.analysis.crossProject.summary)}</p></div>` : ""}
-      <div class="projects">${projects.map(renderProject).join("") || `<p class="empty">В snapshot нет чатов.</p>`}</div>
+      <div class="projects">${projects.map((project) => renderProject(project, snapshot, sendEnabled)).join("") || `<p class="empty">В snapshot нет чатов.</p>`}</div>
     </div>
   </section>
-  ${renderActivity(activity, snapshot)}
+  ${renderActivity(activity, snapshot, num.activity)}
   <section id="tasks" class="section">
-    <div class="section-head"><div><p class="eyebrow">03 · Автоматизация</p><h2>Сохранённые задачи</h2></div><p class="section-note">Задача сохраняется только после проверки скоупов, роли, тарифа и доступа к каналу. Перед запуском проверка повторяется.</p></div>
+    <div class="section-head"><div><p class="eyebrow">${num.tasks} · Автоматизация</p><h2>Сохранённые задачи</h2></div><p class="section-note">Задача сохраняется только после проверки скоупов, роли, тарифа и доступа к каналу. Перед запуском проверка повторяется.</p></div>
     <div class="section-body">${renderTasks(model.tasks)}</div>
   </section>
   <section id="method" class="section">
-    <div class="section-head"><div><p class="eyebrow">04 · Методика</p><h2>Как читать и чего здесь нет</h2></div><p class="section-note">Измерение отделено от интерпретации.</p></div>
+    <div class="section-head"><div><p class="eyebrow">${num.method} · Методика</p><h2>Как читать и чего здесь нет</h2></div><p class="section-note">Измерение отделено от интерпретации.</p></div>
     <div class="section-body method">
       <div>
         <div class="quality">
@@ -396,6 +715,8 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
           <li><b>Сообщения.</b> Уникальные ID сообщений в окне, включая треды; боты не попадают в диаграмму участников.</li>
           <li><b>Молчание.</b> Календарные дни между последним сообщением участника и концом окна. «Более двух дней» — настраиваемый порог, не научный закон.</li>
           <li><b>Прогресс и блокеры.</b> Смысловой анализ новых сообщений. Вывод без ID-цитаты помечается как неподтверждённый.</li>
+          <li><b>Черновики сообщений.</b> Текст черновика — суждение модели; он редактируется перед отправкой, канал назначения подписан у каждого черновика.</li>
+          <li><b>Кнопки «Отправить».</b> ${sendEnabled ? "активны — есть скоуп messages:create" : "неактивны — токен только на чтение (нет messages:create)"}.</li>
           <li><b>Прочерк.</b> В блокерах «—» означает «новых блокеров не найдено», а не «блокеров не существует».</li>
           <li><b>Активность ≠ продуктивность.</b> Число сообщений — сигнал, а не оценка человека. Отчёт не ранжирует людей.</li>
         </ul>
@@ -407,6 +728,8 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
           <li>Чаты: ${coverage.chatsRead} прочитано, ${coverage.chatsQuiet} без новых сообщений, ${coverage.chatsFailed} с ошибками, ${coverage.truncated} обрезано лимитом.</li>
           <li>Треды: ${coverage.threads} найдено; сообщения треда привязаны к родительскому чату.</li>
           <li>Личные переписки: ${snapshot.chats.filter((chat) => chat.personal).length}; архивные: ${snapshot.chats.filter((chat) => chat.archived).length}.</li>
+          <li>Скоупы токена: ${escapeHtml(asArray(snapshot.account?.scopes).join(", ") || "не указаны")}.</li>
+          <li><b>Механизм отправки (outbox).</b> Автономный HTML не хранит токен и не делает сетевых запросов. Активная кнопка ставит сообщение в очередь <code>.pachca/outbox/</code> со статусом <code>pending_confirmation</code> (File System Access API; если браузер не поддерживает — скачивается JSON, который нужно положить в outbox). Отправку выполняет плагин/агент через <code>pachca_send_message</code> только после отдельного подтверждения пользователя, с preflight скоупов и роли в чате; статус меняется на <code>sent</code> или <code>rejected</code>. Автоматически ничего не отправляется.</li>
           <li>Доступ определяется токеном и ролью. Закрытые чаты вне членства не читаются.</li>
           <li>Исключения влияют только на диаграмму; данные проектов сохраняются.</li>
         </ul>
@@ -414,6 +737,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
     </div>
   </section>
 </main>
+${sendDialog()}
 <footer class="footer"><div class="wrap"><span>opencode-pachca · автономный отчёт, без внешних запросов</span><span>${escapeHtml(formatDate(model.generatedAt))}</span></div></footer>
 <script id="report-data" type="application/json">${escapeJson(summaryJson)}</script>
 <script>
@@ -493,6 +817,7 @@ code{font-family:var(--mono);font-size:11.5px;background:#f0f2f4;border-radius:4
   render();
 })();
 </script>
+${outboxScript(sendEnabled)}
 </body>
 </html>`;
 }
